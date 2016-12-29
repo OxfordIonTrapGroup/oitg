@@ -36,3 +36,20 @@ def todays_analysis_path(day=None, user='Chris'):
         # If the dir does not exist, create it
         os.mkdir(path)
     return path
+
+
+def artiq_results_path(experiment=None):
+    """Returns the path to the standard Artiq results directory.
+    If experiment is None, returns the path to the master results directory 
+    containing the experiment subdirectories.
+    Else appends 'experiment' to the path, returning the path to a given 
+    experiment's results.
+
+    The standard results path is <shared_area>/artiqResults/<experiment>"""
+
+    path = os.path.join( shared_dir_path(), 'artiqResults' )
+
+    if experiment is not None:
+        path = os.path.join(path, experiment)
+
+    return path
