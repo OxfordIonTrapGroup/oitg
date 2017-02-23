@@ -1,0 +1,40 @@
+
+import numpy as np
+from . import FitBase
+
+
+def parameter_initialiser(x, y, p):
+
+    p['y0'] = np.mean(y)
+
+    # Estimate the sign of the gaussian
+    dy_min = p['y0'] - np.min(y)
+    dy_max = np.max(y) - p['y0']
+
+    if dy_max >= dy_min:
+        # The peak should be positive
+        p['a'] = dy_max
+        p['x0'] = x[np.argmax(y)]
+    else:
+        # The peak should be negative
+        p['a'] = dy_min
+        p['x0'] = x[np.argmin(y)]
+
+    # Estimate the sigma
+    # In most cases the this initial parameter is a good guess
+    # since most data-sets are sampled so that this is the case
+    p['sigma'] = (1/5)*(np.max(x)-np.min(x))
+
+
+def fitting_function(x, p):
+
+    y = p['a']*np.exp(-2*((x-p['x0'])/p['w0'])**2)
+    y += p['y0']
+
+    return y
+
+
+
+
+gaussian_beam = FitBase.FitBase(['x0', 'y0', 'a', 'w0'], fitting_function,
+                parameter_initialiser=parameter_initialiser)
