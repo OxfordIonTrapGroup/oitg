@@ -23,7 +23,7 @@ def parameter_initialiser(x, y, p):
     # Estimate the sigma
     # In most cases the this initial parameter is a good guess
     # since most data-sets are sampled so that this is the case
-    p['sigma'] = (1/5)*(np.max(x)-np.min(x))
+    p['w0'] = (1/5)*(np.max(x)-np.min(x))
 
 
 def fitting_function(x, p):
