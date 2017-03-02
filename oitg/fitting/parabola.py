@@ -33,6 +33,9 @@ def derived_parameter_function(p, p_error):
 
     #y_ext_error = 
 
+    p['x_ext'] = x_ext
+    p['y_ext'] = y_ext
+
     return p, p_error
 
 parabola = FitBase.FitBase(['a', 'b', 'c'], fitting_function,
