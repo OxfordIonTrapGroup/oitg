@@ -15,9 +15,9 @@ def binom_twosided(k, N):
     confint = proportion_confint(k, N, alpha=(1-np.exp(-1)), method='beta')
 
     # Strip out NaNs for confidence intervals at the boundary
-    if isnan(confint[0]):
+    if np.isnan(confint[0]):
         confint = ( 0, confint[1])
-    elif isnan(confint[1]):
+    elif np.isnan(confint[1]):
         confint = (confint[0], 1)
 
     p = k/N
