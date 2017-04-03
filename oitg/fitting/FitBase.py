@@ -116,7 +116,7 @@ class FitBase:
         self.parameter_initialiser = parameter_initialiser
         self.derived_parameter_function = derived_parameter_function
 
-    def fit(self, x, y,
+    def fit(self, x, y, y_err=None,
             x_limit=[-np.inf, np.inf], y_limit=[-np.inf, np.inf],
             constants={}, initialise={},
             calculate_residuals=False,
@@ -126,6 +126,10 @@ class FitBase:
         """Perform a fit of this object's function to the given data.
 
         - x and y are the arrays of data to fit to.
+        
+        - y_err is an optional array of the standard error of the
+            y input data. If present, these errors are used as
+            weights in the fit.
 
         - x/y_limit are the min and max values in the input data
             that should be used to fit to.
@@ -167,11 +171,15 @@ class FitBase:
         # Ensure that the x and y arrays are numpy arrays
         x = np.array(x)
         y = np.array(y)
+        if y_err is not None:
+            y_err = np.array(y_err)
 
         # Strip out any NaNs of Infs from the data
         valid_indices = np.logical_and(np.isfinite(x), np.isfinite(y))
         x = x[valid_indices]
         y = y[valid_indices]
+        if y_err is not None:
+            y_err = y_err[valid_indices]
 
         # Strip out any data-points that lie outside of the
         # fitting limits
@@ -181,6 +189,8 @@ class FitBase:
                                  & (y <= y_limit[1]))
         x = x[valid_indices]
         y = y[valid_indices]
+        if y_err is not None:
+            y_err = y_err[valid_indices]
 
         # Define the fit parameter object
         p = FitParameters(self.parameter_names, constants, initialise)
@@ -209,7 +219,7 @@ class FitBase:
         # If an exception occurs, raise it as a FitError
         try:
             p_list, p_list_covariance = curve_fit(LocalFitFunction,
-                                                  x, y, p_init_list)
+                x, y, p_init_list, sigma=y_err, absolute_sigma=True)
         except Exception as e:
             raise FitError(e)
 
