@@ -19,17 +19,17 @@ nuclear_spin = 7 / 2
 
 # g-factors taken from Tom's thesis
 g_j = 2.00225664
-g_i = -1.315348 * 2 / 7
+g_i = - 1.315348 * 2 / 7
 
 # Magnetic field strength of 146G clock qubit
 b0 = 146.0942e-4
 
 # Magnetron
-mu = (g_j * units.mu_N + g_j * units.mu_B)
+mu = (g_i * units.mu_N + g_j * units.mu_B)
 mu /= units.h * hyperfine_splitting
 
 
-def _breit_rabi(self, b, m_f, f_sign):
+def _breit_rabi(b, m_f, f_sign):
     """
     Breit-Rabi formula.
 
@@ -39,8 +39,8 @@ def _breit_rabi(self, b, m_f, f_sign):
     frequency_shift = (
         - units.h * hyperfine_splitting / (2 * (2 * nuclear_spin + 1)) -
         b * g_i * units.mu_N * m_f +
-        (f_sign * units.h * hyperfine_splitting /
-            2 * math.sqrt(
+        ((f_sign * units.h * hyperfine_splitting / 2) *
+            math.sqrt(
                 1 + 2 * m_f * (b * mu) /
                 (nuclear_spin + (1 / 2)) +
                 (b * mu)**2)))
