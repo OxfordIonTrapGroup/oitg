@@ -22,6 +22,6 @@ def fitting_function(x, p):
     return y
 
 
-# Sine^2 with 'dumb' initialiser
-sin_2 = FitBase.FitBase(['x0', 'y0', 'a', 'width'], fitting_function,
+# Sinc^2 with 'dumb' initialiser
+sinc_2 = FitBase.FitBase(['x0', 'y0', 'a', 'width'], fitting_function,
                         parameter_initialiser=parameter_initialiser)
