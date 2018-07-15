@@ -85,7 +85,8 @@ class FitBase:
     def __init__(self, parameter_names,
                  fitting_function,
                  parameter_initialiser=None,
-                 derived_parameter_function=None):
+                 derived_parameter_function=None,
+                 parameter_bounds={}):
         """Create an object for fitting a function.
 
         - parameter_names:
@@ -108,13 +109,17 @@ class FitBase:
             i.e. for a gaussian parameterised with sigma, one might
             want to calculate the FWHM
             Callsign: p_dict, p_error_dict = f(p_dict, p_error_dict)
-
+        - parameter_bounds:
+            Allowed ranges for the parameters, as a dictionary of
+            (lower_limit, upper_limit) tuples indexed by parameter name. Use
+            +/- np.inf to disable either of the bounds.
         """
 
         self.parameter_names = parameter_names
         self.fitting_function = fitting_function
         self.parameter_initialiser = parameter_initialiser
         self.derived_parameter_function = derived_parameter_function
+        self.parameter_bounds = parameter_bounds
 
     def fit(self, x, y, y_err=None,
             x_limit=[-np.inf, np.inf], y_limit=[-np.inf, np.inf],
@@ -126,7 +131,7 @@ class FitBase:
         """Perform a fit of this object's function to the given data.
 
         - x and y are the arrays of data to fit to.
-        
+
         - y_err is an optional array of the standard error of the
             y input data. If present, these errors are used as
             weights in the fit.
@@ -202,10 +207,15 @@ class FitBase:
             p.initialisation_mode = False
 
         # Populate the list of initial parameter values to be passed
-        # to the fitting algorithm
+        # to the fitting algorithm, and build list of bounds.
         p_init_list = []
+        lower_bounds = []
+        upper_bounds = []
         for name in p.variable_names:
             p_init_list.append(p[name])
+            l, u = self.parameter_bounds.get(name, (-np.inf, np.inf))
+            lower_bounds.append(l)
+            upper_bounds.append(u)
 
         def LocalFitFunction(x, *p_list):
             # Transfer the parameters from the list used by the fit
@@ -219,7 +229,8 @@ class FitBase:
         # If an exception occurs, raise it as a FitError
         try:
             p_list, p_list_covariance = curve_fit(LocalFitFunction,
-                x, y, p_init_list, sigma=y_err, absolute_sigma=True)
+                x, y, p_init_list, sigma=y_err, absolute_sigma=True,
+                bounds=(lower_bounds, upper_bounds))
         except Exception as e:
             raise FitError(e)
 
