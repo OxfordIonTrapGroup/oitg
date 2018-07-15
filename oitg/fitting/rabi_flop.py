@@ -44,4 +44,5 @@ def derived_parameter_function(p, p_err):
 rabi_flop = FitBase.FitBase(
     ["t_period", "t_dead", "y_lower", "tau_decay"],
     fitting_function, parameter_initialiser=parameter_initialiser,
-    derived_parameter_function=derived_parameter_function)
+    derived_parameter_function=derived_parameter_function,
+    parameter_bounds={"t_period": (0, np.inf), "t_dead": (0, np.inf), "y_lower": (0, 1), "tau_decay": (0, np.inf)})
