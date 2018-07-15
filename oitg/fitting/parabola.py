@@ -31,7 +31,7 @@ def derived_parameter_function(p, p_error):
     y_ext += p['b']*x_ext
     y_ext += p['c']*x_ext**2
 
-    #y_ext_error = 
+    #y_ext_error =
 
     p['x_ext'] = x_ext
     p['y_ext'] = y_ext
@@ -41,3 +41,39 @@ def derived_parameter_function(p, p_error):
 parabola = FitBase.FitBase(['a', 'b', 'c'], fitting_function,
         parameter_initialiser=parameter_initialiser,
         derived_parameter_function=derived_parameter_function)
+
+
+def parameter_initialiser_shifted(x, y, p):
+    order = np.argsort(x)
+
+    x_first = x[order[0]]
+    y_first = y[order[0]]
+
+    center_idx = order[len(order) // 2]
+    x_center = x[center_idx]
+    y_center = y[center_idx]
+
+    x_last = x[order[-1]]
+    y_last = y[order[-1]]
+
+    if y_first > y_center < y_last:
+        min_idx = np.argmin(y)
+        p['position'] = x[min_idx]
+        p['offset'] = y[min_idx]
+        p['scale'] = ((y_first + y_last) / 2 - p['offset']) / np.sqrt((x_last - x_first) / 2)
+    elif y_first < y_center > y_last:
+        max_idx = np.argmax(y)
+        p['position'] = x[max_idx]
+        p['offset'] = y[max_idx]
+        p['scale'] = ((y_first + y_last) / 2 - p['offset']) / np.sqrt((x_last - x_first) / 2)
+    else:
+        # Give up.
+        p['position'] = x[order[len(order) // 2]]
+        p['offset'] = 0
+        p['scale'] = 0
+
+def fitting_function_shifted(x, p):
+    return (x - p['position'])**2 * p['scale'] + p['offset']
+
+shifted_parabola = FitBase.FitBase(['position', 'scale', 'offset'], fitting_function_shifted,
+        parameter_initialiser=parameter_initialiser_shifted)
