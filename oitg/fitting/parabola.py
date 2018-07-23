@@ -60,12 +60,12 @@ def parameter_initialiser_shifted(x, y, p):
         min_idx = np.argmin(y)
         p['position'] = x[min_idx]
         p['offset'] = y[min_idx]
-        p['scale'] = ((y_first + y_last) / 2 - p['offset']) / np.sqrt((x_last - x_first) / 2)
+        p['scale'] = ((y_first + y_last) / 2 - p['offset']) / ((x_last - x_first) / 2)**2
     elif y_first < y_center > y_last:
         max_idx = np.argmax(y)
         p['position'] = x[max_idx]
         p['offset'] = y[max_idx]
-        p['scale'] = ((y_first + y_last) / 2 - p['offset']) / np.sqrt((x_last - x_first) / 2)
+        p['scale'] = ((y_first + y_last) / 2 - p['offset']) / ((x_last - x_first) / 2)**2
     else:
         # Give up.
         p['position'] = x[order[len(order) // 2]]
