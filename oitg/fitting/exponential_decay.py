@@ -22,6 +22,13 @@ def fitting_function(x, p):
 
     return y
 
+def derived_parameter_function(p, p_err):
+    p["t_1_e"] = p["x0"] + p["tau"]
+
+    # This is just a Gaussian error propagation guess.
+    p_err["t_1_e"] = np.sqrt(p_err["x0"]**2 + (p_err["tau"] / 2)**2)
+
+    return p, p_err
 
 # Exponential decay function parameterised such that:
 # for x <= x0:
@@ -32,5 +39,6 @@ def fitting_function(x, p):
 exponential_decay = FitBase.FitBase(
     ['x0', 'y0', 'y_inf', 'tau'],
     fitting_function,
-    parameter_initialiser=parameter_initialiser
+    parameter_initialiser=parameter_initialiser,
+    derived_parameter_function=derived_parameter_function
 )
