@@ -40,7 +40,7 @@ def parameter_initialiser(x, y, p):
 
     # TODO: Estimate decay time constant using RMS amplitude from global mean
     # in first and last chunk.
-    p["tau_decay"] = 10e-6
+    p["tau_decay"] = 1
 
 def fitting_function(x, p):
     y_upper = 1.0
