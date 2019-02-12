@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.optimize import minimize_scalar
+from scipy.optimize import minimize_scalar, curve_fit
 from scipy.signal import lombscargle
 from . import FitBase
 
@@ -37,6 +37,20 @@ def parameter_initialiser(x, y, p):
     p["t_dead"] = 0.0
 
     p["y_lower"] = np.clip(2 * np.mean(y) - 1, 0, 1)
+
+    # Try a fit with no decay first to initialise, hopefully closer?
+    def no_decay_flops(x, y_lower, t_period, t_dead):
+        y_upper = 1.0
+        shifted_t = (x - t_dead)
+        return y_lower + (y_upper - y_lower) / 2 * (np.cos(2 * np.pi / t_period * shifted_t) + 1)
+
+    try:
+        popt, _ = curve_fit(no_decay_flops, x, y, p0=[p["y_lower"], p["t_period"], p["t_dead"]])
+    except RuntimeError:
+        # Fit failed, use previous guesses anyway
+        pass
+    else:
+        p["y_lower"], p["t_period"], p["t_dead"] = popt
 
     # TODO: Estimate decay time constant using RMS amplitude from global mean
     # in first and last chunk.
