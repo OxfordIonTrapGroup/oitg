@@ -99,6 +99,7 @@ dipole_bsb_car_rsb_fit = FitBase(
     parameter_bounds={'eta': (0, np.inf), 'n_bar': (0, np.inf)})
 
 if __name__ == "__main__":  # example & debug code
+    from oitg.uncertainty_to_string import uncertainty_to_string
     from matplotlib import pyplot as plt
     # input parameters
     nmax, eta, delta_n, net_det, n_bar, omega_eff = \
@@ -125,8 +126,8 @@ if __name__ == "__main__":  # example & debug code
 
     plt.plot(fit_x*omega_eff/(2*np.pi), fit_y)
     plt.show()
-    print("n_bar", p_fit['n_bar'], "omega", p_fit['omega'],
-          "\nn_bar", p_err['n_bar'], "omega", p_err['omega'])
+    print("n_bar", uncertainty_to_string(p_fit['n_bar'], p_err['n_bar']))
+    print("omega", uncertainty_to_string(p_fit['omega'], p_err['omega']))
 
     if False:  # frequency initial guess introspection (fit debugging)
         plt.figure()
