@@ -4,7 +4,7 @@ from .exponential_decay import exponential_decay
 from .gaussian import gaussian
 from .gaussian_beam import gaussian_beam
 from .half_lorentzian import half_lorentzian_left, half_lorentzian_right
-from .line import line    # Seems unfinished.
+from .line import line
 from .lorentzian import lorentzian
 from .parabola import parabola, shifted_parabola
 from .rabi_flop import rabi_flop
