@@ -1,0 +1,2 @@
+This directory contains some fitting routine tests based on (manual) visual
+inspection; they should be converted into automated unit tests. (See test/.)
