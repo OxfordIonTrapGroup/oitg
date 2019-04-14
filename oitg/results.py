@@ -1,9 +1,9 @@
+import json
 import os
 from glob import glob
 import h5py
 from datetime import date
 from collections import namedtuple, Iterable
-from artiq.protocols import pyon
 
 from .paths import artiq_results_path
 
@@ -43,7 +43,7 @@ def load_result(day=None, rid=None, experiment=None, root_path=None):
     r = {}
     try:
         with h5py.File(rs[rid].path, "r") as f:
-            expid = pyon.decode(f["expid"][()])
+            expid = json.loads(f["expid"][()])
             r["expid"] = expid
             for k in ["artiq_version", "start_time"]:
                 r[k] = f[k].value
