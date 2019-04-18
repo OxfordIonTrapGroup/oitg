@@ -13,3 +13,4 @@ from .sin_2 import sin_2, sin_2_fft
 from .sinc_2 import sinc_2
 from .step_function import step_function
 from .tanh import tanh
+from .v_function import v_function
