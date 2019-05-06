@@ -21,11 +21,11 @@ def _iterify(x):
 def load_hdf5_file(filename):
     """Load an ARTIQ results file.
 
-    Returns a dictionary containing the logical contents of the HDF5 file,
-    including:
-    * start_time : the unix timestamp when the experiment was built
-    * expid : experiment description, including submission arguments
-    * datasets : dictionary containing all set datasets
+    :returns: A dictionary containing the logical contents of the HDF5 file, including:
+
+     * ``"start_time"``: the unix timestamp when the experiment was built
+     * ``"expid"``: experiment description, including submission arguments
+     * ``"datasets"``: dictionary containing all set datasets
     """
     with h5py.File(filename, "r") as f:
         r = {}
@@ -42,13 +42,14 @@ def load_hdf5_file(filename):
 
 
 def load_result(day=None, rid=None, experiment=None, root_path=None):
-    """Find and load a results from an ARTIQ results directory.
+    """Find and load an HDF5 results file from an ARTIQ master results directory.
 
-    The results file is described by a rid and a day (provided datestring or
-    defaults to today). See find_results for a full description of the
+    The results file is described by a rid and a day (provided date string,
+    defaults to today). See :meth:`find_results` for a full description of the
     arguments.
 
-    Returns a dictionary containing the contents of the file; see load_hdf5_file().
+    :return: A dictionary containing the contents of the file; see
+        :meth:`load_hdf5_file`.
     """
     rs = find_results(day=day,
                       rid=rid,
@@ -73,17 +74,17 @@ def find_results(day=None, rid=None, hour=None, class_name=None,
     given experiment name (see oitg.paths.artiq_results_path()) or root_path
     (if root_path is given).
 
-    * 'rid' is an experiment run ID or list of run IDs to load. If None loads
-    all rids
-    * 'hour' is hour or list of hours when the experiment was build. If None
-    loads all hours
-    * 'day' is a datestring or list of datestrings. Defaults to today. Dates
-    are in ISO format (yyyy-mm-dd)
-    * 'class_name' is the experiment class name, or list of names. If None
-    loads all classes
+    :param rid: An experiment run ID or list of run IDs to load. If None loads all rids.
+    :param hour: hour or list of hours when the experiment was build. If None loads all
+        hours.
+    :param day: Datestring or list of datestrings. Defaults to today. Dates are in ISO
+        format (yyyy-mm-dd).
+    :param class_name: is the experiment class name, or list of names. If None
+        loads all classes.
 
-    Returns a dict of results, indexed by rid. The dict entries are a named
-    tuple (path, day, hour, cls)"""
+    :return: A dict of results, indexed by rid. The dict entries are a named
+        tuple ``(path, day, hour, cls)``.
+    """
 
     Result = namedtuple('Result', ['path', 'day', 'hour', 'cls'])
 
