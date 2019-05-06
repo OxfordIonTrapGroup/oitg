@@ -18,18 +18,37 @@ def _iterify(x):
     return x
 
 
-def load_result(day=None, rid=None, experiment=None, root_path=None):
-    """Load an Artiq results file.
-
-    The results file is described by a rid and a day (provided datestring or
-    defaults to today). See find_results for a full description of the
-    arguments.
+def load_hdf5_file(filename):
+    """Load an ARTIQ results file.
 
     Returns a dictionary containing the logical contents of the HDF5 file,
     including:
     * start_time : the unix timestamp when the experiment was built
     * expid : experiment description, including submission arguments
     * datasets : dictionary containing all set datasets
+    """
+    with h5py.File(filename, "r") as f:
+        r = {}
+        expid = json.loads(f["expid"][()])
+        r["expid"] = expid
+        for k in ["artiq_version", "start_time"]:
+            r[k] = f[k].value
+        # Load datasets
+        ds = {}
+        r["datasets"] = ds
+        for k in f["datasets"]:
+            ds[k] = f["datasets"][k][()]
+        return r
+
+
+def load_result(day=None, rid=None, experiment=None, root_path=None):
+    """Find and load a results from an ARTIQ results directory.
+
+    The results file is described by a rid and a day (provided datestring or
+    defaults to today). See find_results for a full description of the
+    arguments.
+
+    Returns a dictionary containing the contents of the file; see load_hdf5_file().
     """
     rs = find_results(day=day,
                       rid=rid,
@@ -40,28 +59,17 @@ def load_result(day=None, rid=None, experiment=None, root_path=None):
     if len(rs) > 1:
         raise IOError("More than one matching results file found")
 
-    r = {}
     try:
-        with h5py.File(rs[rid].path, "r") as f:
-            expid = json.loads(f["expid"][()])
-            r["expid"] = expid
-            for k in ["artiq_version", "start_time"]:
-                r[k] = f[k].value
-            # Load datasets
-            ds = {}
-            r["datasets"] = ds
-            for k in f["datasets"]:
-                ds[k] = f["datasets"][k].value
+        return load_hdf5_file(rs[rid].path)
     except:
         raise IOError("Failure parsing results file")
-    return r
 
 
 def find_results(day=None, rid=None, hour=None, class_name=None,
                  experiment=None, root_path=None):
-    """Find the Artiq result files for a given experiment.
+    """Find the ARTIQ result files for a given experiment.
 
-    The Artiq results root search path is either the standard root path for the
+    The ARTIQ results root search path is either the standard root path for the
     given experiment name (see oitg.paths.artiq_results_path()) or root_path
     (if root_path is given).
 
