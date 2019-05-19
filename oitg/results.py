@@ -32,7 +32,7 @@ def load_hdf5_file(filename):
         expid = json.loads(f["expid"][()])
         r["expid"] = expid
         for k in ["artiq_version", "start_time"]:
-            r[k] = f[k].value
+            r[k] = f[k][()]
         # Load datasets
         ds = {}
         r["datasets"] = ds
