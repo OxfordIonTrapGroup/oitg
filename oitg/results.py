@@ -62,7 +62,7 @@ def load_result(day=None, rid=None, experiment=None, root_path=None):
 
     try:
         return load_hdf5_file(rs[rid].path)
-    except:
+    except Exception:
         raise IOError("Failure parsing results file")
 
 
