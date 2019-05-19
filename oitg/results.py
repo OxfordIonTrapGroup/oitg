@@ -51,10 +51,7 @@ def load_result(day=None, rid=None, experiment=None, root_path=None):
     :return: A dictionary containing the contents of the file; see
         :meth:`load_hdf5_file`.
     """
-    rs = find_results(day=day,
-                      rid=rid,
-                      experiment=experiment,
-                      root_path=root_path)
+    rs = find_results(day=day, rid=rid, experiment=experiment, root_path=root_path)
     if len(rs) == 0:
         raise IOError("No results file found")
     if len(rs) > 1:
@@ -66,8 +63,12 @@ def load_result(day=None, rid=None, experiment=None, root_path=None):
         raise IOError("Failure parsing results file")
 
 
-def find_results(day=None, rid=None, hour=None, class_name=None,
-                 experiment=None, root_path=None):
+def find_results(day=None,
+                 rid=None,
+                 hour=None,
+                 class_name=None,
+                 experiment=None,
+                 root_path=None):
     """Find the ARTIQ result files for a given experiment.
 
     The ARTIQ results root search path is either the standard root path for the
@@ -105,8 +106,8 @@ def find_results(day=None, rid=None, hour=None, class_name=None,
         day_path = os.path.join(root_path, day)
         # To increase speed on slow FS (such as sambda) we could only list
         # directories with appropriate hours
-        paths.extend([y for x in os.walk(day_path)
-                     for y in glob(os.path.join(x[0], '*.h5'))])
+        paths.extend(
+            [y for x in os.walk(day_path) for y in glob(os.path.join(x[0], '*.h5'))])
 
     results = {}
     for path in paths:
@@ -133,6 +134,5 @@ def find_results(day=None, rid=None, hour=None, class_name=None,
         results[int(this_rid)] = Result(path=path,
                                         cls=this_class,
                                         day=this_day,
-                                        hour=this_hour
-                                        )
+                                        hour=this_hour)
     return results
