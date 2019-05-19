@@ -1,0 +1,301 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>oitg.circuits.qasm &mdash; oitg  documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/ndscan/_modules/oitg/circuits/qasm.html"/>
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> oitg
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cache.html">oitg.cache API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../results.html">oitg.results API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">oitg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>oitg.circuits.qasm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for oitg.circuits.qasm</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functionality for interfacing with OpenQASM.</span>
+
+<span class="sd">QASM is a straightforward text-based format for representing quantum computations in the</span>
+<span class="sd">circuit model. At this point, we do not support any classical feedback, etc.; just</span>
+<span class="sd">straight-line gate sequences starting with state preparation and ending with</span>
+<span class="sd">measurement.</span>
+
+<span class="sd">For more complex QASM support, we should integrate an external library.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">.gate</span> <span class="k">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">collect_operands</span>
+
+<span class="n">Statements</span> <span class="o">=</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="stringify_param"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.stringify_param">[docs]</a><span class="k">def</span> <span class="nf">stringify_param</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns the string form of a parameter p; with fractions of π pretty-printed for</span>
+<span class="sd">    readability.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span>
+            <span class="n">p</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">sign</span> <span class="o">+</span> <span class="s2">&quot;2 * pi&quot;</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">sign</span> <span class="o">+</span> <span class="s2">&quot;pi&quot;</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">sign</span> <span class="o">+</span> <span class="s2">&quot;pi / 2&quot;</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">sign</span> <span class="o">+</span> <span class="s2">&quot;pi / 4&quot;</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="gate_to_qasm"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.gate_to_qasm">[docs]</a><span class="k">def</span> <span class="nf">gate_to_qasm</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns a QASM statement corresponding to the given :class:`.Gate`.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">kind</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;(&quot;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stringify_param</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;q[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">result</span></div>
+
+
+<span class="k">def</span> <span class="nf">default_prologue</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+    <span class="c1"># TODO: We currently use the Quantum Experience standard library for the gate</span>
+    <span class="c1"># definitions; should replace with a taylor-made one.</span>
+    <span class="k">yield</span> <span class="s2">&quot;OPENQASM 2.0&quot;</span>
+    <span class="k">yield</span> <span class="s2">&quot;include </span><span class="se">\&quot;</span><span class="s2">qelib1.inc</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+    <span class="c1"># Use single-letter names `q`/`r` for brevity in plots.</span>
+    <span class="k">yield</span> <span class="s2">&quot;qreg q[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="s2">&quot;creg r[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">default_epilogue</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+    <span class="k">yield</span> <span class="s2">&quot;measure q -&gt; r&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">gate_experiment_to_qasm</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span>
+                            <span class="n">prologue_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Statements</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_prologue</span><span class="p">,</span>
+                            <span class="n">epilogue_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Statements</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_epilogue</span>
+                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+    <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">collect_operands</span><span class="p">(</span><span class="n">gates</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">yield from</span> <span class="n">prologue_fn</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+        <span class="k">yield from</span> <span class="n">gate_to_qasm</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="k">yield from</span> <span class="n">epilogue_fn</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="stringify_qasm"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.stringify_qasm">[docs]</a><span class="k">def</span> <span class="nf">stringify_qasm</span><span class="p">(</span><span class="n">stmts</span><span class="p">:</span> <span class="n">Statements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Concatenate/format a list of QASM statements into a single string.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">stmts</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">stmt</span> <span class="o">+</span> <span class="s2">&quot;;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="parse_gate_sequence_string"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.parse_gate_sequence_string">[docs]</a><span class="k">def</span> <span class="nf">parse_gate_sequence_string</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parse a simple gate sequence in ;-delimited string form into its constituent</span>
+<span class="sd">    gates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># This implementation is an example of what usually *not* to do; we should really</span>
+    <span class="c1"># just pull in an external QASM parser if we want to support more complex strings.</span>
+    <span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">statement</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\w+)\s*(\(.*\))?\s*((q\[\d+\],?\s?)*)&quot;</span><span class="p">,</span> <span class="n">statement</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Not a valid gate string statement: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">statement</span><span class="p">))</span>
+        <span class="n">kind</span><span class="p">,</span> <span class="n">param_string</span><span class="p">,</span> <span class="n">operand_string</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">if</span> <span class="n">param_string</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">param_string</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;pi&quot;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">})</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="p">)</span>
+
+        <span class="n">operands</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;q\[(\d+)\]&quot;</span><span class="p">,</span> <span class="n">operand_string</span><span class="p">))</span>
+
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">operands</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Ion Trap Quantum Computing group
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

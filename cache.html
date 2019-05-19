@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>oitg.cache API &mdash; oitg  documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/ndscan/cache.html"/>
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="oitg.circuits API" href="circuits.html" />
+    <link rel="prev" title="oitg" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> oitg
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.cache API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">oitg.results API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">oitg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>oitg.cache API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/OxfordIonTrapGroup/ndscan/blob/master/docs/cache.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-oitg.cache">
+<span id="oitg-cache-api"></span><h1>oitg.cache API<a class="headerlink" href="#module-oitg.cache" title="Permalink to this headline">¶</a></h1>
+<p>Minimalist caching/memoisation implementation backed by on-disk pickle files.</p>
+<p>Provides functions for transparently storing expensive-to-compute values to disk and
+reading them back when they are next used.</p>
+<dl class="data">
+<dt id="oitg.cache.DIR_ENV_VAR">
+<code class="descclassname">oitg.cache.</code><code class="descname">DIR_ENV_VAR</code><em class="property"> = 'OITG_CACHE_DIR'</em><a class="headerlink" href="#oitg.cache.DIR_ENV_VAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the environment variable to load cache path from.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.cache.get_cache_dir">
+<code class="descclassname">oitg.cache.</code><code class="descname">get_cache_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/oitg/cache.html#get_cache_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.get_cache_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the OITG-wide directory to use for cache files.</p>
+<p>The default path can be overwritten by setting the <a class="reference internal" href="#oitg.cache.DIR_ENV_VAR" title="oitg.cache.DIR_ENV_VAR"><code class="xref py py-data docutils literal notranslate"><span class="pre">DIR_ENV_VAR</span></code></a> environment
+variable.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.cache.read_or_create_pickle_cache">
+<code class="descclassname">oitg.cache.</code><code class="descname">read_or_create_pickle_cache</code><span class="sig-paren">(</span><em>key: str, compute_value: Callable[Any]</em><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="_modules/oitg/cache.html#read_or_create_pickle_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.read_or_create_pickle_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to read the cached value for the given key; if it does not exist,
+compute it and save it for future calls.</p>
+<p>Assumes <cite>compute_value()</cite> is pure (i.e. returns the same value every time); no
+no support for cache invalidation is provided beyond manually clearing a key using
+<a class="reference internal" href="#oitg.cache.clear_pickle_cache" title="oitg.cache.clear_pickle_cache"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clear_pickle_cache()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Cache key, to be used as part of the file name. The user must
+ensure that names are unique across client code.</p></li>
+<li><p><strong>compute_value</strong> – Function to invoke for actually computing the value if it has
+not been cached yet.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The computed or loaded value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.cache.clear_pickle_cache">
+<code class="descclassname">oitg.cache.</code><code class="descname">clear_pickle_cache</code><span class="sig-paren">(</span><em>key: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/oitg/cache.html#clear_pickle_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.clear_pickle_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the cache file for the given key, if it exists.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.cache.cache_to_pickle_file">
+<code class="descclassname">oitg.cache.</code><code class="descname">cache_to_pickle_file</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/cache.html#cache_to_pickle_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.cache_to_pickle_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a parameterless function to cache its results to a pickle file and reload it
+from there on subsequent invocations.</p>
+<p>See <a class="reference internal" href="#oitg.cache.read_or_create_pickle_cache" title="oitg.cache.read_or_create_pickle_cache"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_or_create_pickle_cache()</span></code></a>.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="circuits.html" class="btn btn-neutral float-right" title="oitg.circuits API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="oitg" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Ion Trap Quantum Computing group
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>oitg.circuits.composite_pulses &mdash; oitg  documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/ndscan/_modules/oitg/circuits/composite_pulses.html"/>
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> oitg
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cache.html">oitg.cache API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../results.html">oitg.results API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">oitg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>oitg.circuits.composite_pulses</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for oitg.circuits.composite_pulses</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Composite pulse implementations for replacing gates with sequences that are logically</span>
+<span class="sd">equivalent, but have different behaviour under imperfections.</span>
+
+<span class="sd">.. rubric:: References</span>
+<span class="sd">.. [BIKN13] Bando, M., Ichikawa, T., Kondo, Y. &amp; Nakahara, M.</span>
+<span class="sd">    Concatenated composite pulses compensating simultaneous systematic errors.</span>
+<span class="sd">    J. Phys. Soc. Jpn. 82, 014004 (2013).</span>
+<span class="sd">.. [KGK+14] Kabytayev, C. et al. Robustness of composite pulses to time-dependent</span>
+<span class="sd">    control noise. Phys. Rev. A 90, 012316 (2014).</span>
+<span class="sd">.. [Wimp94] Wimperis, Stephen. Broadband, Narrowband, and Passband Composite Pulses for</span>
+<span class="sd">    Use in Advanced NMR Experiments. Journal of Magnetic Resonance 109, 221–231 (1994).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">.gate</span> <span class="k">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span>
+
+
+<div class="viewcode-block" id="UnsupportedGate"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.composite_pulses.UnsupportedGate">[docs]</a><span class="k">class</span> <span class="nc">UnsupportedGate</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised if a given gate cannot be expanded in the requested form.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="to_rxy"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.composite_pulses.to_rxy">[docs]</a><span class="k">def</span> <span class="nf">to_rxy</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gate</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Canonicalise all single-qubit rotations in the xy-plane to ``rxy`` gates.</span>
+
+<span class="sd">    :return: A ``rxy`` :class:`.Gate` with positive rotation amount.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;rxy&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gate</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rx&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;ry&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">UnsupportedGate</span>
+
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">phase</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">amount</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rxy&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">),</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bb1"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.composite_pulses.bb1">[docs]</a><span class="k">def</span> <span class="nf">bb1</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">symmetric</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate implementation of the given single-qubit rotation using a BB1 composite</span>
+<span class="sd">    pulse.</span>
+
+<span class="sd">    BB1, as per [Wimp94]_, is a broadband amplitude noise suppression sequence,</span>
+<span class="sd">    cancelling error terms up to fourth order in amplitude offset.</span>
+
+<span class="sd">    :param gate: The gate to implement.</span>
+<span class="sd">    :param symmetric: Whether to implement the gate symmetrically using 5 pulses (2</span>
+<span class="sd">        half-rotations around the 3-pulse BB1 identity sequence), or asymmetrically</span>
+<span class="sd">        using 4 pulses. The latter has slightly nicer behaviour under detuning errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gate</span> <span class="o">=</span> <span class="n">to_rxy</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">phase</span><span class="p">,</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">amount</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">xy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rxy&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">),</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
+
+    <span class="n">first_amount</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">amount</span> <span class="k">if</span> <span class="n">symmetric</span> <span class="k">else</span> <span class="n">amount</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">first_amount</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="n">phi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">phi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="n">phi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">symmetric</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">first_amount</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="reduced_c_in_sk"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.composite_pulses.reduced_c_in_sk">[docs]</a><span class="k">def</span> <span class="nf">reduced_c_in_sk</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate implementation of the given single-qubit rotation using a reduced</span>
+<span class="sd">    CORPSE/SK1 concatenated composite pulse.</span>
+
+<span class="sd">    Reduced CinSK, as described in [BIKN13]_ (and among those analysed in [KGK+14]_) is</span>
+<span class="sd">    robust against both pulse amplitude and detuning errors. Note that the CORPSE part</span>
+<span class="sd">    (that gives detuning robustness) requires non-multiple-of-π/2 gate rotation amounts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gate</span> <span class="o">=</span> <span class="n">to_rxy</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+    <span class="n">phase</span><span class="p">,</span> <span class="n">amount</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameters</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">amount</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="o">-</span><span class="n">amount</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">xy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rxy&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">),</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
+
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">amount</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">k</span><span class="p">))</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span> <span class="o">-</span> <span class="n">phi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="n">xy</span><span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="n">phi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="expand_using"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.composite_pulses.expand_using">[docs]</a><span class="k">def</span> <span class="nf">expand_using</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+                 <span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span>
+                 <span class="n">ignore_kinds</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+                 <span class="n">ignore_unsupported_gates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">insert_barriers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Expand all gates in the given sequence using composite pulses.</span>
+
+<span class="sd">    :param method: A callable implementing the chosen composite pulse type</span>
+<span class="sd">        (e.g. :meth:`bb1`).</span>
+<span class="sd">    :param ignore_kinds: A set of gate kinds not to attempt to expand.</span>
+<span class="sd">    :param ignore_unsupported_gates: If ``True``, silently pass over unsupported gates</span>
+<span class="sd">        without expanding them.</span>
+<span class="sd">    :param insert_barriers: Insert a barrier after each composite pulse.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ignore_kinds</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ignore_kinds</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="n">ignore_kinds</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">gate</span>
+                <span class="k">continue</span>
+            <span class="k">yield from</span> <span class="n">method</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">insert_barriers</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;barrier&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">UnsupportedGate</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_unsupported_gates</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">yield</span> <span class="n">gate</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Ion Trap Quantum Computing group
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

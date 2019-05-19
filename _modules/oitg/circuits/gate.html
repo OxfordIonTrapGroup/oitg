@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>oitg.circuits.gate &mdash; oitg  documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/ndscan/_modules/oitg/circuits/gate.html"/>
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> oitg
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../cache.html">oitg.cache API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../results.html">oitg.results API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">oitg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>oitg.circuits.gate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for oitg.circuits.gate</h1><div class="highlight"><pre>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines representations of quantum gates (and sequences of them), and a few basic</span>
+<span class="sd">operations for manipulating them.</span>
+
+<span class="sd">A :class:`Gate` is a named tuple</span>
+<span class="sd">``(kind: str, parameters: Tuple[float, ...], operands: Tuple[int, ...])``.</span>
+
+<span class="sd">``kind`` identifies the type of unitary (e.g. ``&quot;rx&quot;``, ``&quot;cz&quot;``). ``parameters`` is a</span>
+<span class="sd">list of float values parametrising the chosen gate (e.g. rotation angles). ``operands``</span>
+<span class="sd">is a list of integer indices denoting the target qubits.</span>
+
+<span class="sd">This is deliberately just a plain piece of data to make gates directly representable in</span>
+<span class="sd">ARTIQ kernels as well (with the tuples expressed as ``TList``\ s). Even apart from that,</span>
+<span class="sd">coming up with an extensible design for representing both values and operations isn&#39;t</span>
+<span class="sd">trivial in the first place (cf. expression problem). This sort of weakly typed design</span>
+<span class="sd">(with gate types represented as arbitrary strings) isn&#39;t worse than many alternatives</span>
+<span class="sd">anyway.</span>
+
+<span class="sd">Using tuples not only represents the data semantics better than lists (parameters and</span>
+<span class="sd">operands are plain collections with value semantics), but also has the advantage of</span>
+<span class="sd">keeping Gate hashable (so it can be used in sets/dictionaries/…).</span>
+
+<span class="sd">If more complex operations (e.g. decomposition into elementary gates, optimisations,</span>
+<span class="sd">etc.) are desired in the future, we might want to directly integrate a QC library (Cirq,</span>
+<span class="sd">Qiskit, pyQuil, …) into our code instead, though.</span>
+
+<span class="sd">A :class:`GateSequence` is a tuple of :class:`Gate`\ s that represents the coherent</span>
+<span class="sd">portion of a circuit on one or more qubits. Tuples are used instead of lists as most of</span>
+<span class="sd">the time, gate sequences are not changed once built up, and tuples (with their value</span>
+<span class="sd">semantics) are hashable.</span>
+
+<span class="sd">A :class:`GateGenerator` produces a :class:`GateSequence` gate by gate through an</span>
+<span class="sd">``Iterable`` interface. Note that this will in general *not* be a list that support</span>
+<span class="sd">indexing, but for instance an iterator. Use e.g. ``tuple(…)`` (or similar) to convert</span>
+<span class="sd">the result to a :class:`GateSequence`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="c1"># TODO: Make this a NamedTuple subclass (Python 3.6+) or dataclass (3.7+).</span>
+<span class="n">Gate</span> <span class="o">=</span> <span class="n">NamedTuple</span><span class="p">(</span><span class="s2">&quot;Gate&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;parameters&quot;</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">]),</span>
+                           <span class="p">(</span><span class="s2">&quot;operands&quot;</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">])])</span>
+
+<span class="c1">#:</span>
+<span class="n">GateSequence</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Gate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="c1">#:</span>
+<span class="n">GateGenerator</span> <span class="o">=</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Gate</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="collect_operands"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.gate.collect_operands">[docs]</a><span class="k">def</span> <span class="nf">collect_operands</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Return all the qubit operands used in the given gate sequence.&quot;&quot;&quot;</span>
+    <span class="n">qubits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+        <span class="n">qubits</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qubits</span></div>
+
+
+<div class="viewcode-block" id="remap_operands"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.gate.remap_operands">[docs]</a><span class="k">def</span> <span class="nf">remap_operands</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">operand_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Change all the operand indices in a gate string according to the given map.</span>
+
+<span class="sd">    For instance, ``remap_operands(sequence, {0: 1})`` will make all gates in the</span>
+<span class="sd">    sequence that target qubit ``0`` act on qubit ``1`` instead (including cases where</span>
+<span class="sd">    ``0`` is used as part of a multi-qubit gate).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gates</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span>
+                   <span class="nb">tuple</span><span class="p">(</span><span class="n">operand_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">operands</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Ion Trap Quantum Computing group
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

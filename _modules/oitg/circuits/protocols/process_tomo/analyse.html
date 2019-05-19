@@ -1,0 +1,710 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>oitg.circuits.protocols.process_tomo.analyse &mdash; oitg  documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/ndscan/_modules/oitg/circuits/protocols/process_tomo/analyse.html"/>
+  
+
+  
+  <script type="text/javascript" src="../../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> oitg
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../cache.html">oitg.cache API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../results.html">oitg.results API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">oitg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>oitg.circuits.protocols.process_tomo.analyse</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for oitg.circuits.protocols.process_tomo.analyse</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Implements different methods for reconstructing an estimate for a quantum channel</span>
+<span class="sd">(process) from tomography measurements.</span>
+
+<span class="sd">Currently, linear inversion tomography and two maximum-likelihood techniques are</span>
+<span class="sd">supported.</span>
+
+<span class="sd">All implementations assume that the processes in question have the same input and output</span>
+<span class="sd">dimensions, i.e. are endomorphisms on the space of bounded operators (density matrices)</span>
+<span class="sd">on some qubit Hilbert space.</span>
+
+<span class="sd">.. rubric:: References</span>
+<span class="sd">.. [FH01] Fiurášek, J. &amp; Hradil, Z.</span>
+<span class="sd">    Maximum-likelihood estimation of quantum processes.</span>
+<span class="sd">    Physical Review A 63, (2001).</span>
+<span class="sd">.. [RHKL07] Reháček, J., Hradil, Z., Knill, E. &amp; Lvovsky, A. I.</span>
+<span class="sd">    Diluted maximum-likelihood algorithm for quantum tomography.</span>
+<span class="sd">    Physical Review A 75, 1–5 (2007).</span>
+<span class="sd">.. [AL12] Anis, A. &amp; Lvovsky, A. I.</span>
+<span class="sd">    Maximum-likelihood coherent-state quantum process tomography.</span>
+<span class="sd">    New J. Phys. 14, 105021 (2012).</span>
+<span class="sd">.. [KBLG18] Knee, G. C., Bolduc, E., Leach, J. &amp; Gauger, E. M.</span>
+<span class="sd">    Quantum process tomography via completely positive and trace-preserving projection.</span>
+<span class="sd">    Physical Review A 98, (2018).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">...gate</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">...to_matrix</span> <span class="k">import</span> <span class="n">apply_gate_sequence</span><span class="p">,</span> <span class="n">gate_sequence_matrix</span>
+<span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">_find_first_index</span><span class="p">(</span><span class="n">needle</span><span class="p">,</span> <span class="n">haystack</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">)]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span>
+
+
+<div class="viewcode-block" id="guess_prepare_target_measure_split"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split">[docs]</a><span class="k">def</span> <span class="nf">guess_prepare_target_measure_split</span><span class="p">(</span>
+        <span class="n">all_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">]]]:</span>
+    <span class="sd">&quot;&quot;&quot;For a given list of gate sequences making up a tomography experiment, guesses</span>
+<span class="sd">    which is the target sequence to be analysed, and the preparation/measuemrent</span>
+<span class="sd">    fiducial sequences used.</span>
+
+<span class="sd">    :param all_sequences: A list of all the gate sequence for which data was acquired.</span>
+<span class="sd">    :return: A tuple ``(target_seq, [(prep_seq, meas_seq)])`` of the guess for the</span>
+<span class="sd">        target sequence and, for each input sequence, the respective state preparation</span>
+<span class="sd">        sequence before/measurement sequence after the tomography target.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># FIXME: This is needlessly generic, yet fails if the target is more than one gate</span>
+    <span class="c1"># or it also appears as part of the prepare/measure fiducials…</span>
+    <span class="n">possible_targets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_sequences</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">all_sequences</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">possible_targets</span> <span class="o">&amp;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">possible_targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="n">target_seq</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">possible_targets</span><span class="p">)</span>
+
+    <span class="n">target_start_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_find_first_index</span><span class="p">(</span><span class="n">target_seq</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_sequences</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">target_seq</span><span class="p">,</span> <span class="p">[(</span><span class="n">s</span><span class="p">[:</span><span class="n">t</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_seq</span><span class="p">):])</span>
+                        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target_start_idxs</span><span class="p">,</span> <span class="n">all_sequences</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="auto_prepare_data"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data">[docs]</a><span class="k">def</span> <span class="nf">auto_prepare_data</span><span class="p">(</span><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+                      <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Given a results dictionary, guess the target and fiducial sequences and extract</span>
+<span class="sd">    the tomography input data.</span>
+
+<span class="sd">    See :func:`prepare_data` for details.</span>
+
+<span class="sd">    :param outcomes: A dictionary mapping sequences run to the number each outcome was</span>
+<span class="sd">        observed.</span>
+<span class="sd">    :return: A tuple of prepared states, measured states, and the respective number of</span>
+<span class="sd">        observations each (see :func:`prepare_data`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seqs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">outcomes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">fiducial_pairs</span> <span class="o">=</span> <span class="n">guess_prepare_target_measure_split</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">prepare_data</span><span class="p">({</span><span class="n">f</span><span class="p">:</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fiducial_pairs</span><span class="p">,</span> <span class="n">seqs</span><span class="p">)})</span></div>
+
+
+<div class="viewcode-block" id="prepare_data"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">[docs]</a><span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a dictionary of observed measurement outcomes indexed by pairs of the</span>
+<span class="sd">    state preparation and measurement gate sequences used, compute the prepared/measured</span>
+<span class="sd">    states and respective number of operations.</span>
+
+<span class="sd">    Assumes the initial state (i.e. before the preparation sequences are run) is</span>
+<span class="sd">    :math:`\left|00\ldots0\right&gt;`), and outcomes are given in canonical order (i.e.</span>
+<span class="sd">    corresponding to projection onto :math:`\left|0\ldots00\right&gt;,</span>
+<span class="sd">    \left|0\ldots01\right&gt;, \ldots, \left|1\ldots11\right&gt;`.)</span>
+
+<span class="sd">    :param outcomes: A dictionary mapping tuples ``(prepare, measure)`` of state</span>
+<span class="sd">        preparation/measurement gate sequences to an array giving the number each</span>
+<span class="sd">        outcome was observed.</span>
+
+<span class="sd">    :return: A tuple of prepared states, measured states, and the respective number of</span>
+<span class="sd">        observations each. Rows in the retuned observation count array correspond to the</span>
+<span class="sd">        different prepared states, and columns to the measured state. Measured states</span>
+<span class="sd">        corresponding to the different outcomes are enumerated explicitly, so for a</span>
+<span class="sd">        :math:`n`-qubit system and :math:`k` measurement fiducials, there will be</span>
+<span class="sd">        :math:`k\ 2^n` measured states/columns in the observation count matrix. All</span>
+<span class="sd">        states are given as pure states.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fiducial_pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">outcomes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="n">prep_sequences</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">))</span>
+    <span class="n">prep_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">prep_sequences</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">]</span>
+
+    <span class="n">meas_sequences</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">))</span>
+    <span class="n">meas_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">meas_sequences</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">]</span>
+
+    <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="nb">max</span><span class="p">(</span><span class="n">collect_operands</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">initial_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+    <span class="n">initial_state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">prep_states</span> <span class="o">=</span> <span class="p">[</span><span class="n">apply_gate_sequence</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prep_sequences</span><span class="p">]</span>
+
+    <span class="n">meas_unitaries</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">meas_sequences</span>
+    <span class="p">]</span>
+    <span class="n">meas_states</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">meas_unitaries</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">)]</span>
+    <span class="n">observations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">prep_states</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">meas_sequences</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">prep_idx</span><span class="p">,</span> <span class="n">meas_idx</span><span class="p">,</span> <span class="n">fids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">prep_indices</span><span class="p">,</span> <span class="n">meas_indices</span><span class="p">,</span> <span class="n">fiducial_pairs</span><span class="p">):</span>
+        <span class="n">meas_base_idx</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span> <span class="o">*</span> <span class="n">meas_idx</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">counts</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes</span><span class="p">[</span><span class="n">fids</span><span class="p">]):</span>
+            <span class="n">observations</span><span class="p">[</span><span class="n">prep_idx</span><span class="p">,</span> <span class="n">meas_base_idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;Currently assuming all prepare/measure combinations are present&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">prep_states</span><span class="p">,</span> <span class="n">meas_states</span><span class="p">,</span> <span class="n">observations</span></div>
+
+
+<div class="viewcode-block" id="build_choi_predictor"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">[docs]</a><span class="k">def</span> <span class="nf">build_choi_predictor</span><span class="p">(</span><span class="n">prep_states</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                         <span class="n">meas_states</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a list of prepared and measured states as state vectors, return a matrix</span>
+<span class="sd">    that predicts observed probabilities when applied to the Choi matrix of a process.</span>
+
+<span class="sd">    In other words, for given prepared and measured states</span>
+<span class="sd">    :math:`(\left|\psi_i\right&gt;)_i` and :math:`(\left|\psi_j\right&gt;)_j`, the returned</span>
+<span class="sd">    matrix :math:`m` computes the outcomes</span>
+<span class="sd">    :math:`p_{ij} = \operatorname{tr}\left(</span>
+<span class="sd">    \mathcal{E}(\left|\psi_i\right&gt;\left&lt;\psi_i\right|)</span>
+<span class="sd">    \left|\phi_j\right&gt;\left&lt;\phi_j\right|</span>
+<span class="sd">    \right)` by applying it to the Choi matrix :math:`C_\mathcal{E}`, i.e.</span>
+<span class="sd">    :math:`p = m\ C_\mathcal{E}`.</span>
+
+<span class="sd">    This is the same convention for the order of entries in the outcome matrix</span>
+<span class="sd">    :math:`p` as used by :func:`prepare_data`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span>
+        <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">projector</span><span class="p">(</span><span class="n">prep</span><span class="p">),</span>
+                        <span class="n">projector</span><span class="p">(</span><span class="n">meas</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">prep_states</span>
+        <span class="k">for</span> <span class="n">meas</span> <span class="ow">in</span> <span class="n">meas_states</span>
+    <span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="invert_choi_predictor"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor">[docs]</a><span class="k">def</span> <span class="nf">invert_choi_predictor</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                          <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Obtain an estimate for the process :math:`\mathcal{E}` by applying the inverse</span>
+<span class="sd">    of the given Choi predictor to a matrix of experimentally measured outcomes.</span>
+
+<span class="sd">    If the set of measurements is over-complete, the least-squares estimate will be</span>
+<span class="sd">    computed (which is sometimes stated by using the Moore-Penrose pseudo-inverse).</span>
+
+<span class="sd">    :param choi_predictor: The Choi predictor matrix, as computed by</span>
+<span class="sd">        :func:`build_choi_predictor`.</span>
+<span class="sd">    :param observations: The number of observations per prepared/measured state; see</span>
+<span class="sd">        :func:`prepare_data`. Will be normalised row-by-row as necessary.</span>
+
+<span class="sd">    :return: The linear inversion tomography estimate for the process, as a Choi matrix</span>
+<span class="sd">        :math:`C_{\mathcal{E}}`. Note that in the presence of sampling noise or</span>
+<span class="sd">        experimental imperfections, the returned superoperator will not necessarily be</span>
+<span class="sd">        physical, i.e. neither completely positive nor trace-preserving.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># For consistent normalisation, infer the dimension of the underlying state Hilbert</span>
+    <span class="c1"># space and the number of measurement bases from the given predictor/observation</span>
+    <span class="c1"># matrix.</span>
+    <span class="n">pure_state_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">choi_predictor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">pure_state_dimension</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Choi predictor not of right shape for CPTP involution&quot;</span><span class="p">)</span>
+    <span class="n">num_measurement_bases</span><span class="p">,</span> <span class="n">rem</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">observations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pure_state_dimension</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rem</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of observation matrix columns not consistent with &quot;</span>
+                         <span class="s2">&quot;dim(pure_state) measurements per basis&quot;</span><span class="p">)</span>
+
+    <span class="n">normalised_observations</span> <span class="o">=</span> <span class="n">observations</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">shots_per_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_measurement_bases</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">normalised_observations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">normalised_observations</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/=</span> <span class="n">shots_per_basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">solution</span><span class="p">,</span> <span class="n">residuals</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">singular_vals</span> <span class="o">=</span> \
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">normalised_observations</span><span class="p">),</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="o">!=</span> <span class="n">solution</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Predictor matrix was rank-deficient; &quot;</span>
+                         <span class="s2">&quot;check that input/measurement state sets are complete&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vec2mat</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="o">/</span> <span class="n">pure_state_dimension</span></div>
+
+
+<div class="viewcode-block" id="linear_inversion_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">[docs]</a><span class="k">def</span> <span class="nf">linear_inversion_tomography</span><span class="p">(</span><span class="n">prep_states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                                <span class="n">meas_states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                                <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the linear inversion estimate of the quantum process that has produced</span>
+<span class="sd">    the given observations.</span>
+
+<span class="sd">    :param prep_states: A list of the pure states prepared in the tomography experiment.</span>
+<span class="sd">    :param meas_states: A list of the pure states projected onto in the tomography</span>
+<span class="sd">        experiment.</span>
+<span class="sd">    :param observations: A matrix giving the number of times each outcome was observed</span>
+<span class="sd">        in the experiment; see :func:`prepare_data`.</span>
+
+<span class="sd">    :return: The linear inversion tomography estimate for the process as a Choi matrix;</span>
+<span class="sd">        see :func:`invert_choi_predictor`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">predictor</span> <span class="o">=</span> <span class="n">build_choi_predictor</span><span class="p">(</span><span class="n">prep_states</span><span class="p">,</span> <span class="n">meas_states</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">invert_choi_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">outcomes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="negative_log_likelihood"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood">[docs]</a><span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                            <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Return the negative log-likelihood for the given outcomes to be observed (with</span>
+<span class="sd">    experiments as described by the Choi predictor) as a function of the given</span>
+<span class="sd">    superoperator in Choi representation.</span>
+
+<span class="sd">    See :func:`negative_log_likelihood_gradient` for calculating the gradient.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># See e.g. [KBLG18] eq. 3/appendix A.</span>
+    <span class="n">probability_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">choi_predictor</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span>
+
+    <span class="c1"># Fudge predictions away from 0 to avoid stalling as per [KBLG18] appendix D.</span>
+    <span class="n">mask_small</span> <span class="o">=</span> <span class="n">probability_vec</span> <span class="o">&lt;</span> <span class="mf">1e-16</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask_small</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> very small probabilities encountered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_small</span><span class="p">)))</span>
+    <span class="n">probability_vec</span><span class="p">[</span><span class="n">mask_small</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-16</span>
+    <span class="n">probability_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probability_vec</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="o">-</span><span class="n">observation_vec</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">probability_vec</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="negative_log_likelihood_gradient"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient">[docs]</a><span class="k">def</span> <span class="nf">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                     <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                     <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the derivative of the log-likelihood</span>
+<span class="sd">    :math:`\mathcal{L}(C_\mathcal{E})` around the given Choi matrix</span>
+<span class="sd">    :math:`C_\mathcal{E}`.</span>
+
+<span class="sd">    See :func:`negative_log_likelihood` for computing the value at a given point.</span>
+
+<span class="sd">    :return: A matrix giving the gradient :math:`\nabla \mathcal{L}(C_\mathcal{E}) =</span>
+<span class="sd">        \frac{\partial\mathcal{L}(C_\mathcal{E})}{\partial C_\mathcal{E}}`, in the usual</span>
+<span class="sd">        element-wise matrix calculus sense.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">probability_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">choi_predictor</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span>
+
+    <span class="c1"># Fudge predictions away from 0 to avoid stalling as suggested in</span>
+    <span class="c1"># [KBLG18] appendix D.</span>
+    <span class="n">mask_small</span> <span class="o">=</span> <span class="n">probability_vec</span> <span class="o">&lt;</span> <span class="mf">1e-16</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask_small</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> very small probabilities encountered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_small</span><span class="p">)))</span>
+    <span class="n">probability_vec</span><span class="p">[</span><span class="n">mask_small</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-16</span>
+    <span class="n">probability_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probability_vec</span><span class="p">)</span>
+
+    <span class="c1"># See e.g. [AL12] eq. 13 and [KBLG18] eq. 6.</span>
+    <span class="c1"># [KBLG18] suggests the equivalent of `-choi_predictor.conj().T @ vec2mat(...)` in</span>
+    <span class="c1"># appendix A but that doesn&#39;t work out in terms of dimensions.</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">vec2mat</span><span class="p">(</span><span class="n">choi_predictor</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">observation_vec</span> <span class="o">/</span> <span class="n">probability_vec</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_ptrace</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+    <span class="c1"># Calculates partial trace keeping the first of two systems of dimension d. This is</span>
+    <span class="c1"># unoptimised, horrible, not to be imitated, etc.</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+        <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">proj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">proj</span> <span class="o">@</span> <span class="n">rho</span> <span class="o">@</span> <span class="n">proj</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<div class="viewcode-block" id="diluted_mle_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">[docs]</a><span class="k">def</span> <span class="nf">diluted_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                           <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                           <span class="n">rel_tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+                           <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
+<span class="sd">    the given observations using a diluted fixed-point iteration method.</span>
+
+<span class="sd">    By definition, the maximum-likelihood estimate for the superoperator maximises the</span>
+<span class="sd">    likelihood function. The extremal condition can be stated in a form amenable to</span>
+<span class="sd">    fixed-point iteration as shown in [FH01]_. The trace-preserving constraint is</span>
+<span class="sd">    expressed via Lagrange multipliers ([FH01]_ eq. 16), and complete positivity is</span>
+<span class="sd">    enforced at each step by explicitly forcing the iterates to be Hermitian.</span>
+
+<span class="sd">    The particular formulation used here is described in [AL12]_ section 2.1. The</span>
+<span class="sd">    dilution parameter is chosen to ensure progress at each step as suggested in</span>
+<span class="sd">    [RHKL07]_ (but without any of the possible further optimisations for maximising the</span>
+<span class="sd">    likelihood increase discussed there).</span>
+
+<span class="sd">    :param choi_predictor: The Choi predictor matrix, see :func:`build_choi_predictor`.</span>
+<span class="sd">    :param observations: The number of observations per prepared/measured state; see</span>
+<span class="sd">        :func:`prepare_data`. Will be normalised row-by-row as necessary.</span>
+<span class="sd">    :param rel_tol: Stopping criterion, given as relative change of the negative</span>
+<span class="sd">        log-likelihood.</span>
+<span class="sd">    :param iteration_limit: Maximum number of iterations; an error is thrown if it is</span>
+<span class="sd">        reached before the stopping criterion is fulfilled.</span>
+
+<span class="sd">    :return: The CPTP tomography estimate for the process, given in the Choi</span>
+<span class="sd">        representation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">scipy.linalg</span>
+
+    <span class="n">float_pure_state_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">choi_predictor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">pure_state_dimension</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">float_pure_state_dimension</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pure_state_dimension</span> <span class="o">!=</span> <span class="n">float_pure_state_dimension</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Choi predictor not of right shape for CPTP endomorphism&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Normalise so that sum of all probabilities is 1.0, and applying the predictor to a</span>
+    <span class="c1"># Choi matrix with normalisation such that entries are in [-1, 1] yields that.</span>
+    <span class="n">number_of_basis_combinations</span> <span class="o">=</span> <span class="n">choi_predictor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">pure_state_dimension</span>
+    <span class="n">choi_predictor</span> <span class="o">=</span> <span class="n">choi_predictor</span> <span class="o">/</span> <span class="n">number_of_basis_combinations</span>
+    <span class="n">observation_vec</span> <span class="o">=</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+
+    <span class="n">choi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="o">/</span> <span class="n">pure_state_dimension</span>
+
+    <span class="n">old_nll</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">for</span> <span class="n">iter_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iteration_limit</span><span class="p">):</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span><span class="p">)</span>
+
+        <span class="c1"># Decrease dilution parameter `eps` until likelihood starts to increase.</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">new_choi</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">diluted_grad</span> <span class="o">=</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">grad</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Calculate λ, the TP Lagrange multiplier matrix, see e.g. [AL12] eq. 17.</span>
+            <span class="n">lambda_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">(</span>
+                <span class="n">_ptrace</span><span class="p">(</span><span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">choi</span> <span class="o">@</span> <span class="n">diluted_grad</span><span class="p">,</span> <span class="n">pure_state_dimension</span><span class="p">))</span>
+
+            <span class="c1"># Build inverse of λ ⊗ id as used in the iteration step (e.g. [AL12]</span>
+            <span class="c1"># eq. 16).</span>
+            <span class="c1"># For large systems, we would probably want to write the multiplications</span>
+            <span class="c1"># with the inverse in terms of linalg.solve instead, but just calculating</span>
+            <span class="c1"># the inverse avoids tensor product index gymnastics for now.</span>
+            <span class="n">lambda_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">lambda_</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">))</span>
+
+            <span class="n">new_choi</span> <span class="o">=</span> <span class="n">lambda_inv</span> <span class="o">@</span> <span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">choi</span> <span class="o">@</span> <span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">lambda_inv</span>
+            <span class="k">if</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span>
+                                       <span class="n">new_choi</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">old_nll</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">eps</span> <span class="o">/=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">eps</span> <span class="o">&lt;</span> <span class="mf">1e-16</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not converge (dilution limit reached, but &quot;</span>
+                                 <span class="s2">&quot;likelihood still not decreasing)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Ensure complete positivity, i.e. Hermitian Choi matrix.</span>
+        <span class="n">choi</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_choi</span> <span class="o">+</span> <span class="n">new_choi</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="c1"># If the relative change in likelihood is smaller than the tolerance specified,</span>
+        <span class="c1"># we are done.</span>
+        <span class="n">new_nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">old_nll</span> <span class="o">-</span> <span class="n">new_nll</span><span class="p">)</span> <span class="o">/</span> <span class="n">new_nll</span> <span class="o">&lt;</span> <span class="n">rel_tol</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">choi</span> <span class="o">/</span> <span class="n">pure_state_dimension</span>
+        <span class="n">old_nll</span> <span class="o">=</span> <span class="n">new_nll</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not converge (iteration limit reached)&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="project_into_cp"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cp">[docs]</a><span class="k">def</span> <span class="nf">project_into_cp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;For the given superoperator (in Choi representation), return the nearest</span>
+<span class="sd">    completely-positive one.</span>
+
+<span class="sd">    See [KBLG18]_ eq. 8.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">((</span><span class="n">choi</span> <span class="o">+</span> <span class="n">choi</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">eigvals</span><span class="p">[</span><span class="n">eigvals</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">eigvecs</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)</span> <span class="o">@</span> <span class="n">eigvecs</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span></div>
+
+
+<div class="viewcode-block" id="TPProjector"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector">[docs]</a><span class="k">class</span> <span class="nc">TPProjector</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Projects superoperators into the trace-preserving subspace.</span>
+
+<span class="sd">    (This is a class to allow some ancillary matrices to be re-used across different</span>
+<span class="sd">    :meth:`project` invocations.)</span>
+
+<span class="sd">    :param pure_state_dimension: The dimension :math:`d` of the Hilbert space the</span>
+<span class="sd">        density operators of which the superoperators to project act on; i.e.</span>
+<span class="sd">        :math:`d = 2^n` for :math:`n` qubits, and the Choi matrices are</span>
+<span class="sd">        :math:`d^2 \times d^2` in size.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pure_state_dimension</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">pure_state_dimension</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">pure_state_dimension</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">pure_state_dimension</span><span class="o">**</span><span class="mi">4</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">):</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">)</span>
+            <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">),</span> <span class="n">e</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">m</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_id</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">))</span>
+
+<div class="viewcode-block" id="TPProjector.project"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the result of orthogonally projecting the given Choi operator into the</span>
+<span class="sd">        trace-preserving subspace.</span>
+
+<span class="sd">        See [KBLG18]_ eq. 12.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">choi</span> <span class="o">+</span> <span class="n">vec2mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdagger_id</span> <span class="o">-</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span></div></div>
+
+
+<div class="viewcode-block" id="project_into_cptp"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cptp">[docs]</a><span class="k">def</span> <span class="nf">project_into_cptp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                      <span class="n">tp_projector</span><span class="p">:</span> <span class="n">TPProjector</span><span class="p">,</span>
+                      <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+                      <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Project the given Choi matrix onto the closest superoperator that is both</span>
+<span class="sd">    completely positive and trace-preserving.</span>
+
+<span class="sd">    This implements Algorithm 1 from [KBLG18]_.</span>
+
+<span class="sd">    If the iteration did not converge after the given number of steps, an exception is</span>
+<span class="sd">    raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">old_cp_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">choi</span><span class="p">)</span>
+    <span class="n">old_tp_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">choi</span><span class="p">)</span>
+    <span class="n">old_after_cp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">choi</span><span class="p">)</span>
+    <span class="n">old_choi</span> <span class="o">=</span> <span class="n">choi</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iteration_limit</span><span class="p">):</span>
+        <span class="n">before_cp</span> <span class="o">=</span> <span class="n">old_choi</span> <span class="o">+</span> <span class="n">old_cp_step</span>
+        <span class="n">after_cp</span> <span class="o">=</span> <span class="n">project_into_cp</span><span class="p">(</span><span class="n">before_cp</span><span class="p">)</span>
+        <span class="n">cp_step</span> <span class="o">=</span> <span class="n">before_cp</span> <span class="o">-</span> <span class="n">after_cp</span>
+
+        <span class="n">before_tp</span> <span class="o">=</span> <span class="n">after_cp</span> <span class="o">+</span> <span class="n">old_tp_step</span>
+        <span class="n">choi</span> <span class="o">=</span> <span class="n">tp_projector</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">before_tp</span><span class="p">)</span>
+        <span class="n">tp_step</span> <span class="o">=</span> <span class="n">before_tp</span> <span class="o">-</span> <span class="n">choi</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">old_cp_step</span> <span class="o">-</span> <span class="n">cp_step</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">old_tp_step</span> <span class="o">-</span> <span class="n">tp_step</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">old_cp_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span> <span class="o">-</span> <span class="n">old_choi</span><span class="p">))</span> <span class="o">+</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span>
+                       <span class="n">mat2vec</span><span class="p">(</span><span class="n">old_tp_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">after_cp</span> <span class="o">-</span> <span class="n">old_after_cp</span><span class="p">))</span>
+                <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">choi</span>
+        <span class="n">old_cp_step</span> <span class="o">=</span> <span class="n">cp_step</span>
+        <span class="n">old_tp_step</span> <span class="o">=</span> <span class="n">tp_step</span>
+        <span class="n">old_after_cp</span> <span class="o">=</span> <span class="n">after_cp</span>
+        <span class="n">old_choi</span> <span class="o">=</span> <span class="n">choi</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not converge&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pgdb_mle_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">[docs]</a><span class="k">def</span> <span class="nf">pgdb_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                        <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
+<span class="sd">    the given observations using a projected gradient descent algorithm with</span>
+<span class="sd">    backtracking, as proposed by [KBLG18]_.</span>
+
+<span class="sd">    :param choi_predictor: The Choi predictor matrix, see :func:`build_choi_predictor`.</span>
+<span class="sd">    :param observations: The number of observations per prepared/measured state; see</span>
+<span class="sd">        :func:`prepare_data`. Will be normalised row-by-row as necessary.</span>
+
+<span class="sd">    :return: The CPTP tomography estimate for the process, given in the Choi</span>
+<span class="sd">        representation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">float_pure_state_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">choi_predictor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">pure_state_dimension</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">float_pure_state_dimension</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pure_state_dimension</span> <span class="o">!=</span> <span class="n">float_pure_state_dimension</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Choi predictor not of right shape for CPTP endomorphism&quot;</span><span class="p">)</span>
+
+    <span class="n">tp_projector</span> <span class="o">=</span> <span class="n">TPProjector</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">)</span>
+
+    <span class="c1"># Note: Different normalisation used here to match statement of algorithm in</span>
+    <span class="c1"># [KBLG18]; divisor would be pure_state_dimension**2 with our usual convention.</span>
+    <span class="n">choi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span> <span class="o">/</span> <span class="n">pure_state_dimension</span>
+
+    <span class="n">mu</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">/</span> <span class="n">pure_state_dimension</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.3</span>
+
+    <span class="c1"># Normalise so that sum of all probabilities is 1.0, and applying the predictor to a</span>
+    <span class="c1"># Choi matrix with normalisation such that entries are in [-1, 1] yields that.</span>
+    <span class="n">number_of_basis_combinations</span> <span class="o">=</span> <span class="n">choi_predictor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">pure_state_dimension</span>
+    <span class="n">choi_predictor</span> <span class="o">=</span> <span class="n">choi_predictor</span> <span class="o">/</span> <span class="n">number_of_basis_combinations</span>
+    <span class="n">observation_vec</span> <span class="o">=</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+
+    <span class="n">old_nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">nll_gradient</span> <span class="o">=</span> <span class="n">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span>
+                                                        <span class="n">choi</span><span class="p">)</span>
+
+        <span class="n">choi_step</span> <span class="o">=</span> <span class="n">project_into_cptp</span><span class="p">(</span><span class="n">choi</span> <span class="o">-</span> <span class="n">nll_gradient</span> <span class="o">/</span> <span class="n">mu</span><span class="p">,</span> <span class="n">tp_projector</span><span class="p">)</span> <span class="o">-</span> <span class="n">choi</span>
+
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">change</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">nll_gradient</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span>
+                                          <span class="n">choi</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">choi_step</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nll</span> <span class="o">&lt;=</span> <span class="n">old_nll</span> <span class="o">+</span> <span class="n">change</span> <span class="ow">or</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">alpha</span> <span class="o">/=</span> <span class="mi">2</span>
+            <span class="n">change</span> <span class="o">/=</span> <span class="mi">2</span>
+
+        <span class="n">choi</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">choi_step</span>
+        <span class="n">nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">old_nll</span> <span class="o">-</span> <span class="n">nll</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">old_nll</span> <span class="o">=</span> <span class="n">nll</span>
+
+    <span class="c1"># Convert back to our usual normalisation convention.</span>
+    <span class="k">return</span> <span class="n">choi</span> <span class="o">/</span> <span class="n">pure_state_dimension</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Ion Trap Quantum Computing group
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
