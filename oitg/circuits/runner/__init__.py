@@ -85,9 +85,6 @@ class SequenceRunnerOptions:
         for each sequence per repeat.
     :param randomise_per_repeat: Whether to randomise the order of sequences within each
         repeat.
-    :param dataset_prefix: Prefix for dataset keys to write executed sequences and their
-        results to. If ``None``, results are not written to datasets. Sequence runner
-        implementations not
     """
 
     def __init__(self,
@@ -96,15 +93,13 @@ class SequenceRunnerOptions:
                  chunk_size: int = 1,
                  num_repeats_per_chunk: int = 1,
                  num_shots_per_repeat: int = 100,
-                 randomise_per_repeat: bool = True,
-                 dataset_prefix: Union[None, str] = "data.circuits."):
+                 randomise_per_repeat: bool = True):
         self.num_global_repeats = num_global_repeats
         self.randomise_globally = randomise_globally
         self.chunk_size = chunk_size
         self.num_repeats_per_chunk = num_repeats_per_chunk
         self.num_shots_per_repeat = num_shots_per_repeat
         self.randomise_per_repeat = randomise_per_repeat
-        self.dataset_prefix = dataset_prefix
 
 
 class SequenceRunner:
@@ -117,7 +112,8 @@ class SequenceRunner:
                       sequences: Iterable[GateSequence],
                       num_qubits: Union[None, int] = None,
                       progress_callback: Callable[[ndarray, ndarray], None] = None,
-                      progress_callback_interval: float = 5.0):
+                      progress_callback_interval: float = 5.0,
+                      dataset_prefix: Union[None, str] = "data.circuits."):
         r"""Runs the given sequences and returns result statistics.
 
         :param sequences: The gate sequences to execute.
@@ -131,6 +127,10 @@ class SequenceRunner:
             value).
         :param progress_callback_interval: The interval between invocations of the
             progress callback, in seconds.
+        :param dataset_prefix: Prefix for dataset keys to write executed sequences and
+            their results to. If ``None``, results are not written to datasets. Sequence
+            runner implementations not embedded into an ARTIQ experiment can ignore
+            this.
 
         :return: A tuple ``(run_order, outcomes)`` of NumPy arrays. ``run_order`` lists
             the order in which the sequences were executed (possibly with repeats) by
