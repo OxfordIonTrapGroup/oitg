@@ -1364,7 +1364,7 @@ drifts, use fewer total shots per chunk, but more global repeats.</p>
 ARTIQ.</p>
 <dl class="class">
 <dt id="oitg.circuits.runner.SequenceRunnerOptions">
-<em class="property">class </em><code class="descclassname">oitg.circuits.runner.</code><code class="descname">SequenceRunnerOptions</code><span class="sig-paren">(</span><em>num_global_repeats: int = 1</em>, <em>randomise_globally: bool = True</em>, <em>chunk_size: int = 1</em>, <em>num_repeats_per_chunk: int = 1</em>, <em>num_shots_per_repeat: int = 100</em>, <em>randomise_per_repeat: bool = True</em>, <em>dataset_prefix: Union[None</em>, <em>str] = 'data.circuits.'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunnerOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunnerOptions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">oitg.circuits.runner.</code><code class="descname">SequenceRunnerOptions</code><span class="sig-paren">(</span><em>num_global_repeats: int = 1</em>, <em>randomise_globally: bool = True</em>, <em>chunk_size: int = 1</em>, <em>num_repeats_per_chunk: int = 1</em>, <em>num_shots_per_repeat: int = 100</em>, <em>randomise_per_repeat: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunnerOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunnerOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies common <a class="reference internal" href="#oitg.circuits.runner.SequenceRunner" title="oitg.circuits.runner.SequenceRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceRunner</span></code></a> options.</p>
 <p>See the <a class="reference internal" href="#module-oitg.circuits.runner" title="oitg.circuits.runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module</span></code></a>-level docstring for background on
 the concepts.</p>
@@ -1387,9 +1387,6 @@ within each chunk.</p></li>
 for each sequence per repeat.</p></li>
 <li><p><strong>randomise_per_repeat</strong> – Whether to randomise the order of sequences within each
 repeat.</p></li>
-<li><p><strong>dataset_prefix</strong> – Prefix for dataset keys to write executed sequences and their
-results to. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, results are not written to datasets. Sequence runner
-implementations not</p></li>
 </ul>
 </dd>
 </dl>
@@ -1402,7 +1399,7 @@ implementations not</p></li>
 <p>See the <a class="reference internal" href="#module-oitg.circuits.runner" title="oitg.circuits.runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module</span></code></a>-level docstring for details.</p>
 <dl class="method">
 <dt id="oitg.circuits.runner.SequenceRunner.run_sequences">
-<code class="descname">run_sequences</code><span class="sig-paren">(</span><em>sequences: Iterable[Tuple[oitg.circuits.gate.Gate, ...]], num_qubits: Union[None, int] = None, progress_callback: Callable[[numpy.ndarray, numpy.ndarray], None] = None, progress_callback_interval: float = 5.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunner.run_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunner.run_sequences" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_sequences</code><span class="sig-paren">(</span><em>sequences: Iterable[Tuple[oitg.circuits.gate.Gate, ...]], num_qubits: Union[None, int] = None, progress_callback: Callable[[numpy.ndarray, numpy.ndarray], None] = None, progress_callback_interval: float = 5.0, dataset_prefix: Union[None, str] = 'data.circuits.'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunner.run_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunner.run_sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the given sequences and returns result statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1418,6 +1415,10 @@ outcomes acquired since the last time the callback was invoked (see return
 value).</p></li>
 <li><p><strong>progress_callback_interval</strong> – The interval between invocations of the
 progress callback, in seconds.</p></li>
+<li><p><strong>dataset_prefix</strong> – Prefix for dataset keys to write executed sequences and
+their results to. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, results are not written to datasets. Sequence
+runner implementations not embedded into an ARTIQ experiment can ignore
+this.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

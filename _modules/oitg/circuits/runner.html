@@ -236,9 +236,6 @@
 <span class="sd">        for each sequence per repeat.</span>
 <span class="sd">    :param randomise_per_repeat: Whether to randomise the order of sequences within each</span>
 <span class="sd">        repeat.</span>
-<span class="sd">    :param dataset_prefix: Prefix for dataset keys to write executed sequences and their</span>
-<span class="sd">        results to. If ``None``, results are not written to datasets. Sequence runner</span>
-<span class="sd">        implementations not</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -247,15 +244,13 @@
                  <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                  <span class="n">num_repeats_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                  <span class="n">num_shots_per_repeat</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
-                 <span class="n">randomise_per_repeat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                 <span class="n">dataset_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;data.circuits.&quot;</span><span class="p">):</span>
+                 <span class="n">randomise_per_repeat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_global_repeats</span> <span class="o">=</span> <span class="n">num_global_repeats</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">randomise_globally</span> <span class="o">=</span> <span class="n">randomise_globally</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_repeats_per_chunk</span> <span class="o">=</span> <span class="n">num_repeats_per_chunk</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_shots_per_repeat</span> <span class="o">=</span> <span class="n">num_shots_per_repeat</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">randomise_per_repeat</span> <span class="o">=</span> <span class="n">randomise_per_repeat</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_prefix</span> <span class="o">=</span> <span class="n">dataset_prefix</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">randomise_per_repeat</span> <span class="o">=</span> <span class="n">randomise_per_repeat</span></div>
 
 
 <div class="viewcode-block" id="SequenceRunner"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.runner.SequenceRunner">[docs]</a><span class="k">class</span> <span class="nc">SequenceRunner</span><span class="p">:</span>
@@ -268,7 +263,8 @@
                       <span class="n">sequences</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
                       <span class="n">num_qubits</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                       <span class="n">progress_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                      <span class="n">progress_callback_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">):</span>
+                      <span class="n">progress_callback_interval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
+                      <span class="n">dataset_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;data.circuits.&quot;</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Runs the given sequences and returns result statistics.</span>
 
 <span class="sd">        :param sequences: The gate sequences to execute.</span>
@@ -282,6 +278,10 @@
 <span class="sd">            value).</span>
 <span class="sd">        :param progress_callback_interval: The interval between invocations of the</span>
 <span class="sd">            progress callback, in seconds.</span>
+<span class="sd">        :param dataset_prefix: Prefix for dataset keys to write executed sequences and</span>
+<span class="sd">            their results to. If ``None``, results are not written to datasets. Sequence</span>
+<span class="sd">            runner implementations not embedded into an ARTIQ experiment can ignore</span>
+<span class="sd">            this.</span>
 
 <span class="sd">        :return: A tuple ``(run_order, outcomes)`` of NumPy arrays. ``run_order`` lists</span>
 <span class="sd">            the order in which the sequences were executed (possibly with repeats) by</span>
