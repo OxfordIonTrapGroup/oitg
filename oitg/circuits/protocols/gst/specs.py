@@ -6,7 +6,7 @@ from ...gate import Gate
 from .generate import GSTSpec
 
 
-def make_1q_xz_pi_2_spec():
+def make_1q_xz_pi_2_spec() -> GSTSpec:
     """Return a single-qubit gate set using π/2 x- and z-rotations, corresponding to
     pyGSTi's `std1Q_XZ` model.
     """
@@ -20,7 +20,7 @@ def make_1q_xz_pi_2_spec():
     return GSTSpec(prep, meas, germs, "std1Q_XZ")
 
 
-def make_2q_xy_pi_2_cphase_spec():
+def make_2q_xy_pi_2_cphase_spec() -> GSTSpec:
     """Return a two-qubit gate set using a CPHASE (CZ) gate and local π/2 x- and
     y-rotations, corresponding to pyGSTi's `std1Q_XZ` model.
     """
