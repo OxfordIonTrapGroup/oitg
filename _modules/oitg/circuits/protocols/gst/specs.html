@@ -159,7 +159,7 @@
 <span class="kn">from</span> <span class="nn">.generate</span> <span class="k">import</span> <span class="n">GSTSpec</span>
 
 
-<div class="viewcode-block" id="make_1q_xz_pi_2_spec"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.gst.specs.make_1q_xz_pi_2_spec">[docs]</a><span class="k">def</span> <span class="nf">make_1q_xz_pi_2_spec</span><span class="p">():</span>
+<div class="viewcode-block" id="make_1q_xz_pi_2_spec"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.gst.specs.make_1q_xz_pi_2_spec">[docs]</a><span class="k">def</span> <span class="nf">make_1q_xz_pi_2_spec</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSTSpec</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a single-qubit gate set using π/2 x- and z-rotations, corresponding to</span>
 <span class="sd">    pyGSTi&#39;s `std1Q_XZ` model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -173,7 +173,7 @@
     <span class="k">return</span> <span class="n">GSTSpec</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="n">meas</span><span class="p">,</span> <span class="n">germs</span><span class="p">,</span> <span class="s2">&quot;std1Q_XZ&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="make_2q_xy_pi_2_cphase_spec"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec">[docs]</a><span class="k">def</span> <span class="nf">make_2q_xy_pi_2_cphase_spec</span><span class="p">():</span>
+<div class="viewcode-block" id="make_2q_xy_pi_2_cphase_spec"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec">[docs]</a><span class="k">def</span> <span class="nf">make_2q_xy_pi_2_cphase_spec</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">GSTSpec</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a two-qubit gate set using a CPHASE (CZ) gate and local π/2 x- and</span>
 <span class="sd">    y-rotations, corresponding to pyGSTi&#39;s `std1Q_XZ` model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
