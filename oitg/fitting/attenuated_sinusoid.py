@@ -22,6 +22,9 @@ def init_all(t, y, p_dict):
     associated data coordinates share the same index in t & y
 
     Note: Data may be in any order and arbitrarily spaced"""
+    # p_dict is an instance of FitParameters
+    # user-inintialised values are not overwritten
+    # non user-initialised parameters are pre-initialised to 0
 
     # sort data by time (x-axis)
     mask = np.argsort(t)
@@ -30,10 +33,6 @@ def init_all(t, y, p_dict):
 
     p_dict['t_dead'] = 0.0
     p_dict['rate'] = 0.0
-    # is there a reliable way to make lombscargle
-    # non-senisitve to a known exponential decay?
-    # ex: if c_equ and rate are known
-    #     (y - c_equ) * exp(r*t) would only leave sin and dc offset
 
     min_step = np.min(t[1:] - t[:-1])
     duration = t[-1] - t[0]
@@ -41,21 +40,20 @@ def init_all(t, y, p_dict):
     f_min = 0.5 / duration
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
-    pgram = lombscargle(t, y, omega_list, precenter=True)
+    if 'c_equ' in p_dict.constant_parameter_names or \
+        'c_equ' in p_dict.initialised_parameter_names:
+        temp = (y - p_dict['c_equ']) * np.exp(p_dict['rate'] * t)
+        pgram = lombscargle(t, temp, omega_list, precenter=True)
+    else:
+        pgram = lombscargle(t, y, omega_list, precenter=True)
     p_dict['omega'] = omega_list[np.argmax(pgram)]
 
-    # improved amplitude guess if frequency is provided
-    if 'omega' in p_dict.constant_parameter_names or \
-        'omega' in p_dict.initialised_parameter_names:
-        p_dict['a'] = np.sqrt(np.max(pgram) * 4 / len(y))
-    else:
-        temp = pgram[np.searchsorted(omega_list, p_dict['omega'])]
-        p_dict['a'] = np.sqrt(temp * 4 / len(y))
+    temp = pgram[np.searchsorted(omega_list, p_dict['omega'])]
+    p_dict['a'] = np.sqrt(temp * 4 / len(y))
 
 
-    # having estimated 'omega' average over one period
+    # having estimated 'omega', average over a period
     t_period = 2 * np.pi / p_dict['omega']
-
     p_dict['c_equ'] = np.mean(y[np.argwhere(t > t[-1] - 2*t_period)])
     p_dict['c_offset'] = np.mean(y[np.argwhere(t < t[0] + t_period)]) - \
                          p_dict['c_equ']
@@ -90,13 +88,13 @@ if __name__ == "__main__":
     amp = 0.5
     rel_noise = 2e-1
     # fit does not work with significant offset as initial frequency guess breaks
-    offset = -0.5
+    offset = -2
     equ = 1.0
     rate = 1e2
     phi = np.pi/2
 
     n_init = 25
-    t_init = 0.8*2*np.pi/omega
+    t_init = 1.3*2*np.pi/omega
 
     n_end = 35
     t_delay = 1 / rate
@@ -149,7 +147,7 @@ if __name__ == "__main__":
         plt.plot(x_fit, y_fit, color="y", label="fit")
         plt.legend()
         plt.show()
-    if True:  # frequency initial guess introspection (fit debugging)
+    if False:  # frequency initial guess introspection (fit debugging)
         mask = np.argsort(t)
         t = t[mask]
         y = y[mask]
@@ -160,9 +158,9 @@ if __name__ == "__main__":
         f_min = 0.5 / duration
 
         omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
-        pgram = lombscargle(t, y, omega_list, precenter=True)
+        periodigram = lombscargle(t, y, omega_list, precenter=True)
         plt.figure()
-        plt.plot(omega_list, pgram)
+        plt.plot(omega_list, periodigram)
         plt.xlim(0, omega*5)
         plt.show()
 
