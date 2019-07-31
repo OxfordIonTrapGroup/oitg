@@ -10,7 +10,7 @@ def fitting_function(t, p_dict):
                              + p_dict['phi']) \
         + p_dict['c']
     # hold constant during dead time
-    return np.where(t > np.min(t) + p_dict['t_dead'], y,
+    return np.where(t > p_dict['t_dead'], y,
                     p_dict['c'] + p_dict['a'] * np.sin(p_dict['phi'])
                     )
 
@@ -38,7 +38,7 @@ def init_all(t, y, p_dict):
     p_dict['omega'] = omega_list[np.argmax(pgram)]
     p_dict['c'] = np.mean(y)
     p_dict['a'] = np.sqrt(np.max(pgram) * 4 / len(y))
-    p_dict['t_dead'] = 0.0
+    p_dict['t_dead'] = np.min(t)
 
     y0_norm = (y[0] - p_dict['c']) / p_dict['a']
     if y0_norm <= -1.0:
@@ -60,7 +60,7 @@ def derived_params(p_dict, p_error_dict):
     p_dict['t_pi/2'] = p_dict['t_dead'] + np.pi / 2 / p_dict['omega']
     p_dict['period'] = 2 * np.pi / p_dict['omega']
 
-    # this erroc calculation neglects parameter covarience!
+    # this error calculation neglects parameter covariance!
     # may want to upgrade FitBase to make covariance matrix available.
 
     p_error_dict['max'] = np.sqrt(p_error_dict['c']**2 +
