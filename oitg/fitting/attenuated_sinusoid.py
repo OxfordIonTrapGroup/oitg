@@ -68,10 +68,40 @@ def init_all(t, y, p_dict):
     return p_dict  # input is changed due to mutability of dict!
 
 
+def derived_params(p_dict, p_error_dict):
+    """calculate commonly used derived parameters and their error
+
+    This method neglects parameter covariances!"""
+    p_dict['t_pi'] = p_dict['t_dead'] + np.pi / p_dict['omega']
+    p_dict['t_pi/2'] = p_dict['t_dead'] + np.pi / 2 / p_dict['omega']
+    p_dict['period'] = 2 * np.pi / p_dict['omega']
+    p_dict['tau_decay'] = 1 / p_dict['rate']
+
+    # this error calculation neglects parameter covariance!
+    # may want to upgrade FitBase to make covariance matrix available.
+    p_error_dict['t_pi'] = np.sqrt(p_error_dict['t_dead']**2 +
+                                   (np.pi / p_dict['omega'] *
+                                    (p_error_dict['omega'] / p_dict['omega'])
+                                    )**2
+                                   )
+    p_error_dict['t_pi/2'] = np.sqrt(p_error_dict['t_dead']**2 +
+                                     (np.pi / 2 / p_dict['omega'] *
+                                      (p_error_dict['omega'] / p_dict['omega'])
+                                      )**2
+                                     )
+    p_error_dict['period'] =  p_dict['period'] * \
+                             (p_error_dict['omega'] / p_dict['omega'])
+    p_error_dict['tau_decay'] = p_dict['tau_decay'] * \
+                             (p_error_dict['rate'] / p_dict['rate'])
+
+    return (p_dict, p_error_dict)
+
+
+
 attenuated_sinusoid = FitBase(
     ["omega", "t_dead", "a", "c_offset", "c_equ", "rate", "phi"],
     fitting_function=fitting_function, parameter_initialiser=init_all,
-    # derived_parameter_function=derived_params,
+    derived_parameter_function=derived_params,
     parameter_bounds={"omega": (0, np.inf),
                       "t_dead": (0, np.inf),
                       "a": (0, np.inf),
