@@ -71,14 +71,32 @@ def fitting_function(t, p):
     omega_eff = p['omega'] * p['omega_factor_vec']
     if not isinstance(t, np.ndarray):
         t = np.array([t])
+    if not isinstance(p['omega_factor_vec'], np.ndarray):
+        msg = "param_dict['omega_factor_vec'] is expected to be a numpy " + \
+              "vector. It should be supplied via the 'constants' argument " + \
+              "of FitBase.fit. \n\n" + \
+              "The provided 'mk_const_param' function is intended for " + \
+              "calculating this vector."
+        raise RuntimeError(msg)
     return sim_rabi(t, omega_eff, p['net_det'], p['n_bar'])
 
 
 def parameter_initialiser(t, y, p):
     """initialises suggested fit parameters"""
-    # lombscargle accepts irregularly sampled data (use sane bounds != 0)
-    omega = np.linspace(1e2, 1e7, 10000)  # rad s^-1
-    p['omega'] = omega[np.argmax(lombscargle(t, y, omega, precenter=True))]
+    # sort data by time (x-axis)
+    mask = np.argsort(t)
+    t = t[mask]
+    y = y[mask]
+
+    min_step = np.min(t[1:] - t[:-1])
+    duration = t[-1] - t[0]
+    f_max = 0.5 / min_step
+    f_min = 0.5 / duration
+
+    omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
+    pgram = lombscargle(t, y, omega_list, precenter=True)
+
+    p['omega'] = omega_list[np.argmax(pgram)]
     p['n_bar'] = 1  # small enough to fit n_bar=0.1
 
 
@@ -103,7 +121,7 @@ if __name__ == "__main__":  # example & debug code
     from matplotlib import pyplot as plt
     # input parameters
     nmax, eta, delta_n, net_det, n_bar, omega_eff = \
-        171, 2.48309e-1, 0, 0.0, 15.3, 2.5e5
+        171, 1e-1, 0, 0.0, 10, 2.5e5
     # sample times - these don't need to be equally spaced
     t = 2 * np.pi/omega_eff * np.linspace(0, 2.5, 500)
 
