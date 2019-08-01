@@ -15,7 +15,7 @@ def fitting_function(t, p_dict):
         c_offset: initial oscillation offset from equilibrium constant
         c_equ: equilibrium value the oscillation decays to after a long time
     """
-    y = np.exp(-p_dict['rate'] * (t- p_dict['t_dead'])) * \
+    y = np.exp(-p_dict['rate'] * (t - p_dict['t_dead'])) * \
         (p_dict['a'] * np.sin((t - p_dict['t_dead']) * p_dict['omega']
                               + p_dict['phi'])
          + p_dict['c_offset']) + p_dict['c_equ']
@@ -104,18 +104,18 @@ def derived_params(p_dict, p_error_dict):
     # replace n*pi with pi/2 + (corrections + pi/2)%pi
     # This gives the pi pulse equivalent time
     p_dict['t_max_transfer'] = (
-            p_dict['t_dead'] +
-            1 / p_dict['omega'] *
-            (np.pi /2 +
-             (-p_dict['phi']
-              - np.arcsin(1 / np.sqrt(1 + (p_dict['rate']/p_dict['omega'])**2))
-              + np.arcsin(
-                        p_dict['c_offset'] * p_dict['rate'] /
-                        (p_dict['a'] * p_dict['omega'] *
-                         np.sqrt(1 + (p_dict['rate']/p_dict['omega'])**2)
-                         )
-                    )
-              + np.pi / 2) % np.pi)
+        p_dict['t_dead'] +
+        1 / p_dict['omega'] *
+        (np.pi / 2 +
+         (- p_dict['phi']
+          - np.arcsin(1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2))
+          + np.arcsin(
+                    p_dict['c_offset'] * p_dict['rate'] /
+                    (p_dict['a'] * p_dict['omega'] *
+                     np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
+                     )
+                )
+          + np.pi / 2) % np.pi)
     )
     p_dict['period'] = 2 * np.pi / p_dict['omega']
     p_dict['tau_decay'] = 1 / p_dict['rate']
@@ -123,31 +123,30 @@ def derived_params(p_dict, p_error_dict):
     # this error calculation neglects parameter covariance!
     # may want to upgrade FitBase to make covariance matrix available.
 
-
     # calculate error for t_max_transfer
     # df = sqrt(sum_i( df/dx_i * dx_i))
     dtdt_dead = 1
-    dtdphi = - 1/p_dict['omega']
+    dtdphi = - 1 / p_dict['omega']
 
-    #dertivative of arcsin wrt it's argument
-    darcsindx = lambda x: 1 / np.sqrt(1 - x*x)
+    # dertivative of arcsin wrt it's argument
+    darcsindx = lambda x: 1 / np.sqrt(1 - x * x)
     # common term
-    temp0 = 1 / np.sqrt(1 + (p_dict['rate']/p_dict['omega'])**2)
+    temp0 = 1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
     # derivative of second arcsin argument wrt c_offset
     temp1 = p_dict['rate'] / (p_dict['a'] * p_dict['omega']) * temp0
     # second arcsin argument
     temp2 = temp1 * p_dict['c_offset']
-    dtdc_offset = 1/p_dict['omega'] * temp1 * darcsindx(temp2)
+    dtdc_offset = 1 / p_dict['omega'] * temp1 * darcsindx(temp2)
 
     # derivative of second arcsin argument wrt a
     temp3 = - temp2 / p_dict['a']
-    dtda = 1/p_dict['omega'] * temp3 * darcsindx(temp2)
+    dtda = 1 / p_dict['omega'] * temp3 * darcsindx(temp2)
 
     # 1/omega * derivative of second arcsin argument wrt rate
     temp4 = p_dict['c_offset'] * temp0 / (
             p_dict['a'] * (p_dict['omega']**2 + p_dict['rate']**2)
     )
-    dtdrate = (1/p_dict['omega'] * p_dict['rate'] / p_dict['omega']**2 *
+    dtdrate = (1 / p_dict['omega'] * p_dict['rate'] / p_dict['omega']**2 *
                temp0**3 * darcsindx(temp0) + temp4 * darcsindx(temp2)
                )
 
@@ -156,21 +155,23 @@ def derived_params(p_dict, p_error_dict):
     # derivative of second arcsin argument wrt omega
     temp6 = (p_dict['c_offset'] * p_dict['rate'] * temp0 /
              (p_dict['a'] * p_dict['omega']**2) *
-             ((p_dict['rate'] * temp0/ p_dict['omega'])**2 - 1)
+             ((p_dict['rate'] * temp0 / p_dict['omega'])**2 - 1)
              )
-    dtdomega = 1/p_dict['omega'] * (-temp5 * darcsindx(temp0) +
+    dtdomega = 1 / p_dict['omega'] * (-temp5 * darcsindx(temp0) +
                                     temp6 * darcsindx(temp2))
 
     dtdc_equ = 0.0
 
     covar_mat = np.diag([p_error_dict['t_dead']**2,
                          p_error_dict['phi']**2,
+                         p_error_dict['c_offset']**2,
                          p_error_dict['a']**2,
                          p_error_dict['rate']**2,
                          p_error_dict['omega']**2,
-                         p_error_dict['c_equ']**2,])
+                         p_error_dict['c_equ']**2, ])
     deriv_vect = np.array([dtdt_dead,
                            dtdphi,
+                           dtdc_offset,
                            dtda,
                            dtdrate,
                            dtdomega,
@@ -179,7 +180,7 @@ def derived_params(p_dict, p_error_dict):
     p_error_dict['t_max_transfer'] = np.sqrt(
         np.einsum('i,ij,j', deriv_vect, covar_mat, deriv_vect)
     )
-    p_error_dict['period'] =  p_dict['period'] * \
+    p_error_dict['period'] = p_dict['period'] * \
                              (p_error_dict['omega'] / p_dict['omega'])
     p_error_dict['tau_decay'] = p_dict['tau_decay'] * \
                              (p_error_dict['rate'] / p_dict['rate'])
