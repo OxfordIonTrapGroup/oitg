@@ -8,7 +8,7 @@ def fitting_function(t, p_dict):
     """attenuated sinusoid with dead time
     p_dict fields:
         rate: decay rate of sinusoid (1/tau)
-        a: sinusoid amplitude at t=0
+        a: initial sinusoid amplitude
         t_dead: represents the time before which the signal is held constant
         omega: angular oscillation frequency
         phi: initial phase at first data-point
@@ -204,21 +204,21 @@ attenuated_sinusoid = FitBase(
 
 if __name__ == "__main__":
     # example and debugging
-    omega = 8.3e3
+    omega = 3.05e4
     amp = 0.5
-    rel_noise = 3e-1
+    rel_noise = 1e-1
     # fit does not work with significant offset as initial frequency guess breaks
     offset = 0.0
     equ = 0.5
     rate = 1e2
     phi = np.pi / 2
 
-    n_init = 25
-    t_init = 1.3 * 2 * np.pi / omega
+    n_init = 65
+    t_init = 10.4 * 2 * np.pi / omega
 
-    n_end = 35
-    t_delay = 1 / rate
-    t_end = 2.8 * 2 * np.pi / omega
+    n_end = 65
+    t_delay = 1.9 / rate
+    t_end = 10.2 * 2 * np.pi / omega
 
     temp0 = t_init * np.random.rand(n_init)
     temp1 = t_delay + t_end * np.random.rand(n_end)
@@ -232,12 +232,12 @@ if __name__ == "__main__":
     # fix these fit parameters to a specific value
     const_dict = {
         't_dead': 0.0,
+        'c_offset': offset,
         'c_equ': equ,
         # 'phi': phi,
     }
     init_dict = {
-        't_dead': 0.0,
-        'c_offset': offset,
+        # 't_dead': 0.0,
         'phi': phi,
         # 'rate': rate,
     }
