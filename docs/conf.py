@@ -78,13 +78,13 @@ pygments_style = None
 html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
-    'canonical_url': 'https://oxfordiontrapgroup.github.io/ndscan/',
+    'canonical_url': 'https://oxfordiontrapgroup.github.io/oitg/',
 }
 
 html_context = {
     'display_github': True,
     'github_user': 'OxfordIonTrapGroup',
-    'github_repo': 'ndscan',
+    'github_repo': 'oitg',
     'github_version': 'master',
     'conf_py_path': '/docs/'
 }
@@ -108,7 +108,7 @@ html_context = {
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ndscandoc'
+htmlhelp_basename = 'oitgdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -135,7 +135,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ndscan.tex', 'ndscan Documentation',
+    (master_doc, 'oitg.tex', 'oitg Documentation',
      'David Nadlinger', 'manual'),
 ]
 
@@ -145,7 +145,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'ndscan', 'ndscan Documentation',
+    (master_doc, 'oitg', 'oitg Documentation',
      [author], 1)
 ]
 
@@ -156,8 +156,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ndscan', 'ndscan Documentation',
-     author, 'ndscan', 'One line description of project.',
+    (master_doc, 'oitg', 'oitg Documentation',
+     author, 'oitg', 'One line description of project.',
      'Miscellaneous'),
 ]
 
