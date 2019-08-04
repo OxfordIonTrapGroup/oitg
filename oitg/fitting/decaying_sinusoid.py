@@ -1,11 +1,11 @@
-"""Fit an attenuated sinusoid with optional dead-time to data"""
+"""Fit a decaying sinusoid with optional dead-time to data"""
 import numpy as np
 from scipy.signal import lombscargle
 from .FitBase import FitBase
 
 
 def fitting_function(t, p_dict):
-    """attenuated sinusoid with dead time
+    """decaying sinusoid with dead time
     p_dict fields:
         rate: decay rate of sinusoid (1/tau)
         a: initial sinusoid amplitude
@@ -91,7 +91,7 @@ def derived_params(p_dict, p_error_dict):
     """calculate commonly used derived parameters and their error
 
     This method neglects parameter covariances!"""
-    # the attenuated maximum transfer time is slightly shifted from the sinusoid
+    # the decaying maximum transfer time is slightly shifted from the sinusoid
     # pi-time! Additionally, starting with a phase offset effects the minimum
 
     # time of maximum population transfer
@@ -188,7 +188,7 @@ def derived_params(p_dict, p_error_dict):
     return (p_dict, p_error_dict)
 
 
-attenuated_sinusoid = FitBase(
+decaying_sinusoid = FitBase(
     ["omega", "t_dead", "a", "c_offset", "c_equ", "rate", "phi"],
     fitting_function=fitting_function, parameter_initialiser=init_all,
     derived_parameter_function=derived_params,
@@ -241,7 +241,7 @@ if __name__ == "__main__":
         'phi': phi,
         # 'rate': rate,
     }
-    p, p_err, x_fit, y_fit = attenuated_sinusoid.fit(
+    p, p_err, x_fit, y_fit = decaying_sinusoid.fit(
         t, y,
         y_err=np.ones(y.shape) * np.sqrt(1/3 - 1/4) * amp * rel_noise,
         initialise=init_dict,
