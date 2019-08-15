@@ -1,5 +1,6 @@
 from .cos import cos, cos_fft
 from .cos_2 import cos_2, cos_2_fft
+from .decaying_sinusoid import decaying_sinusoid
 from .exponential_decay import exponential_decay
 from .gaussian import gaussian
 from .gaussian_beam import gaussian_beam
