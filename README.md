@@ -14,4 +14,6 @@ To view the API documentation, run
 	$ cd docs/
 	$ make html
 
-and open `docs/_build/html/index.html` in a web browser.
+and open `docs/_build/html/index.html` in a web browser. (Builds
+of the most recent main repository master branch commit are also
+available online at https://oxfordiontrapgroup.github.io/oitg/.)
