@@ -21,7 +21,7 @@ jobs:
       # code by default.
       - run:
           name: Run unit tests
-          command: python -m unittest discover -v test/circuits
+          command: python -m unittest discover -t . -v test
       - run:
           name: Verify that Flake8 passes
           command: flake8 oitg/cache.py oitg/circuits oitg/results.py test/circuits
