@@ -24,9 +24,7 @@ def calc_target_bin_time(bright_rate, dark_rate, p_error_target, p_bright=0.5):
     t_bin_init = 1e-3
     result = least_squares(residuals, t_bin_init,
                            bounds=(0, np.inf),
-                           x_scale=(1e-2,), f_scale=(0.1*p_error_target)**2)
-    # assert result['cost'] < (0.1*p_error_target)**2, \
-    #     "result ing error outside of tolerance"
+                           x_scale=(1e-3,), f_scale=(0.1*p_error_target)**2)
 
     thresh_rate = calc_thresh_rate(bright_rate, dark_rate,
                                    p_bright=p_bright, t_bin=result['x'][0])
@@ -45,7 +43,7 @@ def calc_p_error(bright_rate, dark_rate, t_bin, p_bright=0.5):
     thresh_rate = calc_thresh_rate(bright_rate, dark_rate,
                                    p_bright=p_bright, t_bin=t_bin)
     thresh_count = np.ceil(thresh_rate*t_bin).astype(np.int_)
-    # if use_sum:  # this breaks for
+    
     n_vec = np.arange(thresh_count + 1, dtype=np.int_)
 
     p_error = (1 - p_bright) * (1 - np.sum(
