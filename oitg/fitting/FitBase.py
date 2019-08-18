@@ -23,11 +23,19 @@ class FitParameters:
         """
 
         self.parameter_dict = {}
-        self.constant_parameter_names = constant_parameters.keys()
-        self.initialised_parameter_names = initialised_parameters.keys()
+        self.constant_parameter_names = set(constant_parameters.keys())
+        self.initialised_parameter_names = set(initialised_parameters.keys())
 
         # Check the contant and initialisation parameters for dodgy entries
-        # TODO
+        names = set(names)
+        undefined_constants = self.constant_parameter_names - names
+        if undefined_constants:
+            raise FitError("Parameters specified as constant "
+                           "do not exist: {}".format(undefined_constants))
+        undefined_initialised = self.initialised_parameter_names - names
+        if undefined_initialised:
+            raise FitError("Initial values specified for parameters that "
+                           "do not exist: {}".format(undefined_initialised))
 
         for name in names:
             if name in self.constant_parameter_names:
@@ -41,8 +49,7 @@ class FitParameters:
 
         # A list of names of those parameters which are to be variables
         # i.e. all of the remaining parameters
-        self.variable_names = list(set(self.parameter_dict.keys())
-                                   - set(self.constant_parameter_names))
+        self.variable_names = list(names - self.constant_parameter_names)
 
         # Internally set to true to stop initialisation parameters from
         # being overwritten during auto-initialisation
