@@ -46,8 +46,11 @@ def parameter_initialiser(t, y, p_dict):
 
     min_step = np.min(t[1:] - t[:-1])
     duration = t[-1] - t[0]
+    # Nyquist limit does not apply to irregularly spaced data
+    # We'll use it as a starting point anyway...
     f_max = 0.5 / min_step
-    f_min = 0.5 / duration
+    # relaxed Fourier limit
+    f_min = 0.2 / duration
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
     pgram = lombscargle(t, y, omega_list, precenter=True)
