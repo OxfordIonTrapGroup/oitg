@@ -47,8 +47,11 @@ def init_all(t, y, p_dict):
     # and smaller than the data time range. (Niquist and Fourier limit)
     min_step = np.min(t[1:] - t[:-1])
     duration = t[-1] - t[0]
+    # Niquist limit does not apply to irregularly spaced data
+    # We'll use it as a starting point anyway...
     f_max = 0.5 / min_step
-    f_min = 0.5 / duration
+    # relaxed Fourier limit
+    f_min = 0.2 / duration
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
 
     # Lomb-Scargle does not deal well with exponential decays where c_offset > a
