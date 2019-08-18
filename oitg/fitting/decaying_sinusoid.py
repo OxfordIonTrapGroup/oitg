@@ -44,7 +44,7 @@ def init_all(t, y, p_dict):
     # Estimate frequency. Starting with a Lomb-Scargle periodogram (which
     # supports irregularly-spaced samples), we pick the strongest frequency
     # component which leads to a pi time larger than the smallest sample spacing
-    # and smaller than the data time range. (Niquist and Fourier limit)
+    # and smaller than the data time range. (Nyquist and Fourier limit)
     min_step = np.min(t[1:] - t[:-1])
     duration = t[-1] - t[0]
     # Nyquist limit does not apply to irregularly spaced data
@@ -131,7 +131,7 @@ def derived_params(p_dict, p_error_dict):
     dtdt_dead = 1
     dtdphi = - 1 / p_dict['omega']
 
-    # dertivative of arcsin wrt it's argument
+    # derivative of arcsin wrt it's argument
     darcsindx = lambda x: 1 / np.sqrt(1 - x * x)
     # common term
     temp0 = 1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)

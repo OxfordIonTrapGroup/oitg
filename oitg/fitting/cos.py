@@ -27,7 +27,7 @@ cos = FitBase.FitBase(['x0', 'y0', 'a', 'period'], fitting_function,
 
 def parameter_initialiser_fft(x, y, p):
 
-    # Take the fourier transform of the y axis
+    # Take the Fourier transform of the y axis
     y_ft = numpy.fft.rfft(y)
 
     # Find the maximum frequency component, apart from DC
@@ -42,7 +42,7 @@ def parameter_initialiser_fft(x, y, p):
     p['a'] = (np.max(y) - np.min(y))/2
 
 
-# Cosine with initialiser which extracts the intial period with
+# Cosine with initialiser which extracts the initial period with
 # an fft, only works when the x-axis is regularly spaced
 cos_fft = FitBase.FitBase(['x0', 'y0', 'a', 'period'], fitting_function,
                           parameter_initialiser=parameter_initialiser_fft)

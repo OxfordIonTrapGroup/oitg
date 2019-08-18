@@ -5,17 +5,17 @@ from .FitBase import FitBase
 
 
 def gen_rab_freq(n0=0, n1=1, omega0=1.0, eta=0.1):
-    """calculate rabi frequency associated with single photon, n0->n1 transition
+    """calculate Rabi frequency associated with single photon, n0->n1 transition
 
     all inputs may be vectors
     n0, n1: SHM excitation states of the transition
 
     omega: strength of coupling term
-           (would be rabi frequency if not for lamb-dicke effect)
+           (would be Rabi frequency if not for lamb-dicke effect)
 
     eta: lamb-dicke parameter
 
-    returns rabi frequency of transition (vector if inputs are vectors)
+    returns Rabi frequency of transition (vector if inputs are vectors)
    """
     n_s, n_l = np.sort(np.array([n0, n1]), axis=0)
     return omega0 * np.exp(-eta*eta/2) \
@@ -29,7 +29,7 @@ def mk_omega_vec(n_max=171, delta_n=0, omega0=1, eta=0.1):
     wraps gen_rab_freq to return omega for lowest n_max SHM modes
     transitions change SHM excitation by delta_n
 
-    returns vector of rabi frequencies
+    returns vector of Rabi frequencies
     """
     n0 = np.arange(n_max)
     n1 = n0 + delta_n  # negative n1 is un-physical!
@@ -43,7 +43,7 @@ def sim_rabi(t_vec, omega_vec, delta, n_bar):
 
     t_vec: times to be evaluated
 
-    omega_vec: vector of all involved rabi frequencies
+    omega_vec: vector of all involved Rabi frequencies
                (as provided by mk_omega_vec)
 
     delta: detuning (rad s^-1)
@@ -52,7 +52,7 @@ def sim_rabi(t_vec, omega_vec, delta, n_bar):
 
     returns vector of state 1 populations"""
     t = t_vec[:, np.newaxis]
-    # oscilation freq is effected by detuning!
+    # oscillation freq is effected by detuning!
     omega_eff = np.sqrt(delta*delta + omega_vec*omega_vec)[np.newaxis, :]
     # transition fraction of each transition
     pop_vec = np.where(omega_eff != 0,
@@ -67,7 +67,7 @@ def sim_rabi(t_vec, omega_vec, delta, n_bar):
 
 
 def fitting_function(t, p):
-    # omega0, omega1 are of approximatly unit amplitude
+    # omega0, omega1 are of approximately unit amplitude
     omega_eff = p['omega'] * p['omega_factor_vec']
     if not isinstance(t, np.ndarray):
         t = np.array([t])
@@ -82,7 +82,7 @@ def fitting_function(t, p):
 
 
 def parameter_initialiser(t, y, p):
-    """initialises suggested fit parameters"""
+    """initialise suggested fit parameters"""
     # sort data by time (x-axis)
     mask = np.argsort(t)
     t = t[mask]

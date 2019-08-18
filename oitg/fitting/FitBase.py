@@ -148,7 +148,7 @@ class FitBase:
             be held constant during the fitting, along with their
             values
 
-        - intialise is a dictionary of those parameters which should
+        - initialise is a dictionary of those parameters which should
             be initialise to specific values instead of using the
             auto-initialisation function
 
@@ -200,7 +200,7 @@ class FitBase:
         # Define the fit parameter object
         p = FitParameters(self.parameter_names, constants, initialise)
 
-        # Call the parameter intialiser
+        # Call the parameter initialiser
         if self.parameter_initialiser is not None:
             p.initialisation_mode = True
             self.parameter_initialiser(x, y, p)

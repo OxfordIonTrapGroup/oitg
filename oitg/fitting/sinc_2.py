@@ -12,14 +12,14 @@ def parameter_initialiser(x, y, p):
 
     min_step = np.min(x[1:] - x[:-1])
     duration = x[-1] - x[0]
-    # Niquist limit does not apply to irregularly spaced data
+    # Nyquist limit does not apply to irregularly spaced data
     # We'll use it as a starting point anyway...
     f_max = 0.5 / min_step
     # relaxed Fourier limit
     f_min = 0.2 / duration
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
-    # the periodigram should give the correct width up-to a factor of 2
+    # the periodogram should give the correct width up-to a factor of 2
     pgram = lombscargle(x, y, omega_list, precenter=True)
     p["width"] = omega_list[np.argmax(pgram)]/np.pi
 
