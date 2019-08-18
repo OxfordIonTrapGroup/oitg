@@ -1,3 +1,4 @@
+from .FitBase import FitError
 from .cos import cos, cos_fft
 from .cos_2 import cos_2, cos_2_fft
 from .decaying_sinusoid import decaying_sinusoid
