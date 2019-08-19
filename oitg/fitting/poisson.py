@@ -58,18 +58,29 @@ def poisson_large_n(n, mean):
 
 
 if __name__=='__main__':
-    test_poission = False
+    test_poission = True
 
     if test_poission:
         from matplotlib import pyplot as plt
-        mean = 150
+
+        from scipy.stats import poisson
+
+        mean = 200
         n = np.arange(300)
         fig, ax = plt.subplots(2,1, sharex=True)
-        ax[0].plot(n, poisson_iter(n, mean))
+
+        ax[0].plot(n, poisson.pmf(n, mu=mean), label="scipy")
+        ax[0].plot(n, poisson_iter(n, mean), label="iter")
         p_large_n = np.zeros(n.shape)
         for idx in n:
             p_large_n[idx] = poisson_large_n(idx, mean)
-        ax[0].plot(n, p_large_n)
-        ax[1].plot(n, p_large_n-poisson_iter(n, mean))
-        ax[1].plot(n, poisson_iter(n, mean)-poisson_recursive(n, mean))
+        ax[0].plot(n, p_large_n, label="integrate")
+        ax[0].legend()
+        ax[0].set_ylabel("pmf")
+        ax[1].plot(n, poisson_iter(n, mean)-poisson.pmf(n, mu=mean),
+                   label="iter")
+        ax[1].plot(n, p_large_n-poisson.pmf(n, mu=mean), label="integrate")
+        ax[1].legend()
+        ax[1].set_ylabel("deviation from scipy")
+        ax[1].set_xlabel("n")
         plt.show()
