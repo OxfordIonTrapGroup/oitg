@@ -16,7 +16,7 @@ def parameter_initialiser(x, y, p):
     # We'll use it as a starting point anyway...
     f_max = 0.5 / min_step
     # relaxed Fourier limit
-    f_min = 0.2 / duration
+    f_min = 0.25 / duration
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
     # the periodogram should give the correct width up-to a factor of 2

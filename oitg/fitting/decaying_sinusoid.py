@@ -51,7 +51,7 @@ def init_all(t, y, p_dict):
     # We'll use it as a starting point anyway...
     f_max = 0.5 / min_step
     # relaxed Fourier limit
-    f_min = 0.2 / duration
+    f_min = 0.25 / duration
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
 
     # Lomb-Scargle does not deal well with exponential decays where c_offset > a
