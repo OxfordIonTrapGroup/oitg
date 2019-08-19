@@ -4,10 +4,14 @@ from oitg.fitting.poisson import poisson_iter
 
 
 def calc_target_bin_time(bright_rate, dark_rate, p_error_target, p_bright=0.5):
-    """calculate optimal treshold bin time for target error chance
+    """calculate optimal threshold bin time for target error chance
 
     The calculation assumes both bright and dark counts are
     Poisson distributed and gives a threshold minimising the error probability
+
+    The calculation neglects de-shelving and accidental shelving during the
+    readout bin time. It is therefore not suitable for P(error) < 2e-4.
+    see Thesis: Alice Burrell, 2010
 
     :param bright_rate: expected bright count rate in $s^-1$
     :param dark_rate: expected dark count ratein $s^-1$
@@ -35,6 +39,10 @@ def calc_target_bin_time(bright_rate, dark_rate, p_error_target, p_bright=0.5):
 def calc_p_error(bright_rate, dark_rate, t_bin, p_bright=0.5):
     """assumes exact threshold count is evaluated as dark
 
+    The calculation neglects de-shelving and accidental shelving during the
+    readout bin time. It is therefore not suitable for P(error) < 2e-4.
+    see Thesis: Alice Burrell, 2010
+
     :param bright_rate: expected bright count rate in $s^-1$
     :param dark_rate: expected dark count ratein $s^-1$
     :param t_bin: integration time in s.
@@ -43,7 +51,7 @@ def calc_p_error(bright_rate, dark_rate, t_bin, p_bright=0.5):
     thresh_rate = calc_thresh_rate(bright_rate, dark_rate,
                                    p_bright=p_bright, t_bin=t_bin)
     thresh_count = np.ceil(thresh_rate*t_bin).astype(np.int_)
-    
+
     n_vec = np.arange(thresh_count + 1, dtype=np.int_)
 
     p_error = (1 - p_bright) * (1 - np.sum(
@@ -57,7 +65,11 @@ def calc_thresh_rate(bright_rate, dark_rate, t_bin=1e-3, p_bright=0.5):
     """Optimal threshold rate for distinguishing bright and dark states
 
     The calculation assumes both bright and dark counts are
-    Poisson distributed and gives a threshold minimising the error probability
+    Poisson distributed and gives a threshold minimising the error probability.
+
+    The calculation neglects de-shelving and accidental shelving during the
+    readout bin time. It is therefore not suitable for P(error) < 2e-4.
+    see Thesis: Alice Burrell, 2010
 
     :param bright_rate: expected bright count rate in $s^-1$
     :param dark_rate: expected dark count ratein $s^-1$
