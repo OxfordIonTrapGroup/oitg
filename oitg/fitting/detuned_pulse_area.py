@@ -63,7 +63,13 @@ def derived_params(p_dict, p_error_dict):
 detuned_pulse_area = FitBase.FitBase(
     ['omega', 't_pulse', 'offset', 'a', 'y0'], fitting_function,
     parameter_initialiser=parameter_initialiser,
-    derived_parameter_function=derived_params)
+    derived_parameter_function=derived_params,
+    parameter_bounds={"omega": (0, np.inf),
+                      "t_pulse": (0, np.inf),
+                      "a": (-np.inf, np.inf),
+                      "offset": (-np.inf, np.inf),
+                      "y0": (-np.inf, np.inf),
+                      })
 
 if __name__=='__main__':
 
@@ -88,9 +94,9 @@ if __name__=='__main__':
                     # 'omega': np.pi/t_pulse,
                     # 'a': 1.0,
                     # 'y0': 0.0,
+                    # 't_pulse': t_pulse,
                     },
         constants={
-                    't_pulse': t_pulse,
         }
     )
     print(p)
