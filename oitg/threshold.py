@@ -20,18 +20,20 @@ def calc_target_bin_time(bright_rate, dark_rate, p_error_target, p_bright=0.5):
 
     :returns: (target_t_bin [s], threshold_rate [$s^-1$])"""
     def residuals(t_bin):
-        return (
-            calc_p_error(bright_rate, dark_rate, t_bin[0], p_bright=p_bright)
-            - p_error_target
-        )
+        return (calc_p_error(bright_rate, dark_rate, t_bin[0], p_bright=p_bright) -
+                p_error_target)
 
     t_bin_init = 1e-3
-    result = least_squares(residuals, t_bin_init,
+    result = least_squares(residuals,
+                           t_bin_init,
                            bounds=(0, np.inf),
-                           x_scale=(1e-3,), f_scale=(0.1*p_error_target)**2)
+                           x_scale=(1e-3, ),
+                           f_scale=(0.1 * p_error_target)**2)
 
-    thresh_rate = calc_thresh_rate(bright_rate, dark_rate,
-                                   p_bright=p_bright, t_bin=result['x'][0])
+    thresh_rate = calc_thresh_rate(bright_rate,
+                                   dark_rate,
+                                   p_bright=p_bright,
+                                   t_bin=result['x'][0])
 
     return result['x'][0], thresh_rate
 
@@ -48,18 +50,17 @@ def calc_p_error(bright_rate, dark_rate, t_bin, p_bright=0.5):
     :param t_bin: integration time in s.
     :param p_bright: probability of encountering a bright state (default=0.5)
     """
-    thresh_rate = calc_thresh_rate(bright_rate, dark_rate,
-                                   p_bright=p_bright, t_bin=t_bin)
-    thresh_count = np.ceil(thresh_rate*t_bin).astype(np.int_)
+    thresh_rate = calc_thresh_rate(bright_rate,
+                                   dark_rate,
+                                   p_bright=p_bright,
+                                   t_bin=t_bin)
+    thresh_count = np.ceil(thresh_rate * t_bin).astype(np.int_)
 
     n_vec = np.arange(thresh_count + 1, dtype=np.int_)
 
-    p_error = (1 - p_bright) * (1 - np.sum(
-        poisson.pmf(n_vec[:-1], mu=dark_rate * t_bin)
-    ))
-    p_error += p_bright * np.sum(
-        poisson.pmf(n_vec, mu=bright_rate * t_bin)
-    )
+    p_error = (1 - p_bright) * (1 -
+                                np.sum(poisson.pmf(n_vec[:-1], mu=dark_rate * t_bin)))
+    p_error += p_bright * np.sum(poisson.pmf(n_vec, mu=bright_rate * t_bin))
     return p_error
 
 
@@ -82,16 +83,15 @@ def calc_thresh_rate(bright_rate, dark_rate, t_bin=1e-3, p_bright=0.5):
 
     :returns: threshold_rate /$s^-1$
     """
-    thresh = np.log(p_bright/(1-p_bright))/t_bin + bright_rate - dark_rate
-    thresh /= np.log(bright_rate/dark_rate)
+    thresh = np.log(p_bright / (1 - p_bright)) / t_bin + bright_rate - dark_rate
+    thresh /= np.log(bright_rate / dark_rate)
     return thresh
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     test_threshhold = True
     test_calc_p_error = True
     test_bin_time = True
-
 
     bright = 4e4
     dark = 2e4
@@ -106,9 +106,9 @@ if __name__=="__main__":
         print("p_error_calc", calc_p_error(bright, dark, t_bin, p_bright))
 
     if test_bin_time:
-        t_bin, thresh_rate = calc_target_bin_time(
-            bright, dark, error_target, p_bright=p_bright)
+        t_bin, thresh_rate = calc_target_bin_time(bright,
+                                                  dark,
+                                                  error_target,
+                                                  p_bright=p_bright)
         print("t_bin, thresh_rate", t_bin, thresh_rate)
-        print("p_error for this bin",
-              calc_p_error(bright, dark, t_bin, p_bright))
-
+        print("p_error for this bin", calc_p_error(bright, dark, t_bin, p_bright))
