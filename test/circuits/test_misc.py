@@ -87,5 +87,5 @@ class CompositePulseTest(unittest.TestCase):
         self.assertEqual(len(result), 9)
         expand_using(bb1, gates, ignore_unsupported_gates=False)
         self.assertRaises(
-            UnsupportedGate, lambda: list(
-                expand_using(bb1, gates, ignore_unsupported_gates=False)))
+            UnsupportedGate,
+            lambda: list(expand_using(bb1, gates, ignore_unsupported_gates=False)))

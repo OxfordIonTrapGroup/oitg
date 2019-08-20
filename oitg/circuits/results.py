@@ -53,7 +53,6 @@ def collect_outcomes_from_datasets(datasets: Dict[str, Any],
         each measurement outcome was observed after running them; see
         :meth:`collect_outcomes`.
     """
-
     def d(key):
         return datasets[prefix + key]
 

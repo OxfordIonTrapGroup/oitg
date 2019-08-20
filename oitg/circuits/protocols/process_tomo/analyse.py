@@ -393,7 +393,6 @@ class TPProjector:
         :math:`d = 2^n` for :math:`n` qubits, and the Choi matrices are
         :math:`d^2 \times d^2` in size.
     """
-
     def __init__(self, pure_state_dimension):
         self.dim = pure_state_dimension
 

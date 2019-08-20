@@ -86,7 +86,6 @@ class SequenceRunnerOptions:
     :param randomise_per_repeat: Whether to randomise the order of sequences within each
         repeat.
     """
-
     def __init__(self,
                  num_global_repeats: int = 1,
                  randomise_globally: bool = True,
@@ -107,7 +106,6 @@ class SequenceRunner:
 
     See the :mod:`module <oitg.circuits.runner>`\ -level docstring for details.
     """
-
     def run_sequences(self,
                       sequences: Iterable[GateSequence],
                       num_qubits: Union[None, int] = None,

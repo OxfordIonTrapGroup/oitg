@@ -39,7 +39,6 @@ class GSTSpec:
     :param pygsti_name: The name of the equivalent pyGSTi standard model construction,
         if any.
     """
-
     def __init__(self,
                  prep_fiducials: List[GateSequence],
                  meas_fiducials: List[GateSequence],

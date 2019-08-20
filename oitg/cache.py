@@ -81,7 +81,6 @@ def cache_to_pickle_file(key):
 
     See :meth:`read_or_create_pickle_cache`.
     """
-
     def decorator(function):
         @functools.wraps(function)
         def wrapper():
