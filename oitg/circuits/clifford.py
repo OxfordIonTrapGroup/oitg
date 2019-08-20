@@ -36,7 +36,6 @@ class GateGroup:
         as a map of canonical matrix key (see :meth:`to_canonical_matrix_key`) to
         element index.
     """
-
     def __init__(self, num_qubits: int, gate_sequences: List[GateSequence],
                  matrices: List[np.ndarray], inverse_idxs: Dict[bytearray, int]):
         self.num_qubits = num_qubits
@@ -319,7 +318,6 @@ def get_cz_entangling_gate_implementation(kind: EntanglingGate,
     """Generate an implementation of the given entangling gate category using CZ gates
     and the given single-qubit gate implementation.
     """
-
     def clifford_1q_impl_1(idx):
         return remap_operands(clifford_1q_impl_0(idx), {0: 1})
 
