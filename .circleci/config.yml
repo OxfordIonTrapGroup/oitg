@@ -24,10 +24,10 @@ jobs:
           command: python -m unittest discover -t . -v test
       - run:
           name: Verify that Flake8 passes
-          command: flake8 oitg/cache.py oitg/circuits oitg/results.py test/circuits
+          command: flake8 oitg/cache.py oitg/circuits oitg/results.py oitg/threshold.py test
       - run:
           name: Check that YAPF doesn't change formatting
-          command: yapf -d -r oitg/cache.py oitg/circuits oitg/results.py test/circuits
+          command: yapf -d -r oitg/cache.py oitg/circuits oitg/results.py test
   docs-build:
     <<: *artiq_docker
     steps:
