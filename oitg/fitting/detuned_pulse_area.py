@@ -52,9 +52,17 @@ def fitting_function(detuning, p):
 def derived_params(p_dict, p_error_dict):
     # pulse area arror
     p_dict['t_error'] = p_dict['t_pulse'] - np.pi / p_dict['omega']
+    # normalised to pi pulse
+    p_dict['area_error'] = p_dict['t_pulse'] * p_dict['omega'] / np.pi - 1.0
+
     p_error_dict['t_error'] = np.sqrt(
         p_error_dict['t_pulse']**2 +
-        (np.pi / p_dict['omega'] * (p_error_dict['omega']/p_dict['omega']))**2
+        (np.pi / p_dict['omega'] * (p_error_dict['omega'] / p_dict['omega']))**2
+    )
+    p_error_dict['area_error'] = p_dict['t_pulse'] * p_dict['omega'] / np.pi \
+                                 * np.sqrt(
+        (p_error_dict['t_pulse'] / p_dict['t_pulse']) ** 2 +
+        (p_error_dict['omega'] / p_dict['omega']) ** 2
     )
     return (p_dict, p_error_dict)
 
@@ -74,12 +82,12 @@ detuned_pulse_area = FitBase.FitBase(
 if __name__=='__main__':
 
     omega = 1e6
-    t_pulse, offset, a, y0 = np.pi/omega + 1e-7, 2e3, 1.0, 0.0
+    t_pulse, offset, a, y0 = np.pi/omega + 1e-6, 2e3, 1.0, 0.0
 
-    error = 0.05
+    error = 0.02
     range = 10*omega
 
-    x = np.linspace(-range/2, range/2,100)
+    x = np.linspace(-range/2, range/2,55)
 
     temp = np.sqrt(omega**2 + (x-offset)**2)
     y =  np.sinc(temp*t_pulse/(2*np.pi))**2
