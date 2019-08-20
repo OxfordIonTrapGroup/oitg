@@ -158,7 +158,7 @@
 <span id="oitg-threshold-api"></span><h1>oitg.threshold API<a class="headerlink" href="#module-oitg.threshold" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="oitg.threshold.calc_target_bin_time">
-<code class="descclassname">oitg.threshold.</code><code class="descname">calc_target_bin_time</code><span class="sig-paren">(</span><em>bright_rate</em>, <em>dark_rate</em>, <em>p_error_target</em>, <em>p_bright=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_target_bin_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_target_bin_time" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_target_bin_time</code><span class="sig-paren">(</span><em class="sig-param">bright_rate</em>, <em class="sig-param">dark_rate</em>, <em class="sig-param">p_error_target</em>, <em class="sig-param">p_bright=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_target_bin_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_target_bin_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate optimal threshold bin time for target error chance</p>
 <p>The calculation assumes both bright and dark counts are
 Poisson distributed and gives a threshold minimising the error probability</p>
@@ -182,7 +182,7 @@ See thesis: Alice Burrell, 2010</p>
 
 <dl class="function">
 <dt id="oitg.threshold.calc_p_error">
-<code class="descclassname">oitg.threshold.</code><code class="descname">calc_p_error</code><span class="sig-paren">(</span><em>bright_rate</em>, <em>dark_rate</em>, <em>t_bin</em>, <em>p_bright=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_p_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_p_error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_p_error</code><span class="sig-paren">(</span><em class="sig-param">bright_rate</em>, <em class="sig-param">dark_rate</em>, <em class="sig-param">t_bin</em>, <em class="sig-param">p_bright=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_p_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_p_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assumes exact threshold count is evaluated as dark</p>
 <p>The calculation neglects de-shelving and accidental shelving during the
 readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.
@@ -201,7 +201,7 @@ See thesis: Alice Burrell, 2010</p>
 
 <dl class="function">
 <dt id="oitg.threshold.calc_thresh_rate">
-<code class="descclassname">oitg.threshold.</code><code class="descname">calc_thresh_rate</code><span class="sig-paren">(</span><em>bright_rate</em>, <em>dark_rate</em>, <em>t_bin=0.001</em>, <em>p_bright=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_thresh_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_thresh_rate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_thresh_rate</code><span class="sig-paren">(</span><em class="sig-param">bright_rate</em>, <em class="sig-param">dark_rate</em>, <em class="sig-param">t_bin=0.001</em>, <em class="sig-param">p_bright=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_thresh_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_thresh_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimal threshold rate for distinguishing bright and dark states</p>
 <p>The calculation assumes both bright and dark counts are
 Poisson distributed and gives a threshold minimising the error probability.</p>

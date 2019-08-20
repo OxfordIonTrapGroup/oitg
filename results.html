@@ -159,7 +159,7 @@
 <span id="oitg-results-api"></span><h1>oitg.results API<a class="headerlink" href="#module-oitg.results" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="oitg.results.load_hdf5_file">
-<code class="descclassname">oitg.results.</code><code class="descname">load_hdf5_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#load_hdf5_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_hdf5_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">load_hdf5_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#load_hdf5_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_hdf5_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load an ARTIQ results file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -176,7 +176,7 @@
 
 <dl class="function">
 <dt id="oitg.results.load_result">
-<code class="descclassname">oitg.results.</code><code class="descname">load_result</code><span class="sig-paren">(</span><em>day=None</em>, <em>rid=None</em>, <em>experiment=None</em>, <em>root_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#load_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_result" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">load_result</code><span class="sig-paren">(</span><em class="sig-param">day=None</em>, <em class="sig-param">rid=None</em>, <em class="sig-param">experiment=None</em>, <em class="sig-param">root_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#load_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find and load an HDF5 results file from an ARTIQ master results directory.</p>
 <p>The results file is described by a rid and a day (provided date string,
 defaults to today). See <a class="reference internal" href="#oitg.results.find_results" title="oitg.results.find_results"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_results()</span></code></a> for a full description of the
@@ -191,7 +191,7 @@ arguments.</p>
 
 <dl class="function">
 <dt id="oitg.results.find_results">
-<code class="descclassname">oitg.results.</code><code class="descname">find_results</code><span class="sig-paren">(</span><em>day=None</em>, <em>rid=None</em>, <em>hour=None</em>, <em>class_name=None</em>, <em>experiment=None</em>, <em>root_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#find_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.find_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">find_results</code><span class="sig-paren">(</span><em class="sig-param">day=None</em>, <em class="sig-param">rid=None</em>, <em class="sig-param">hour=None</em>, <em class="sig-param">class_name=None</em>, <em class="sig-param">experiment=None</em>, <em class="sig-param">root_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#find_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.find_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the ARTIQ result files for a given experiment.</p>
 <p>The ARTIQ results root search path is either the standard root path for the
 given experiment name (see oitg.paths.artiq_results_path()) or root_path

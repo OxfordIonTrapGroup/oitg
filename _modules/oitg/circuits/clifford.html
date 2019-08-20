@@ -188,7 +188,6 @@
 <span class="sd">        as a map of canonical matrix key (see :meth:`to_canonical_matrix_key`) to</span>
 <span class="sd">        element index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">gate_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
                  <span class="n">matrices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">inverse_idxs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span> <span class="o">=</span> <span class="n">num_qubits</span>
@@ -471,7 +470,6 @@
     <span class="sd">&quot;&quot;&quot;Generate an implementation of the given entangling gate category using CZ gates</span>
 <span class="sd">    and the given single-qubit gate implementation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 

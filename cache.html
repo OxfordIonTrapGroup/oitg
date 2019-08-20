@@ -162,13 +162,13 @@
 reading them back when they are next used.</p>
 <dl class="data">
 <dt id="oitg.cache.DIR_ENV_VAR">
-<code class="descclassname">oitg.cache.</code><code class="descname">DIR_ENV_VAR</code><em class="property"> = 'OITG_CACHE_DIR'</em><a class="headerlink" href="#oitg.cache.DIR_ENV_VAR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.cache.</code><code class="sig-name descname">DIR_ENV_VAR</code><em class="property"> = 'OITG_CACHE_DIR'</em><a class="headerlink" href="#oitg.cache.DIR_ENV_VAR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the environment variable to load cache path from.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="oitg.cache.get_cache_dir">
-<code class="descclassname">oitg.cache.</code><code class="descname">get_cache_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/oitg/cache.html#get_cache_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.get_cache_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.cache.</code><code class="sig-name descname">get_cache_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/oitg/cache.html#get_cache_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.get_cache_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the OITG-wide directory to use for cache files.</p>
 <p>The default path can be overwritten by setting the <a class="reference internal" href="#oitg.cache.DIR_ENV_VAR" title="oitg.cache.DIR_ENV_VAR"><code class="xref py py-data docutils literal notranslate"><span class="pre">DIR_ENV_VAR</span></code></a> environment
 variable.</p>
@@ -176,7 +176,7 @@ variable.</p>
 
 <dl class="function">
 <dt id="oitg.cache.read_or_create_pickle_cache">
-<code class="descclassname">oitg.cache.</code><code class="descname">read_or_create_pickle_cache</code><span class="sig-paren">(</span><em>key: str, compute_value: Callable[Any]</em><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="_modules/oitg/cache.html#read_or_create_pickle_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.read_or_create_pickle_cache" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.cache.</code><code class="sig-name descname">read_or_create_pickle_cache</code><span class="sig-paren">(</span><em class="sig-param">key: str, compute_value: Callable[Any]</em><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="_modules/oitg/cache.html#read_or_create_pickle_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.read_or_create_pickle_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempt to read the cached value for the given key; if it does not exist,
 compute it and save it for future calls.</p>
 <p>Assumes <cite>compute_value()</cite> is pure (i.e. returns the same value every time); no
@@ -199,13 +199,13 @@ not been cached yet.</p></li>
 
 <dl class="function">
 <dt id="oitg.cache.clear_pickle_cache">
-<code class="descclassname">oitg.cache.</code><code class="descname">clear_pickle_cache</code><span class="sig-paren">(</span><em>key: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/oitg/cache.html#clear_pickle_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.clear_pickle_cache" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.cache.</code><code class="sig-name descname">clear_pickle_cache</code><span class="sig-paren">(</span><em class="sig-param">key: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/oitg/cache.html#clear_pickle_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.clear_pickle_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the cache file for the given key, if it exists.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="oitg.cache.cache_to_pickle_file">
-<code class="descclassname">oitg.cache.</code><code class="descname">cache_to_pickle_file</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/cache.html#cache_to_pickle_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.cache_to_pickle_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.cache.</code><code class="sig-name descname">cache_to_pickle_file</code><span class="sig-paren">(</span><em class="sig-param">key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/cache.html#cache_to_pickle_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.cache.cache_to_pickle_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap a parameterless function to cache its results to a pickle file and reload it
 from there on subsequent invocations.</p>
 <p>See <a class="reference internal" href="#oitg.cache.read_or_create_pickle_cache" title="oitg.cache.read_or_create_pickle_cache"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_or_create_pickle_cache()</span></code></a>.</p>
