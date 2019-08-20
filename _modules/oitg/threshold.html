@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>oitg.threshold &mdash; oitg  documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/threshold.html"/>
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> oitg
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cache.html">oitg.cache API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../results.html">oitg.results API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../threshold.html">oitg.threshold API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">oitg</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>oitg.threshold</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for oitg.threshold</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">least_squares</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">poisson</span>
+
+
+<div class="viewcode-block" id="calc_target_bin_time"><a class="viewcode-back" href="../../threshold.html#oitg.threshold.calc_target_bin_time">[docs]</a><span class="k">def</span> <span class="nf">calc_target_bin_time</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">p_error_target</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate optimal threshold bin time for target error chance</span>
+
+<span class="sd">    The calculation assumes both bright and dark counts are</span>
+<span class="sd">    Poisson distributed and gives a threshold minimising the error probability</span>
+
+<span class="sd">    The calculation neglects de-shelving and accidental shelving during the</span>
+<span class="sd">    readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.</span>
+<span class="sd">    See thesis: Alice Burrell, 2010</span>
+
+<span class="sd">    :param bright_rate: expected bright count rate in $s^-1$</span>
+<span class="sd">    :param dark_rate: expected dark count ratein $s^-1$</span>
+<span class="sd">    :param p_error_target: target error probability</span>
+<span class="sd">    :param p_bright: probability of encountering a bright state (default=0.5)</span>
+
+<span class="sd">    :returns: (target_t_bin [s], threshold_rate [$s^-1$])&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">residuals</span><span class="p">(</span><span class="n">t_bin</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">calc_p_error</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">)</span>
+            <span class="o">-</span> <span class="n">p_error_target</span>
+        <span class="p">)</span>
+
+    <span class="n">t_bin_init</span> <span class="o">=</span> <span class="mf">1e-3</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">least_squares</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">t_bin_init</span><span class="p">,</span>
+                           <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+                           <span class="n">x_scale</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-3</span><span class="p">,),</span> <span class="n">f_scale</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">p_error_target</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">thresh_rate</span> <span class="o">=</span> <span class="n">calc_thresh_rate</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span>
+                                   <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">,</span> <span class="n">t_bin</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">thresh_rate</span></div>
+
+
+<div class="viewcode-block" id="calc_p_error"><a class="viewcode-back" href="../../threshold.html#oitg.threshold.calc_p_error">[docs]</a><span class="k">def</span> <span class="nf">calc_p_error</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Assumes exact threshold count is evaluated as dark</span>
+
+<span class="sd">    The calculation neglects de-shelving and accidental shelving during the</span>
+<span class="sd">    readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.</span>
+<span class="sd">    See thesis: Alice Burrell, 2010</span>
+
+<span class="sd">    :param bright_rate: expected bright count rate in $s^-1$</span>
+<span class="sd">    :param dark_rate: expected dark count ratein $s^-1$</span>
+<span class="sd">    :param t_bin: integration time in s.</span>
+<span class="sd">    :param p_bright: probability of encountering a bright state (default=0.5)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thresh_rate</span> <span class="o">=</span> <span class="n">calc_thresh_rate</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span>
+                                   <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">,</span> <span class="n">t_bin</span><span class="o">=</span><span class="n">t_bin</span><span class="p">)</span>
+    <span class="n">thresh_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">thresh_rate</span><span class="o">*</span><span class="n">t_bin</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+
+    <span class="n">n_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">thresh_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+
+    <span class="n">p_error</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_bright</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">n_vec</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">mu</span><span class="o">=</span><span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">)</span>
+    <span class="p">))</span>
+    <span class="n">p_error</span> <span class="o">+=</span> <span class="n">p_bright</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">n_vec</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">bright_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">p_error</span></div>
+
+
+<div class="viewcode-block" id="calc_thresh_rate"><a class="viewcode-back" href="../../threshold.html#oitg.threshold.calc_thresh_rate">[docs]</a><span class="k">def</span> <span class="nf">calc_thresh_rate</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">t_bin</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Optimal threshold rate for distinguishing bright and dark states</span>
+
+<span class="sd">    The calculation assumes both bright and dark counts are</span>
+<span class="sd">    Poisson distributed and gives a threshold minimising the error probability.</span>
+
+<span class="sd">    The calculation neglects de-shelving and accidental shelving during the</span>
+<span class="sd">    readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.</span>
+<span class="sd">    See thesis: Alice Burrell, 2010</span>
+
+<span class="sd">    :param bright_rate: expected bright count rate in $s^-1$</span>
+<span class="sd">    :param dark_rate: expected dark count ratein $s^-1$</span>
+<span class="sd">    :param t_bin: integration time in s. Only relevant for p_bright!=0.5</span>
+<span class="sd">        (default=1e-3)</span>
+<span class="sd">    :param p_bright: probability of encountering a bright state</span>
+<span class="sd">        (default=0.5)</span>
+
+<span class="sd">    :returns: threshold_rate /$s^-1$</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thresh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p_bright</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p_bright</span><span class="p">))</span><span class="o">/</span><span class="n">t_bin</span> <span class="o">+</span> <span class="n">bright_rate</span> <span class="o">-</span> <span class="n">dark_rate</span>
+    <span class="n">thresh</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">bright_rate</span><span class="o">/</span><span class="n">dark_rate</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">thresh</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">test_threshhold</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">test_calc_p_error</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">test_bin_time</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+    <span class="n">bright</span> <span class="o">=</span> <span class="mf">4e4</span>
+    <span class="n">dark</span> <span class="o">=</span> <span class="mf">2e4</span>
+    <span class="n">p_bright</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">error_target</span> <span class="o">=</span> <span class="mf">1e-3</span>
+    <span class="n">t_bin</span> <span class="o">=</span> <span class="mf">2e-3</span>
+
+    <span class="k">if</span> <span class="n">test_threshhold</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">calc_thresh_rate</span><span class="p">(</span><span class="n">bright</span><span class="p">,</span> <span class="n">dark</span><span class="p">,</span> <span class="n">t_bin</span><span class="o">=</span><span class="n">t_bin</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">test_calc_p_error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;p_error_calc&quot;</span><span class="p">,</span> <span class="n">calc_p_error</span><span class="p">(</span><span class="n">bright</span><span class="p">,</span> <span class="n">dark</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">p_bright</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">test_bin_time</span><span class="p">:</span>
+        <span class="n">t_bin</span><span class="p">,</span> <span class="n">thresh_rate</span> <span class="o">=</span> <span class="n">calc_target_bin_time</span><span class="p">(</span>
+            <span class="n">bright</span><span class="p">,</span> <span class="n">dark</span><span class="p">,</span> <span class="n">error_target</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;t_bin, thresh_rate&quot;</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">thresh_rate</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;p_error for this bin&quot;</span><span class="p">,</span>
+              <span class="n">calc_p_error</span><span class="p">(</span><span class="n">bright</span><span class="p">,</span> <span class="n">dark</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">p_bright</span><span class="p">))</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Ion Trap Quantum Computing group
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
