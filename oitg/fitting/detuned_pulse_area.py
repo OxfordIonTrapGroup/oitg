@@ -19,12 +19,12 @@ def parameter_initialiser(x, y, p):
     # relaxed Fourier limit
     f_min = 0.25 / duration
 
-    omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
+    omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(10*f_max / f_min))
     # the periodogram should give the correct width up-to a factor of 2
     pgram = lombscargle(x, y, omega_list, precenter=True)
-    p["omega"] = omega_list[np.argmax(pgram)]
+    p["t_pulse"] = omega_list[np.argmax(pgram)]
 
-    p['t_pulse'] = np.pi / p["omega"]
+    p['omega'] = np.pi / p["t_pulse"]
     p['y0'] = np.mean(y)
     y_diff = y - p['y0']
     peak_ind = np.argmax(np.abs(y_diff))
@@ -85,7 +85,7 @@ if __name__=='__main__':
         x, y, y_err=np.full(y.shape, error), evaluate_function=True,
         initialise={
                     # 'offset': offset,
-                    'omega': np.pi/t_pulse,
+                    # 'omega': np.pi/t_pulse,
                     # 'a': 1.0,
                     # 'y0': 0.0,
                     },
@@ -101,4 +101,22 @@ if __name__=='__main__':
     plt.plot(x,y)
     plt.plot(x_fit,y_fit)
     plt.show()
+
+
+    if False:
+        min_step = np.min(x[1:] - x[:-1])
+        duration = x[-1] - x[0]
+        # Nyquist limit does not apply to irregularly spaced data
+        # We'll use it as a starting point anyway...
+        f_max = 0.5 / min_step
+        # relaxed Fourier limit
+        f_min = 0.25 / duration
+
+        omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(10 * f_max / f_min))
+        # the periodogram should give the correct width up-to a factor of 2
+        pgram = lombscargle(x, y, omega_list, precenter=True)
+
+        plt.figure()
+        plt.plot(omega_list, pgram)
+        plt.show()
 
