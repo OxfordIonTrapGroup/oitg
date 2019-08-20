@@ -27,7 +27,7 @@ jobs:
           command: flake8 oitg/cache.py oitg/circuits oitg/results.py oitg/threshold.py test
       - run:
           name: Check that YAPF doesn't change formatting
-          command: yapf -d -r oitg/cache.py oitg/circuits oitg/results.py test
+          command: yapf -d -r oitg/cache.py oitg/circuits oitg/results.py oitg/threshold.py test
   docs-build:
     <<: *artiq_docker
     steps:
