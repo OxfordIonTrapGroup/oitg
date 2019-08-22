@@ -2,7 +2,7 @@ import numpy as np
 import unittest
 from numpy.testing import assert_allclose
 
-from oitg.fitting.detuned_pulse_area import detuned_pulse_area
+from oitg.fitting.detuned_square_pulse import detuned_square_pulse
 
 
 class SinusoidTest(unittest.TestCase):
@@ -22,7 +22,7 @@ class SinusoidTest(unittest.TestCase):
         y += y0
         y += np.random.normal(size=len(y), scale=error)
 
-        p, p_err, x_fit, y_fit = detuned_pulse_area.fit(
+        p, p_err, x_fit, y_fit = detuned_square_pulse.fit(
             x, y, y_err=np.full(y.shape, error), evaluate_function=True,
             initialise={
             },
@@ -61,7 +61,7 @@ class SinusoidTest(unittest.TestCase):
         y += y0
         y += np.random.normal(size=len(y), scale=error)
 
-        p, p_err, x_fit, y_fit = detuned_pulse_area.fit(
+        p, p_err, x_fit, y_fit = detuned_square_pulse.fit(
             x, y, y_err=np.full(y.shape, error), evaluate_function=True,
             initialise={
             },
@@ -100,7 +100,7 @@ class SinusoidTest(unittest.TestCase):
         y += y0
         y += np.random.normal(size=len(y), scale=error)
 
-        p, p_err, x_fit, y_fit = detuned_pulse_area.fit(
+        p, p_err, x_fit, y_fit = detuned_square_pulse.fit(
             x, y, y_err=np.full(y.shape, error), evaluate_function=True,
         )
         self.assertIn('t_error', p)

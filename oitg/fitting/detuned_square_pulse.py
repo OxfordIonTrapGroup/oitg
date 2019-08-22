@@ -68,7 +68,7 @@ def derived_params(p_dict, p_error_dict):
 
 
 # fitter
-detuned_pulse_area = FitBase.FitBase(
+detuned_square_pulse = FitBase.FitBase(
     ['omega', 't_pulse', 'offset', 'a', 'y0'], fitting_function,
     parameter_initialiser=parameter_initialiser,
     derived_parameter_function=derived_params,
@@ -95,7 +95,7 @@ if __name__=='__main__':
     y += y0
     y += np.random.normal(size=len(y), scale=error)
 
-    p, p_err, x_fit, y_fit = detuned_pulse_area.fit(
+    p, p_err, x_fit, y_fit = detuned_square_pulse.fit(
         x, y, y_err=np.full(y.shape, error), evaluate_function=True,
         initialise={
                     # 'offset': offset,
