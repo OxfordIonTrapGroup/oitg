@@ -22,7 +22,8 @@ def parameter_initialiser(x, y, p):
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(10*f_max / f_min))
     # the periodogram should give the correct width up-to a factor of 2
     pgram = lombscargle(x, y, omega_list, precenter=True)
-    p["t_pulse"] = omega_list[np.argmax(pgram)]
+    # sqrt(3) factor derived from assuming pi pulse
+    p["t_pulse"] = omega_list[np.argmax(pgram)]/np.sqrt(3)
 
     p['omega'] = np.pi / p["t_pulse"]
     p['y0'] = np.mean(y)
@@ -82,28 +83,23 @@ detuned_square_pulse = FitBase.FitBase(
 if __name__=='__main__':
 
     omega = 1e6
-    t_pulse, offset, a, y0 = np.pi/omega + 1e-6, 2e3, 1.0, 0.0
+    t_pulse, offset, a, y0 = np.pi / omega + 1e-7, 2e3, 1.0, 0.0
 
-    error = 0.02
-    range = 10*omega
+    error = 0.01
+    range = 10 * omega
 
-    x = np.linspace(-range/2, range/2,55)
+    x = np.linspace(-range / 2, range / 2, 35)
 
-    temp = np.sqrt(omega**2 + (x-offset)**2)
-    y =  np.sinc(temp*t_pulse/(2*np.pi))**2
-    y *= a*omega**2 * t_pulse**2 /4
+    temp = np.sqrt(omega ** 2 + (x - offset) ** 2)
+    y = np.sinc(temp * t_pulse / (2 * np.pi)) ** 2
+    y *= a * omega ** 2 * t_pulse ** 2 / 4
     y += y0
     y += np.random.normal(size=len(y), scale=error)
 
     p, p_err, x_fit, y_fit = detuned_square_pulse.fit(
         x, y, y_err=np.full(y.shape, error), evaluate_function=True,
         initialise={
-                    # 'offset': offset,
-                    # 'omega': np.pi/t_pulse,
-                    # 'a': 1.0,
-                    # 'y0': 0.0,
-                    # 't_pulse': t_pulse,
-                    },
+        },
         constants={
         }
     )
