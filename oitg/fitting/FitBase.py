@@ -43,11 +43,17 @@ class FitParameters:
             if name in self.constant_parameter_names:
                 # If the parameter should be constant, set its value
                 self.parameter_dict[name] = constant_parameters[name]
-                self.scale_dict[name] = abs(constant_parameters[name])
+                if constant_parameters[name] != 0:
+                    self.scale_dict[name] = abs(constant_parameters[name])
+                else:
+                    self.scale_dict[name] = 1.0
             elif name in self.initialised_parameter_names:
                 # If the parameter should be initialised
                 self.parameter_dict[name] = initialised_parameters[name]
-                self.scale_dict[name] = abs(initialised_parameters[name])
+                if initialised_parameters[name] != 0:
+                    self.scale_dict[name] = abs(initialised_parameters[name])
+                else:
+                    self.scale_dict[name] = 1.0
             else:
                 self.parameter_dict[name] = 0
                 self.scale_dict[name] = 1.0
