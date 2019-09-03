@@ -19,11 +19,11 @@ def parameter_initialiser(x, y, p):
     # relaxed Fourier limit
     f_min = 0.25 / duration
 
-    omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(10*f_max / f_min))
+    omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(10 * f_max / f_min))
     # the periodogram should give the correct width up-to a factor of 2
     pgram = lombscargle(x, y, omega_list, precenter=True)
     # sqrt(3) factor derived from assuming pi pulse
-    p["t_pulse"] = omega_list[np.argmax(pgram)]/np.sqrt(3)
+    p["t_pulse"] = omega_list[np.argmax(pgram)] / np.sqrt(3)
 
     p['omega'] = np.pi / p["t_pulse"]
     p['y0'] = np.mean(y)
@@ -40,12 +40,12 @@ def fitting_function(detuning, p):
     f(detuning) = a*omega^2 * t_pulse^2 /4 * sinc^2(W*t_pulse/2) + y0
     where W = sqrt(omega^2 + detuning^2)
     """
-    w = np.sqrt(p['omega']**2 + (detuning-p['offset'])**2)
+    w = np.sqrt(p['omega']**2 + (detuning - p['offset'])**2)
 
     # beware! np.sinc(x) = sin(pi*x)/(pi*x)
-    y = p['a']*(p['omega'] * p['t_pulse'] / 2 *
-                np.sinc(w*p['t_pulse'] / (2 * np.pi))
-                )**2
+    y = p['a'] * (p['omega'] * p['t_pulse'] / 2 *
+                  np.sinc(w * p['t_pulse'] / (2 * np.pi))
+                  )**2
     y += p['y0']
     return y
 
@@ -61,9 +61,9 @@ def derived_params(p_dict, p_error_dict):
         (np.pi / p_dict['omega'] * (p_error_dict['omega'] / p_dict['omega']))**2
     )
     p_error_dict['area_error'] = p_dict['t_pulse'] * p_dict['omega'] / np.pi \
-                                 * np.sqrt(
-        (p_error_dict['t_pulse'] / p_dict['t_pulse']) ** 2 +
-        (p_error_dict['omega'] / p_dict['omega']) ** 2
+        * np.sqrt(
+            (p_error_dict['t_pulse'] / p_dict['t_pulse']) ** 2 +
+            (p_error_dict['omega'] / p_dict['omega']) ** 2
     )
     return (p_dict, p_error_dict)
 
@@ -80,7 +80,7 @@ detuned_square_pulse = FitBase.FitBase(
                       "y0": (-np.inf, np.inf),
                       })
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
     omega = 1e6
     t_pulse, offset, a, y0 = np.pi / omega + 1e-7, 2e3, 1.0, 0.0
@@ -108,10 +108,9 @@ if __name__=='__main__':
 
     from matplotlib import pyplot as plt
     plt.figure()
-    plt.plot(x,y)
-    plt.plot(x_fit,y_fit)
+    plt.plot(x, y)
+    plt.plot(x_fit, y_fit)
     plt.show()
-
 
     if False:
         min_step = np.min(x[1:] - x[:-1])
@@ -129,4 +128,3 @@ if __name__=='__main__':
         plt.figure()
         plt.plot(omega_list, pgram)
         plt.show()
-
