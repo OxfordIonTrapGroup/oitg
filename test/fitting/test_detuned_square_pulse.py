@@ -1,6 +1,5 @@
 import numpy as np
 import unittest
-from numpy.testing import assert_allclose
 
 from oitg.fitting.detuned_square_pulse import detuned_square_pulse
 
@@ -31,20 +30,19 @@ class SinusoidTest(unittest.TestCase):
         )
 
         # test precision
-        self.assertAlmostEqual(omega, p['omega'], delta=3*p_err['omega'])
-        self.assertAlmostEqual(a, p['a'], delta=3*p_err['a'])
-        self.assertAlmostEqual(y0, p['y0'], delta=3*p_err['y0'])
+        self.assertAlmostEqual(omega, p['omega'], delta=3 * p_err['omega'])
+        self.assertAlmostEqual(a, p['a'], delta=3 * p_err['a'])
+        self.assertAlmostEqual(y0, p['y0'], delta=3 * p_err['y0'])
         self.assertAlmostEqual(t_pulse, p['t_pulse'],
-                               delta=3*p_err['t_pulse'])
+                               delta=3 * p_err['t_pulse'])
         self.assertAlmostEqual(offset, p['offset'],
                                delta=3 * p_err['offset'])
 
-        #derived data precision
-        self.assertAlmostEqual(t_pulse - np.pi/omega,
-                               p['t_error'], delta=3*p_err['t_error'])
+        # derived data precision
+        self.assertAlmostEqual(t_pulse - np.pi / omega,
+                               p['t_error'], delta=3 * p_err['t_error'])
         self.assertAlmostEqual(t_pulse * omega / np.pi - 1.0,
-                               p['area_error'], delta=3*p_err['area_error'])
-
+                               p['area_error'], delta=3 * p_err['area_error'])
 
     def test_area_error_data(self):
         omega = 1e6
@@ -71,19 +69,19 @@ class SinusoidTest(unittest.TestCase):
         )
 
         # test precision
-        self.assertAlmostEqual(omega, p['omega'], delta=3*p_err['omega'])
-        self.assertAlmostEqual(a, p['a'], delta=3*p_err['a'])
-        self.assertAlmostEqual(y0, p['y0'], delta=3*p_err['y0'])
+        self.assertAlmostEqual(omega, p['omega'], delta=3 * p_err['omega'])
+        self.assertAlmostEqual(a, p['a'], delta=3 * p_err['a'])
+        self.assertAlmostEqual(y0, p['y0'], delta=3 * p_err['y0'])
         # self.assertAlmostEqual(t_pulse, p['t_pulse'],
         #                        delta=3*p_err['t_pulse'])
         self.assertAlmostEqual(offset, p['offset'],
                                delta=3 * p_err['offset'])
 
-        #derived data precision
-        self.assertAlmostEqual(t_pulse - np.pi/omega,
-                               p['t_error'], delta=3*p_err['t_error'])
+        # derived data precision
+        self.assertAlmostEqual(t_pulse - np.pi / omega,
+                               p['t_error'], delta=3 * p_err['t_error'])
         self.assertAlmostEqual(t_pulse * omega / np.pi - 1.0,
-                               p['area_error'], delta=3*p_err['area_error'])
+                               p['area_error'], delta=3 * p_err['area_error'])
 
     def test_derived_params(self):
         omega = 1e6
@@ -108,5 +106,6 @@ class SinusoidTest(unittest.TestCase):
         self.assertIn('area_error', p)
         self.assertIn('area_error', p_err)
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     unittest.main()
