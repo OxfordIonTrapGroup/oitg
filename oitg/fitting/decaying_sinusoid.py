@@ -73,7 +73,7 @@ def init_all(t, y, p_dict):
     t_period = 2 * np.pi / p_dict['omega']
     p_dict['c_equ'] = np.mean(y[np.argwhere(t > t[-1] - 2 * t_period)])
     p_dict['c_offset'] = np.mean(y[np.argwhere(t < t[0] + t_period)]) - \
-                         p_dict['c_equ']
+        p_dict['c_equ']
 
     p_dict['t_dead'] = 0.0
     p_dict['rate'] = 0.0  # TODO: be smarter about the decay rate guess
@@ -113,11 +113,10 @@ def derived_params(p_dict, p_error_dict):
          (- p_dict['phi']
           - np.arcsin(1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2))
           + np.arcsin(
-                    p_dict['c_offset'] * p_dict['rate'] /
-                    (p_dict['a'] * p_dict['omega'] *
-                     np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
-                     )
-                )
+              p_dict['c_offset'] * p_dict['rate'] /
+              (p_dict['a'] * p_dict['omega'] *
+               np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
+               ))
           + np.pi / 2) % np.pi)
     )
     p_dict['period'] = 2 * np.pi / p_dict['omega']
@@ -132,7 +131,8 @@ def derived_params(p_dict, p_error_dict):
     dtdphi = - 1 / p_dict['omega']
 
     # derivative of arcsin wrt it's argument
-    darcsindx = lambda x: 1 / np.sqrt(1 - x * x)
+    def darcsindx(x):
+        return 1 / np.sqrt(1 - x * x)
     # common term
     temp0 = 1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
     # derivative of second arcsin argument wrt c_offset
@@ -147,7 +147,7 @@ def derived_params(p_dict, p_error_dict):
 
     # 1/omega * derivative of second arcsin argument wrt rate
     temp4 = p_dict['c_offset'] * temp0 / (
-            p_dict['a'] * (p_dict['omega']**2 + p_dict['rate']**2)
+        p_dict['a'] * (p_dict['omega']**2 + p_dict['rate']**2)
     )
     dtdrate = (1 / p_dict['omega'] * p_dict['rate'] / p_dict['omega']**2 *
                temp0**3 * darcsindx(temp0) + temp4 * darcsindx(temp2)
@@ -161,7 +161,7 @@ def derived_params(p_dict, p_error_dict):
              ((p_dict['rate'] * temp0 / p_dict['omega'])**2 - 1)
              )
     dtdomega = 1 / p_dict['omega'] * (-temp5 * darcsindx(temp0) +
-                                    temp6 * darcsindx(temp2))
+                                      temp6 * darcsindx(temp2))
 
     dtdc_equ = 0.0
 
@@ -184,9 +184,9 @@ def derived_params(p_dict, p_error_dict):
         np.einsum('i,ij,j', deriv_vect, covar_mat, deriv_vect)
     )
     p_error_dict['period'] = p_dict['period'] * \
-                             (p_error_dict['omega'] / p_dict['omega'])
+        (p_error_dict['omega'] / p_dict['omega'])
     p_error_dict['tau_decay'] = p_dict['tau_decay'] * \
-                             (p_error_dict['rate'] / p_dict['rate'])
+        (p_error_dict['rate'] / p_dict['rate'])
 
     return (p_dict, p_error_dict)
 
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     }
     p, p_err, x_fit, y_fit = decaying_sinusoid.fit(
         t, y,
-        y_err=np.ones(y.shape) * np.sqrt(1/3 - 1/4) * amp * rel_noise,
+        y_err=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
         initialise=init_dict,
         evaluate_function=True, evaluate_x_limit=[0, t_end + t_delay],
         constants=const_dict)
@@ -263,8 +263,8 @@ if __name__ == "__main__":
 
         plt.figure()
         plt.errorbar(t, y,
-                     yerr=np.ones(y.shape) * np.sqrt(1/3 - 1/4) * \
-                          amp * rel_noise,
+                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) *
+                     amp * rel_noise,
                      ecolor='k',
                      label="input")
         plt.plot(x_fit, y_fit, color="y", label="fit")
