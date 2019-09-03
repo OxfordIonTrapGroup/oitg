@@ -143,7 +143,7 @@ if __name__ == "__main__":
     }
     p, p_err, x_fit, y_fit = sinusoid.fit(
         t, y,
-        y_err=np.ones(y.shape) * np.sqrt(1/3 - 1/4) * amp * rel_noise,
+        y_err=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
         evaluate_function=True, evaluate_x_limit=[0, t_max],
         constants=const_dict)
 
@@ -159,8 +159,8 @@ if __name__ == "__main__":
 
         plt.figure()
         plt.errorbar(t, y,
-                     yerr=np.ones(y.shape) * np.sqrt(1/3 - 1/4)
-                          * amp * rel_noise,
+                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4)
+                     * amp * rel_noise,
                      ecolor='k',
                      label="input")
         plt.plot(x_fit, y_fit, color="y", label="fit")
