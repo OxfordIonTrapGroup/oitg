@@ -250,9 +250,10 @@ class FitBase:
         # Execute the fitting algorithm
         # If an exception occurs, raise it as a FitError
         try:
-            p_list, p_list_covariance = curve_fit(LocalFitFunction,
-                x, y, p_init_list, sigma=y_err, absolute_sigma=True,
-                bounds=(lower_bounds, upper_bounds), 
+            p_list, p_list_covariance = curve_fit(
+                LocalFitFunction, x, y, p_init_list,
+                sigma=y_err, absolute_sigma=True,
+                bounds=(lower_bounds, upper_bounds),
                 x_scale=p_scale_list, method='trf')
         except Exception as e:
             raise FitError(e)
