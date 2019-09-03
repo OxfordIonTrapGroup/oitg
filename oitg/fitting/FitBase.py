@@ -23,6 +23,8 @@ class FitParameters:
         """
 
         self.parameter_dict = {}
+        # dictionary for storing parameter scales
+        self.scale_dict = {}
         self.constant_parameter_names = set(constant_parameters.keys())
         self.initialised_parameter_names = set(initialised_parameters.keys())
 
@@ -41,11 +43,20 @@ class FitParameters:
             if name in self.constant_parameter_names:
                 # If the parameter should be constant, set its value
                 self.parameter_dict[name] = constant_parameters[name]
+                if constant_parameters[name] != 0:
+                    self.scale_dict[name] = abs(constant_parameters[name])
+                else:
+                    self.scale_dict[name] = 1.0
             elif name in self.initialised_parameter_names:
                 # If the parameter should be initialised
                 self.parameter_dict[name] = initialised_parameters[name]
+                if initialised_parameters[name] != 0:
+                    self.scale_dict[name] = abs(initialised_parameters[name])
+                else:
+                    self.scale_dict[name] = 1.0
             else:
                 self.parameter_dict[name] = 0
+                self.scale_dict[name] = 1.0
 
         # A list of names of those parameters which are to be variables
         # i.e. all of the remaining parameters
@@ -75,6 +86,8 @@ class FitParameters:
 
         # Otherwise, set the value
         self.parameter_dict[name] = value
+        if value != 0:
+            self.scale_dict[name] = abs(value)
 
     def absorb_variable_values(self, values):
         """Set the value of all variables with the given sequence of values.
@@ -216,10 +229,12 @@ class FitBase:
         # Populate the list of initial parameter values to be passed
         # to the fitting algorithm, and build list of bounds.
         p_init_list = []
+        p_scale_list = []
         lower_bounds = []
         upper_bounds = []
         for name in p.variable_names:
             p_init_list.append(p[name])
+            p_scale_list.append(p.scale_dict[name])
             l, u = self.parameter_bounds.get(name, (-np.inf, np.inf))
             lower_bounds.append(l)
             upper_bounds.append(u)
@@ -237,7 +252,8 @@ class FitBase:
         try:
             p_list, p_list_covariance = curve_fit(LocalFitFunction,
                 x, y, p_init_list, sigma=y_err, absolute_sigma=True,
-                bounds=(lower_bounds, upper_bounds))
+                bounds=(lower_bounds, upper_bounds), 
+                x_scale=p_scale_list, method='trf')
         except Exception as e:
             raise FitError(e)
 
