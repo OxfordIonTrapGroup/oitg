@@ -18,9 +18,9 @@ def gen_rab_freq(n0=0, n1=1, omega0=1.0, eta=0.1):
     returns Rabi frequency of transition (vector if inputs are vectors)
    """
     n_s, n_l = np.sort(np.array([n0, n1]), axis=0)
-    return omega0 * np.exp(-eta*eta/2) \
-        * np.sqrt(factorial(n_s)/factorial(n_l)) \
-        * eta**(n_l-n_s) * eval_genlaguerre(n_s, n_l-n_s, eta*eta)
+    return omega0 * np.exp(-eta * eta / 2) \
+        * np.sqrt(factorial(n_s) / factorial(n_l)) \
+        * eta**(n_l - n_s) * eval_genlaguerre(n_s, n_l - n_s, eta * eta)
 
 
 def mk_omega_vec(n_max=171, delta_n=0, omega0=1, eta=0.1):
@@ -53,14 +53,14 @@ def sim_rabi(t_vec, omega_vec, delta, n_bar):
     returns vector of state 1 populations"""
     t = t_vec[:, np.newaxis]
     # oscillation freq is effected by detuning!
-    omega_eff = np.sqrt(delta*delta + omega_vec*omega_vec)[np.newaxis, :]
+    omega_eff = np.sqrt(delta * delta + omega_vec * omega_vec)[np.newaxis, :]
     # transition fraction of each transition
     pop_vec = np.where(omega_eff != 0,
-                       (omega_vec/omega_eff * np.sin(omega_eff/2*t))**2,
+                       (omega_vec / omega_eff * np.sin(omega_eff / 2 * t))**2,
                        0)
     # weight according to thermal dist (derive through partition function)
-    weights = (n_bar/(n_bar+1))**(np.arange(len(omega_vec))) / (n_bar+1)
-    weights = weights/sum(weights)  # re-normalise due to truncation
+    weights = (n_bar / (n_bar + 1))**(np.arange(len(omega_vec))) / (n_bar + 1)
+    weights = weights / sum(weights)  # re-normalise due to truncation
 
     pop_vec = pop_vec * weights[np.newaxis, :]
     return np.sum(pop_vec, axis=1)
@@ -123,18 +123,19 @@ if __name__ == "__main__":  # example & debug code
     nmax, eta, delta_n, net_det, n_bar, omega_eff = \
         171, 1e-1, 0, 0.0, 10, 2.5e5
     # sample times - these don't need to be equally spaced
-    t = 2 * np.pi/omega_eff * np.linspace(0, 2.5, 500)
+    t = 2 * np.pi / omega_eff * np.linspace(0, 2.5, 500)
 
     # simulate data for fitting
     omega_eff_vec = mk_omega_vec(nmax, delta_n=delta_n,
                                  omega0=omega_eff, eta=eta)
     y = sim_rabi(t, omega_eff_vec, net_det, n_bar) \
-        + np.random.random(t.shape)*0.05
+        + np.random.random(t.shape) * 0.05
 
     plt.figure()
-    plt.plot(t*omega_eff/(2*np.pi), y)
+    plt.plot(t * omega_eff / (2 * np.pi), y)
     plt.ylim([0, 1])
-    plt.xlim([min(t*omega_eff/(2*np.pi)), max(t*omega_eff/(2*np.pi))])
+    plt.xlim([min(t * omega_eff / (2 * np.pi)),
+              max(t * omega_eff / (2 * np.pi))])
     plt.ylabel("population")
     plt.xlabel("time*omega_eff/2pi")
 
@@ -142,7 +143,7 @@ if __name__ == "__main__":  # example & debug code
     p_fit, p_err, fit_x, fit_y = dipole_bsb_car_rsb_fit.fit(
         t, y, constants=mk_const_param(delta_n, eta), evaluate_function=True)
 
-    plt.plot(fit_x*omega_eff/(2*np.pi), fit_y)
+    plt.plot(fit_x * omega_eff / (2 * np.pi), fit_y)
     plt.show()
     print("n_bar", uncertainty_to_string(p_fit['n_bar'], p_err['n_bar']))
     print("omega", uncertainty_to_string(p_fit['omega'], p_err['omega']))
@@ -152,6 +153,6 @@ if __name__ == "__main__":  # example & debug code
         f = np.linspace(1e-1, 5, 10000)
         plt.plot(f, lombscargle(t, y, f, precenter=True))
         from numpy.fft import rfftfreq, rfft
-        plt.plot(rfftfreq(len(t), t[1]-t[0])*2*np.pi,
-                 np.abs(rfft(y-np.mean(y), norm="ortho")))
+        plt.plot(rfftfreq(len(t), t[1] - t[0]) * 2 * np.pi,
+                 np.abs(rfft(y - np.mean(y), norm="ortho")))
         plt.show()
