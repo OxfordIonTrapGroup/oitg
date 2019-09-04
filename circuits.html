@@ -808,7 +808,20 @@ pyGSTi’s <cite>std1Q_XZ</cite> model.</p>
 <dt id="oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec">
 <code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xy_pi_2_cphase_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xy_pi_2_cphase_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a two-qubit gate set using a CPHASE (CZ) gate and local π/2 x- and
-y-rotations, corresponding to pyGSTi’s <cite>std1Q_XZ</cite> model.</p>
+y-rotations, corresponding to pyGSTi’s <cite>std2Q_XYCPHASE</cite> model.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_wobble_spec">
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xy_pi_2_wobble_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xy_pi_2_wobble_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_wobble_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a two-qubit gate set using a wobble gate and local π/2 x- and
+y-rotations.</p>
+<p>Fiducial/germ selection is based on pyGSTi’s <cite>std2Q_XYCNOT</cite> model, with CNOT
+replaced by the wobble gate. As suggested in the pyGSTi documentation, this still
+leads to a complete set of germs, but might not be optimal. (The CNOT construction
+was chosen over the CPHASE-based germ set as its germ score was slightly better
+after switching to the wobble gate; fiducials are only single-qubit and hence the
+same for both anyway.)</p>
 </dd></dl>
 
 </div>
