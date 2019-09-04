@@ -22,7 +22,7 @@ def make_1q_xz_pi_2_spec() -> GSTSpec:
 
 def make_2q_xy_pi_2_cphase_spec() -> GSTSpec:
     """Return a two-qubit gate set using a CPHASE (CZ) gate and local π/2 x- and
-    y-rotations, corresponding to pyGSTi's `std1Q_XZ` model.
+    y-rotations, corresponding to pyGSTi's `std2Q_XYCPHASE` model.
     """
     xi = (Gate("rx", (np.pi / 2, ), (0, )), )
     ix = (Gate("rx", (np.pi / 2, ), (1, )), )
