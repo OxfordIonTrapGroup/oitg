@@ -111,3 +111,44 @@ def make_2q_xy_pi_2_wobble_spec() -> GSTSpec:
         return [tuple(chain.from_iterable(g)) for g in gs]
 
     return GSTSpec(flatten(prep), flatten(meas), flatten(germs), "wobble2Q_XYCNOT")
+
+
+def make_2q_xz_pi_2_wobble_spec() -> GSTSpec:
+    """Return a two-qubit gate set using a wobble gate and local π/2 x- and
+    z-rotations.
+
+    Fiducial/germ selection is based on pyGSTi's optimisation functions, run
+    from scratch for the wobble gate.
+    """
+    xi = (Gate("rx", (np.pi / 2, ), (0, )), )
+    ix = (Gate("rx", (np.pi / 2, ), (1, )), )
+    zi = (Gate("rz", (np.pi / 2, ), (0, )), )
+    iz = (Gate("rz", (np.pi / 2, ), (1, )), )
+    w = (Gate("w", (), (0, 1)), )
+
+    prep = [(), (ix, ), (xi, ), (ix, ix), (ix, iz), (ix, xi), (xi, xi), (xi, zi),
+            (ix, iz, xi), (ix, xi, zi), (xi, ix, ix), (xi, ix, xi), (ix, xi, iz, zi),
+            (ix, xi, xi, iz), (xi, ix, ix, xi), (xi, ix, ix, zi)]
+
+    meas = [(), (ix, ), (xi, ), (ix, ix), (xi, xi), (iz, ix), (xi, ix), (zi, xi),
+            (ix, zi, xi), (iz, ix, xi), (iz, ix, zi, xi)]
+
+    germs = [(ix, ), (iz, ), (xi, ), (zi, ), (w, ), (xi, zi), (ix, zi), (iz, zi),
+             (ix, iz, w), (xi, zi, w), (ix, ix, w), (xi, xi, w), (ix, w, zi),
+             (iz, xi, w), (xi, w, zi), (iz, w, xi), (ix, w, iz), (xi, w, w),
+             (ix, zi, w), (ix, iz, iz), (ix, w, w), (ix, iz, zi), (ix, iz, xi),
+             (xi, xi, zi), (ix, zi, iz), (ix, xi, w), (ix, xi, iz), (ix, w, xi),
+             (ix, iz, xi, w), (w, ix, xi, xi), (ix, xi, zi, w), (xi, ix, w, iz),
+             (iz, zi, w), (ix, xi, w, iz), (iz, ix, xi, zi), (w, w, ix, ix),
+             (w, ix, w, iz), (w, xi, zi, xi), (w, w, zi, zi), (zi, xi, xi, w),
+             (xi, zi, zi, xi), (ix, ix, ix, iz), (xi, iz, iz, iz), (iz, iz, zi, iz),
+             (w, zi, w, xi), (zi, zi, ix, xi), (iz, ix, ix, w), (xi, iz, zi, xi),
+             (xi, w, xi, xi), (w, w, xi, w), (iz, ix, ix, zi), (zi, w, w, w),
+             (xi, zi, ix, ix), (xi, zi, iz, iz), (iz, w, w, w), (iz, ix, w, ix),
+             (zi, ix, iz, w, zi), (iz, w, xi, xi, iz), (xi, xi, zi, w, zi),
+             (xi, ix, w, xi, iz), (zi, w, iz, iz, xi), (xi, ix, zi, ix, zi)]
+
+    def flatten(gs):
+        return [tuple(chain.from_iterable(g)) for g in gs]
+
+    return GSTSpec(flatten(prep), flatten(meas), flatten(germs), "opt2Q_XZW")
