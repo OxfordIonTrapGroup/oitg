@@ -126,7 +126,7 @@ def make_clifford_group(num_qubits: int, implementation: CliffordImpl) -> GateGr
 # TODO: Look up by unitary for dry-ness.
 C1_HADAMARD_IDX = 9
 C1_Y_PI_BY_2_IDX = 11
-C1_X_PI_IDX = 23
+C1_X_PI_BY_2_IDX = 23
 
 _clifford_1q_xypm_implementations = [
     [],
@@ -325,17 +325,45 @@ def get_cz_entangling_gate_implementation(kind: EntanglingGate,
         yield Gate("cz", (), (0, 1))
     elif kind == EntanglingGate.iswap_like:
         yield Gate("cz", (), (0, 1))
-        yield from clifford_1q_impl_0(C1_X_PI_IDX)
-        yield from clifford_1q_impl_1(C1_X_PI_IDX)
+        yield from clifford_1q_impl_0(C1_X_PI_BY_2_IDX)
+        yield from clifford_1q_impl_1(C1_X_PI_BY_2_IDX)
         yield Gate("cz", (), (0, 1))
     elif kind == EntanglingGate.swap_like:
         yield Gate("cz", (), (0, 1))
-        yield from clifford_1q_impl_0(C1_X_PI_IDX)
-        yield from clifford_1q_impl_1(C1_X_PI_IDX)
+        yield from clifford_1q_impl_0(C1_X_PI_BY_2_IDX)
+        yield from clifford_1q_impl_1(C1_X_PI_BY_2_IDX)
         yield Gate("cz", (), (0, 1))
-        yield from clifford_1q_impl_0(C1_X_PI_IDX)
-        yield from clifford_1q_impl_1(C1_X_PI_IDX)
+        yield from clifford_1q_impl_0(C1_X_PI_BY_2_IDX)
+        yield from clifford_1q_impl_1(C1_X_PI_BY_2_IDX)
         yield Gate("cz", (), (0, 1))
+    else:
+        assert False
+
+
+def get_zzw_entangling_gate_implementation(kind: EntanglingGate,
+                                           clifford_1q_impl_0: CliffordImpl
+                                           ) -> GateGenerator:
+    """Generate an implementation of the given entangling gate category using symmetric
+    ZZ (wobble) gates and the given single-qubit gate implementation.
+    """
+    def clifford_1q_impl_1(idx):
+        return remap_operands(clifford_1q_impl_0(idx), {0: 1})
+
+    if kind == EntanglingGate.cz_like:
+        yield Gate("zzw", (), (0, 1))
+    elif kind == EntanglingGate.iswap_like:
+        yield Gate("zzw", (), (0, 1))
+        yield from clifford_1q_impl_0(C1_X_PI_BY_2_IDX)
+        yield from clifford_1q_impl_1(C1_X_PI_BY_2_IDX)
+        yield Gate("zzw", (), (0, 1))
+    elif kind == EntanglingGate.swap_like:
+        yield Gate("zzw", (), (0, 1))
+        yield from clifford_1q_impl_0(C1_X_PI_BY_2_IDX)
+        yield from clifford_1q_impl_1(C1_X_PI_BY_2_IDX)
+        yield Gate("zzw", (), (0, 1))
+        yield from clifford_1q_impl_0(22)
+        yield from clifford_1q_impl_1(22)
+        yield Gate("zzw", (), (0, 1))
     else:
         assert False
 
@@ -354,3 +382,12 @@ def get_clifford_2q_xzpm2_cz_implementation(idx: int) -> GateGenerator:
     """
     return get_clifford_2q_implementation(idx, get_clifford_1q_xzpm2_implementation,
                                           get_cz_entangling_gate_implementation)
+
+
+def get_clifford_2q_xzpm2_zzw_implementation(idx: int) -> GateGenerator:
+    """Generate an implementation of the given 2-qubit Clifford group element using a
+    symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local
+    single-qubit ±π/2 and π rotations about the x and z axes.
+    """
+    return get_clifford_2q_implementation(idx, get_clifford_1q_xzpm2_implementation,
+                                          get_zzw_entangling_gate_implementation)

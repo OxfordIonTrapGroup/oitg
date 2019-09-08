@@ -16,25 +16,19 @@ def rxy(phase, amount):
 
 
 LOCAL_MATRICES = {
-    "rx":
-    lambda amount: [[np.cos(amount / 2), -1j * np.sin(amount / 2)],
-                    [-1j * np.sin(amount / 2),
-                     np.cos(amount / 2)]],
-    "ry":
-    lambda amount: [[np.cos(amount / 2), -np.sin(amount / 2)],
-                    [np.sin(amount / 2), np.cos(amount / 2)]],
+    "rx": (lambda amount: [[np.cos(amount / 2), -1j * np.sin(amount / 2)],
+                           [-1j * np.sin(amount / 2),
+                            np.cos(amount / 2)]]),
+    "ry": (lambda amount: [[np.cos(amount / 2), -np.sin(amount / 2)],
+                           [np.sin(amount / 2), np.cos(amount / 2)]]),
     "rz":
-    lambda amount: [[np.exp(-1j * amount / 2), 0], [0, np.exp(1j * amount / 2)]],
-    "rxy":
-    rxy,
-    "h":
-    lambda: np.array([[1, 1], [1, -1]]) / np.sqrt(2),
-    "cx":
-    lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]],
-    "cz":
-    lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, -1]],
-    "barrier":
-    None,
+    (lambda amount: [[np.exp(-1j * amount / 2), 0], [0, np.exp(1j * amount / 2)]]),
+    "rxy": (rxy),
+    "h": (lambda: np.array([[1, 1], [1, -1]]) / np.sqrt(2)),
+    "cx": (lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]),
+    "cz": (lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, -1]]),
+    "zzw": (lambda: [[0, 0, 0, 1], [0, 0, 1j, 0], [0, 1j, 0, 0], [1, 0, 0, 0]]),
+    "barrier": (None),
 }
 
 
