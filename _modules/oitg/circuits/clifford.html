@@ -278,7 +278,7 @@
 <span class="c1"># TODO: Look up by unitary for dry-ness.</span>
 <span class="n">C1_HADAMARD_IDX</span> <span class="o">=</span> <span class="mi">9</span>
 <span class="n">C1_Y_PI_BY_2_IDX</span> <span class="o">=</span> <span class="mi">11</span>
-<span class="n">C1_X_PI_IDX</span> <span class="o">=</span> <span class="mi">23</span>
+<span class="n">C1_X_PI_BY_2_IDX</span> <span class="o">=</span> <span class="mi">23</span>
 
 <span class="n">_clifford_1q_xypm_implementations</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">[],</span>
@@ -477,17 +477,45 @@
         <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">iswap_like</span><span class="p">:</span>
         <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_IDX</span><span class="p">)</span>
-        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">swap_like</span><span class="p">:</span>
         <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_IDX</span><span class="p">)</span>
-        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_IDX</span><span class="p">)</span>
-        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;cz&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_zzw_entangling_gate_implementation"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_zzw_entangling_gate_implementation">[docs]</a><span class="k">def</span> <span class="nf">get_zzw_entangling_gate_implementation</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span>
+                                           <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span>
+                                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate an implementation of the given entangling gate category using symmetric</span>
+<span class="sd">    ZZ (wobble) gates and the given single-qubit gate implementation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">cz_like</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;zzw&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">iswap_like</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;zzw&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;zzw&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">swap_like</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;zzw&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="n">C1_X_PI_BY_2_IDX</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;zzw&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="mi">22</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">clifford_1q_impl_1</span><span class="p">(</span><span class="mi">22</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;zzw&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="kc">False</span></div>
 
@@ -506,6 +534,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xzpm2_implementation</span><span class="p">,</span>
                                           <span class="n">get_cz_entangling_gate_implementation</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_clifford_2q_xzpm2_zzw_implementation"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation">[docs]</a><span class="k">def</span> <span class="nf">get_clifford_2q_xzpm2_zzw_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate an implementation of the given 2-qubit Clifford group element using a</span>
+<span class="sd">    symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local</span>
+<span class="sd">    single-qubit ±π/2 and π rotations about the x and z axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xzpm2_implementation</span><span class="p">,</span>
+                                          <span class="n">get_zzw_entangling_gate_implementation</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

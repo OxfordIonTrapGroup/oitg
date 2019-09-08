@@ -490,6 +490,13 @@ and the given single-qubit gate implementation.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="oitg.circuits.clifford.get_zzw_entangling_gate_implementation">
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_zzw_entangling_gate_implementation</code><span class="sig-paren">(</span><em class="sig-param">kind: oitg.circuits.clifford.EntanglingGate, clifford_1q_impl_0: Callable[int, Iterable[oitg.circuits.gate.Gate]]</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_zzw_entangling_gate_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_zzw_entangling_gate_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an implementation of the given entangling gate category using symmetric
+ZZ (wobble) gates and the given single-qubit gate implementation.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="oitg.circuits.clifford.get_clifford_2q_xypm_cz_implementation">
 <code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xypm_cz_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xypm_cz_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xypm_cz_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given 2-qubit Clifford group element using CZ
@@ -501,6 +508,14 @@ gates and local single-qubit ±π/2 rotations about the x and y axes.</p>
 <code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xzpm2_cz_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xzpm2_cz_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xzpm2_cz_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given 2-qubit Clifford group element using CZ
 gates and local single-qubit ±π/2 and π rotations about the x and z axes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation">
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xzpm2_zzw_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xzpm2_zzw_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an implementation of the given 2-qubit Clifford group element using a
+symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local
+single-qubit ±π/2 and π rotations about the x and z axes.</p>
 </dd></dl>
 
 </div>
@@ -822,6 +837,15 @@ leads to a complete set of germs, but might not be optimal. (The CNOT constructi
 was chosen over the CPHASE-based germ set as its germ score was slightly better
 after switching to the wobble gate; fiducials are only single-qubit and hence the
 same for both anyway.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="oitg.circuits.protocols.gst.specs.make_2q_xz_pi_2_wobble_spec">
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xz_pi_2_wobble_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xz_pi_2_wobble_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xz_pi_2_wobble_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a two-qubit gate set using a wobble gate and local π/2 x- and
+z-rotations.</p>
+<p>Fiducial/germ selection is based on pyGSTi’s optimisation functions, run
+from scratch for the wobble gate.</p>
 </dd></dl>
 
 </div>
