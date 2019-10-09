@@ -16,7 +16,7 @@ def generate_rbm_experiment(group: GateGroup,
                             sequence_lengths: Iterable[int],
                             randomisations_per_length: int,
                             pauli_randomize_last=True,
-                            interleave_gate=None,
+                            interleave_gates=None,
                             derive_shorter_by_truncation=False,
                             seed=None) -> List[Tuple[List[int], GateSequence, int]]:
     """
@@ -29,9 +29,9 @@ def generate_rbm_experiment(group: GateGroup,
         invert the previous only gates up to a randomly selected Pauli group element,
         thus randomising the outcome between 0 and 1. This should always be used, as
         the analysis is susceptible to SPAM errors otherwise.
-    :param interleave_gate: If not ``None``, the given gate is interleaved between each
-        two Clifford gates in a second copy of every sequence (to implement interleaved
-        benchmarking).
+    :param interleave_gates: If not ``None``, the given gate sequence is interleaved
+        between each two Clifford gates in a second copy of every sequence (to implement
+        interleaved benchmarking).
     :param derive_shorter_by_truncation: Derive shorter sequences by truncating longer
         sequences (and then appending the appropriate inverse gate) instead of
         generating fresh random sequences. This can be handy for debugging when
@@ -43,6 +43,8 @@ def generate_rbm_experiment(group: GateGroup,
         interleaved gate), the gate sequences, and the respective expected results
         (as the canonical integer representation of the binary string of results, where
         for each qubit 0 indicates the initial state, and 1 the one orthogonal to that).
+        For interleaved benchmarking, the sequences with interleaved gates comprise the
+        second half of the list.
     """
 
     rng = np.random.RandomState(seed=seed)
@@ -65,7 +67,11 @@ def generate_rbm_experiment(group: GateGroup,
         unfinished_sequences += truncated_sequences
 
     INTERLEAVE_IDX = -1
-    if interleave_gate is not None:
+    if interleave_gates is not None:
+        # Make sure we can accept arbitrary GateSequence generators – we need to append
+        # the list many times.
+        interleave_gates = list(interleave_gates)
+
         interleaved_sequences = []
         for seq in unfinished_sequences:
             interleaved_seq = []
@@ -80,7 +86,7 @@ def generate_rbm_experiment(group: GateGroup,
 
         def to_gates(idx):
             if idx == INTERLEAVE_IDX:
-                gates = [interleave_gate]
+                gates = interleave_gates
             else:
                 gates = group.gates_for_idx(idx)
             return gates + [Gate("barrier", (), tuple(range(group.num_qubits)))]
