@@ -1240,7 +1240,7 @@ most pedestrian scheme possible and just tracks the total unitary generated inst
 implementing stabilizer calculations.</p>
 <dl class="function">
 <dt id="oitg.circuits.protocols.rbm.generate.generate_rbm_experiment">
-<code class="sig-prename descclassname">oitg.circuits.protocols.rbm.generate.</code><code class="sig-name descname">generate_rbm_experiment</code><span class="sig-paren">(</span><em class="sig-param">group: oitg.circuits.clifford.GateGroup, sequence_lengths: Iterable[int], randomisations_per_length: int, pauli_randomize_last=True, interleave_gate=None, derive_shorter_by_truncation=False, seed=None</em><span class="sig-paren">)</span> &#x2192; List[Tuple[List[int], Tuple[oitg.circuits.gate.Gate, ...], int]]<a class="reference internal" href="_modules/oitg/circuits/protocols/rbm/generate.html#generate_rbm_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rbm.generate.generate_rbm_experiment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.rbm.generate.</code><code class="sig-name descname">generate_rbm_experiment</code><span class="sig-paren">(</span><em class="sig-param">group: oitg.circuits.clifford.GateGroup, sequence_lengths: Iterable[int], randomisations_per_length: int, pauli_randomize_last=True, interleave_gates=None, derive_shorter_by_truncation=False, seed=None</em><span class="sig-paren">)</span> &#x2192; List[Tuple[List[int], Tuple[oitg.circuits.gate.Gate, ...], int]]<a class="reference internal" href="_modules/oitg/circuits/protocols/rbm/generate.html#generate_rbm_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rbm.generate.generate_rbm_experiment" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1253,9 +1253,9 @@ sequence length (twice that for interleaved benchmarking).</p></li>
 invert the previous only gates up to a randomly selected Pauli group element,
 thus randomising the outcome between 0 and 1. This should always be used, as
 the analysis is susceptible to SPAM errors otherwise.</p></li>
-<li><p><strong>interleave_gate</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the given gate is interleaved between each
-two Clifford gates in a second copy of every sequence (to implement interleaved
-benchmarking).</p></li>
+<li><p><strong>interleave_gates</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the given gate sequence is interleaved
+between each two Clifford gates in a second copy of every sequence (to implement
+interleaved benchmarking).</p></li>
 <li><p><strong>derive_shorter_by_truncation</strong> – Derive shorter sequences by truncating longer
 sequences (and then appending the appropriate inverse gate) instead of
 generating fresh random sequences. This can be handy for debugging when
@@ -1269,7 +1269,9 @@ unpredictable seed is used.</p></li>
 experiment to run the corresponding list of Clifford elements (<cite>-1</cite> for the
 interleaved gate), the gate sequences, and the respective expected results
 (as the canonical integer representation of the binary string of results, where
-for each qubit 0 indicates the initial state, and 1 the one orthogonal to that).</p>
+for each qubit 0 indicates the initial state, and 1 the one orthogonal to that).
+For interleaved benchmarking, the sequences with interleaved gates comprise the
+second half of the list.</p>
 </dd>
 </dl>
 </dd></dl>
