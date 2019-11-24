@@ -25,7 +25,7 @@ on some qubit Hilbert space.
 
 import numpy as np
 import warnings
-from typing import Dict, List
+from typing import Dict, List, Optional
 from ...gate import *
 from ...to_matrix import apply_gate_sequence, gate_sequence_matrix
 from .tools import *
@@ -82,7 +82,9 @@ def auto_prepare_data(outcomes: Dict[GateSequence, np.ndarray]
     return prepare_data({f: outcomes[s] for f, s in zip(fiducial_pairs, seqs)})
 
 
-def prepare_data(outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray]
+def prepare_data(outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray],
+                 initial_state: Optional[List[np.ndarray]] = None,
+                 readout_projectors: Optional[List[np.ndarray]] = None
                  ) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
     r"""Given a dictionary of observed measurement outcomes indexed by pairs of the
     state preparation and measurement gate sequences used, compute the prepared/measured
@@ -103,7 +105,7 @@ def prepare_data(outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray]
         corresponding to the different outcomes are enumerated explicitly, so for a
         :math:`n`-qubit system and :math:`k` measurement fiducials, there will be
         :math:`k\ 2^n` measured states/columns in the observation count matrix. All
-        states are given as pure states.
+        states are given as density matrices/projectors.
     """
     fiducial_pairs = list(outcomes.keys())
 
@@ -115,15 +117,32 @@ def prepare_data(outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray]
 
     num_qubits = max(
         max(collect_operands(s), default=0) for f in fiducial_pairs for s in f) + 1
-    initial_state = np.zeros(2**num_qubits, dtype=np.complex128)
-    initial_state[0] = 1
-    prep_states = [apply_gate_sequence(s, initial_state) for s in prep_sequences]
 
-    meas_unitaries = [
-        gate_sequence_matrix(s, num_qubits).T.conj() for s in meas_sequences
+    def basis_ket(k):
+        psi = np.zeros(2**num_qubits, dtype=np.complex128)
+        psi[k] = 1
+        return psi
+
+    ###
+
+    if initial_state is None:
+        initial_state = projector(basis_ket(0))
+    prep_unitaries = [gate_sequence_matrix(s, num_qubits) for s in prep_sequences]
+    prep_projectors = [u @ initial_state @ u.T.conj() for u in prep_unitaries]
+
+    ###
+
+    meas_unitaries = [gate_sequence_matrix(s, num_qubits) for s in meas_sequences]
+    if readout_projectors is None:
+        readout_projectors = [projector(basis_ket(k)) for k in range(2**num_qubits)]
+    meas_projectors = [
+        u.T.conj() @ readout_projector @ u for u in meas_unitaries
+        for readout_projector in readout_projectors
     ]
-    meas_states = [u[:, i] for u in meas_unitaries for i in range(2**num_qubits)]
-    observations = np.full((len(prep_states), len(meas_sequences) * 2**num_qubits), -1)
+
+    ###
+
+    observations = np.full((len(prep_projectors), len(meas_projectors)), -1)
     for prep_idx, meas_idx, fids in zip(prep_indices, meas_indices, fiducial_pairs):
         meas_base_idx = 2**num_qubits * meas_idx
         for i, counts in enumerate(outcomes[fids]):
@@ -131,30 +150,32 @@ def prepare_data(outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray]
     if np.sum(observations == -1) != 0:
         raise NotImplementedError(
             "Currently assuming all prepare/measure combinations are present")
-    return prep_states, meas_states, observations
+    return prep_projectors, meas_projectors, observations
 
 
-def build_choi_predictor(prep_states: Iterable[np.ndarray],
-                         meas_states: Iterable[np.ndarray]) -> np.ndarray:
+def build_choi_predictor(prep_operators: Iterable[np.ndarray],
+                         meas_operators: Iterable[np.ndarray]) -> np.ndarray:
     r"""Given a list of prepared and measured states as state vectors, return a matrix
     that predicts observed probabilities when applied to the Choi matrix of a process.
 
-    In other words, for given prepared and measured states
-    :math:`(\left|\psi_i\right>)_i` and :math:`(\left|\psi_j\right>)_j`, the returned
-    matrix :math:`m` computes the outcomes
-    :math:`p_{ij} = \operatorname{tr}\left(
-    \mathcal{E}(\left|\psi_i\right>\left<\psi_i\right|)
-    \left|\phi_j\right>\left<\phi_j\right|
-    \right)` by applying it to the Choi matrix :math:`C_\mathcal{E}`, i.e.
-    :math:`p = m\ C_\mathcal{E}`.
+    In other words, for given prepared states :math:`\rho_i` and measurement operators
+    :math:`P_j`, the returned matrix :math:`M` computes the outcomes
+    :math:`p_{ij} = \operatorname{tr}\left(\mathcal{E}(\rho_i) P_j \right)` by applying
+    it to the Choi matrix :math:`C_\mathcal{E}`, i.e. :math:`p = M\ C_\mathcal{E}`.
 
     This is the same convention for the order of entries in the outcome matrix
     :math:`p` as used by :func:`prepare_data`.
+
+    :param prep_operators: The prepared states, given as density matrices. Typically,
+        the states are pure states :math:`\left(\left|\psi_i\right>\right)_i`, and
+        :math:`\rho_i = \left|\psi_i\right>\left<\psi_i\right|`.
+    :param meas_operators: The measurement operators. Typically, the measurements are
+        ideal projections onto states :math:`\left(\left|\phi_j\right>\right)_j`, and
+        :math:`P_j = \left|\phi_j\right>\left<\phi_j\right|`.
     """
     return np.vstack([
-        mat2vec(np.kron(projector(prep),
-                        projector(meas).T)) for prep in prep_states
-        for meas in meas_states
+        mat2vec(np.kron(prep, meas.T)) for prep in prep_operators
+        for meas in meas_operators
     ])
 
 
@@ -200,22 +221,22 @@ def invert_choi_predictor(choi_predictor: np.ndarray,
     return vec2mat(solution) / pure_state_dimension
 
 
-def linear_inversion_tomography(prep_states: List[np.ndarray],
-                                meas_states: List[np.ndarray],
+def linear_inversion_tomography(prep_projectors: List[np.ndarray],
+                                meas_operators: List[np.ndarray],
                                 observations: np.ndarray) -> np.ndarray:
     """Calculate the linear inversion estimate of the quantum process that has produced
     the given observations.
 
-    :param prep_states: A list of the pure states prepared in the tomography experiment.
-    :param meas_states: A list of the pure states projected onto in the tomography
-        experiment.
+    :param prep_projectors: A list of the states prepared in the tomography experiment.
+    :param meas_operators: A list of the measurement operators (projectors) in the
+        tomography experiment.
     :param observations: A matrix giving the number of times each outcome was observed
         in the experiment; see :func:`prepare_data`.
 
     :return: The linear inversion tomography estimate for the process as a Choi matrix;
         see :func:`invert_choi_predictor`.
     """
-    predictor = build_choi_predictor(prep_states, meas_states)
+    predictor = build_choi_predictor(prep_projectors, meas_operators)
     return invert_choi_predictor(predictor, outcomes)
 
 
