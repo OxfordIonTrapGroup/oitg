@@ -7,12 +7,12 @@ def binom_twosided(k, N):
     """Returns the estimated source probability and confidence interval from
     a sample of k Trues out of N samples.
     """
-    # Method 'beta' uses Clopper-Pearson method
-    # alpha (1 - exp(-1)) gives us the 68% confidence interval
     if k > N or k < 0:
         raise ValueError("k must be between 0 and N (k={}, N={})".format(k,N))
 
-    confint = proportion_confint(k, N, alpha=(1-np.exp(-1)), method='beta')
+    # 'beta' is Clopper–Pearson method; chosen alpha corresponds to 1σ of a normal
+    # distribution (68%).
+    confint = proportion_confint(k, N, alpha=0.3173, method='beta')
 
     # Strip out NaNs for confidence intervals at the boundary
     if np.isnan(confint[0]):
