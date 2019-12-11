@@ -42,16 +42,15 @@ def load_hdf5_file(filename):
 
 
 def load_result(day=None,
-                rid=None,
                 hour=None,
+                rid=None,
                 class_name=None,
                 experiment=None,
                 root_path=None):
     """Find and load an HDF5 results file from an ARTIQ master results directory.
 
-    The results file is described by a rid and a day (provided date string,
-    defaults to today). See :meth:`find_results` for a full description of the
-    arguments.
+    The results file is described by a rid and a day (provided date string, defaults to
+    today). See :meth:`find_results` for a full description of the arguments.
 
     :return: A dictionary containing the contents of the file; see
         :meth:`load_hdf5_file`.
@@ -74,27 +73,32 @@ def load_result(day=None,
 
 
 def find_results(day=None,
-                 rid=None,
                  hour=None,
+                 rid=None,
                  class_name=None,
                  experiment=None,
                  root_path=None):
-    """Find the ARTIQ result files for a given experiment.
+    """Find all ARTIQ result files matching the given filters.
 
-    The ARTIQ results root search path is either the standard root path for the
-    given experiment name (see oitg.paths.artiq_results_path()) or root_path
-    (if root_path is given).
+    To implement this, the file system in the given ``root_path`` (or the standard root
+    path for the given experiment as per :func:`.artiq_results_path`) is searched for
+    HDF5 files matching the standard ARTIQ folder/file name structure.
 
-    :param rid: An experiment run ID or list of run IDs to load. If None loads all rids.
-    :param hour: hour or list of hours when the experiment was build. If None loads all
-        hours.
-    :param day: Datestring or list of datestrings. Defaults to today. Dates are in ISO
-        format (yyyy-mm-dd).
-    :param class_name: is the experiment class name, or list of names. If None
-        loads all classes.
+    :param day: Acqusition date of results to load, in ISO format (yyyy-mm-dd). If
+        ``None``, defaults to the current date (today).
+    :param hour: Hour or list of hours when the experiment was built. If ``None``, loads
+        all hours.
+    :param rid: An experiment run id or list of run ids to load. If ``None``, loads all
+        rids.
+    :param class_name: The class name of the experiemnt to load, or a list of names. If
+        ``None``, loads all classes.
+    :param experiment: The experiment name, used for determining the results path if
+        ``root_path`` is not given`. See :func:`.artiq_results_path`.
+    :param root_path: The ARTIQ results directory to search. If not given, defaults to
+        the :func:`.artiq_results_path`.
 
-    :return: A dict of results, indexed by rid. The dict entries are a named
-        tuple ``(path, day, hour, cls)``.
+    :return: A dict of results, indexed by rid. The dict entries are a named tuple
+        ``(path, day, hour, cls)``.
     """
 
     Result = namedtuple('Result', ['path', 'day', 'hour', 'cls'])
