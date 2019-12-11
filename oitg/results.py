@@ -3,7 +3,8 @@ import os
 from glob import glob
 import h5py
 from datetime import date
-from collections import namedtuple, Iterable
+from collections import Iterable
+from typing import Any, Dict, List, NamedTuple, Optional, Union
 
 from .paths import artiq_results_path
 
@@ -18,7 +19,7 @@ def _iterify(x):
     return x
 
 
-def load_hdf5_file(filename):
+def load_hdf5_file(filename: str) -> Dict[str, Any]:
     """Load an ARTIQ results file.
 
     :returns: A dictionary containing the logical contents of the HDF5 file, including:
@@ -41,12 +42,12 @@ def load_hdf5_file(filename):
         return r
 
 
-def load_result(day=None,
-                hour=None,
-                rid=None,
-                class_name=None,
-                experiment=None,
-                root_path=None):
+def load_result(day: Union[None, str, List[str]] = None,
+                hour: Union[None, int, List[int]] = None,
+                rid: Union[None, int, List[int]] = None,
+                class_name: Union[None, str, List[str]] = None,
+                experiment: Optional[str] = None,
+                root_path: Optional[str] = None) -> Dict[str, Any]:
     """Find and load an HDF5 results file from an ARTIQ master results directory.
 
     The results file is described by a rid and a day (provided date string, defaults to
@@ -72,12 +73,16 @@ def load_result(day=None,
         raise IOError("Failure parsing results file")
 
 
-def find_results(day=None,
-                 hour=None,
-                 rid=None,
-                 class_name=None,
-                 experiment=None,
-                 root_path=None):
+Result = NamedTuple('Result', [('path', str), ('day', str), ('hour', int),
+                               ('cls', str)])
+
+
+def find_results(day: Union[None, str, List[str]] = None,
+                 hour: Union[None, int, List[int]] = None,
+                 rid: Union[None, int, List[int]] = None,
+                 class_name: Union[None, str, List[str]] = None,
+                 experiment: Optional[str] = None,
+                 root_path: Optional[str] = None) -> Dict[int, Result]:
     """Find all ARTIQ result files matching the given filters.
 
     To implement this, the file system in the given ``root_path`` (or the standard root
@@ -100,8 +105,6 @@ def find_results(day=None,
     :return: A dict of results, indexed by rid. The dict entries are a named tuple
         ``(path, day, hour, cls)``.
     """
-
-    Result = namedtuple('Result', ['path', 'day', 'hour', 'cls'])
 
     if root_path is None:
         root_path = artiq_results_path(experiment=experiment)
