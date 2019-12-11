@@ -131,8 +131,8 @@ def find_results(day=None,
         if hours is not None and this_hour not in hours:
             continue
 
-        results[int(this_rid)] = Result(path=path,
-                                        cls=this_class,
-                                        day=this_day,
-                                        hour=this_hour)
+        results[this_rid] = Result(path=path,
+                                   cls=this_class,
+                                   day=this_day,
+                                   hour=this_hour)
     return results
