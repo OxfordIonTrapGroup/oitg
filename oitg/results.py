@@ -41,7 +41,12 @@ def load_hdf5_file(filename):
         return r
 
 
-def load_result(day=None, rid=None, experiment=None, root_path=None):
+def load_result(day=None,
+                rid=None,
+                hour=None,
+                class_name=None,
+                experiment=None,
+                root_path=None):
     """Find and load an HDF5 results file from an ARTIQ master results directory.
 
     The results file is described by a rid and a day (provided date string,
@@ -51,7 +56,12 @@ def load_result(day=None, rid=None, experiment=None, root_path=None):
     :return: A dictionary containing the contents of the file; see
         :meth:`load_hdf5_file`.
     """
-    rs = find_results(day=day, rid=rid, experiment=experiment, root_path=root_path)
+    rs = find_results(day=day,
+                      rid=rid,
+                      hour=hour,
+                      class_name=class_name,
+                      experiment=experiment,
+                      root_path=root_path)
     if len(rs) == 0:
         raise IOError("No results file found")
     if len(rs) > 1:
