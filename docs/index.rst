@@ -11,5 +11,6 @@ experiments in the `Oxford Ion Trap Quantum Computing Group
 
    cache
    circuits
+   paths
    results
    threshold
