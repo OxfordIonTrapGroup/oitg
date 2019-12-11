@@ -14,14 +14,14 @@ def shared_dir_path():
     """Returns the standard path to the shared area for this platform.
     For Windows the standard mount point is Z:\
     For Linux / OSX the standard mount point is ~/steaneShared"""
-    
-    if os.name == 'nt': # Windows
+
+    if os.name == 'nt':  # Windows
         path = 'Z:\\'
-    elif os.name == 'unix' or os.name == 'posix': # Linux / OSX / ...
+    elif os.name == 'unix' or os.name == 'posix':  # Linux / OSX / ...
         path = os.path.expanduser('~/steaneShared/')
     else:
         raise Exception('Unknown OS')
-    
+
     return path
 
 
@@ -30,7 +30,7 @@ def analysis_root_path(user=None):
     area. If the user is None, uses the enviroment variable 'OITG_USER'"""
     if user is None:
         user = _get_user()
-    return os.path.join( shared_dir_path(), 'Users', user, 'analysis' )
+    return os.path.join(shared_dir_path(), 'Users', user, 'analysis')
 
 
 def todays_analysis_path(day=None, user=None):
@@ -44,7 +44,7 @@ def todays_analysis_path(day=None, user=None):
         user = _get_user()
 
     path = os.path.join(analysis_root_path(user=user), day)
-    
+
     if not os.access(path, os.R_OK):
         # If the dir does not exist, create it
         os.mkdir(path)
@@ -53,18 +53,19 @@ def todays_analysis_path(day=None, user=None):
 
 def artiq_results_path(experiment=None):
     """Returns the path to an experiments Artiq results directory.
-    'experiment' is the results subdirectory name. If None, the enviroment 
+    'experiment' is the results subdirectory name. If None, the enviroment
     variable 'OITG_EXPERIMENT' is used.
 
     The standard results path is <shared_area>/artiqResults/<experiment>"""
 
-    path = os.path.join( shared_dir_path(), 'artiqResults' )
+    path = os.path.join(shared_dir_path(), 'artiqResults')
 
     if experiment is None:
         try:
             experiment = os.environ["OITG_EXPERIMENT"]
         except KeyError:
-            raise Exception("No experiment supplied, and no OITG_EXPERIMENT environment key")
+            raise Exception(
+                "No experiment supplied, and no OITG_EXPERIMENT environment key")
     path = os.path.join(path, experiment)
 
     return path
