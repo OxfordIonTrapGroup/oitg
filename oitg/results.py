@@ -10,8 +10,11 @@ from .paths import artiq_results_path
 
 
 def _iterify(x):
-    """Turn an element or iterable into an interable, counting strings as
-    elements, not iterables"""
+    """Ensure the passed argument is iterable, that is, if it is a single element, wrap
+    it into a list.
+
+    A string is treated as a single element, not an iterable of characters.
+    """
     if x is None:
         return None
     if not isinstance(x, Iterable) or isinstance(x, str):
@@ -24,21 +27,26 @@ def load_hdf5_file(filename: str) -> Dict[str, Any]:
 
     :returns: A dictionary containing the logical contents of the HDF5 file, including:
 
-     * ``"start_time"``: the unix timestamp when the experiment was built
+     * ``"start_time"``: the Unix timestamp when the experiment was built
      * ``"expid"``: experiment description, including submission arguments
      * ``"datasets"``: dictionary containing all set datasets
     """
     with h5py.File(filename, "r") as f:
         r = {}
-        expid = json.loads(f["expid"][()])
-        r["expid"] = expid
+
+        # `expid` is actually serialised as PYON on the ARTIQ side, but as it is within
+        # the JSON subset (as of ARTIQ 5, anyway), we can avoid the library dependency
+        # in data analysis environments.
+        r["expid"] = json.loads(f["expid"][()])
+
         for k in ["artiq_version", "start_time"]:
             r[k] = f[k][()]
-        # Load datasets
+
         ds = {}
         r["datasets"] = ds
         for k in f["datasets"]:
             ds[k] = f["datasets"][k][()]
+
         return r
 
 
@@ -51,10 +59,10 @@ def load_result(day: Union[None, str, List[str]] = None,
     """Find and load an HDF5 results file from an ARTIQ master results directory.
 
     The results file is described by a rid and a day (provided date string, defaults to
-    today). See :meth:`find_results` for a full description of the arguments.
+    today). See :func:`find_results` for a full description of the arguments.
 
     :return: A dictionary containing the contents of the file; see
-        :meth:`load_hdf5_file`.
+        :func:`load_hdf5_file`.
     """
     rs = find_results(day=day,
                       rid=rid,
@@ -89,20 +97,20 @@ def find_results(day: Union[None, str, List[str]] = None,
     path for the given experiment as per :func:`.artiq_results_path`) is searched for
     HDF5 files matching the standard ARTIQ folder/file name structure.
 
-    :param day: Acqusition date of results to load, in ISO format (yyyy-mm-dd). If
-        ``None``, defaults to the current date (today).
+    :param day: Acquisition date of results to load, or list of dates, in ISO format
+        (yyyy-mm-dd). If ``None``, defaults to the current date (today).
     :param hour: Hour or list of hours when the experiment was built. If ``None``, loads
         all hours.
     :param rid: An experiment run id or list of run ids to load. If ``None``, loads all
         rids.
-    :param class_name: The class name of the experiemnt to load, or a list of names. If
+    :param class_name: The class name of the experiment to load, or a list of names. If
         ``None``, loads all classes.
     :param experiment: The experiment name, used for determining the results path if
-        ``root_path`` is not given`. See :func:`.artiq_results_path`.
+        ``root_path`` is not given. See :func:`oitg.paths.artiq_results_path`.
     :param root_path: The ARTIQ results directory to search. If not given, defaults to
-        the :func:`.artiq_results_path`.
+        the :func:`oitg.paths.artiq_results_path`.
 
-    :return: A dict of results, indexed by rid. The dict entries are a named tuple
+    :return: A dictionary of results, indexed by rid. The values are named tuples
         ``(path, day, hour, cls)``.
     """
 
@@ -121,10 +129,10 @@ def find_results(day: Union[None, str, List[str]] = None,
     paths = []
     for day in days:
         day_path = os.path.join(root_path, day)
-        # To increase speed on slow FS (such as sambda) we could only list
-        # directories with appropriate hours
+        # To increase speed on a slow filesystem (such as an SMB mount) we could only
+        # list directories with appropriate hours.
         paths.extend(
-            [y for x in os.walk(day_path) for y in glob(os.path.join(x[0], '*.h5'))])
+            [y for x in os.walk(day_path) for y in glob(os.path.join(x[0], "*.h5"))])
 
     results = {}
     for path in paths:
