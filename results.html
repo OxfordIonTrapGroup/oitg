@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="oitg.threshold API" href="threshold.html" />
-    <link rel="prev" title="oitg.circuits API" href="circuits.html" /> 
+    <link rel="prev" title="oitg.paths API" href="paths.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,6 +87,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paths.html">oitg.paths API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.results API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threshold.html">oitg.threshold API</a></li>
 </ul>
@@ -159,13 +160,13 @@
 <span id="oitg-results-api"></span><h1>oitg.results API<a class="headerlink" href="#module-oitg.results" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="oitg.results.load_hdf5_file">
-<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">load_hdf5_file</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#load_hdf5_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_hdf5_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">load_hdf5_file</code><span class="sig-paren">(</span><em class="sig-param">filename: str</em><span class="sig-paren">)</span> &#x2192; Dict[str, Any]<a class="reference internal" href="_modules/oitg/results.html#load_hdf5_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_hdf5_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load an ARTIQ results file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><p>A dictionary containing the logical contents of the HDF5 file, including:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;start_time&quot;</span></code>: the unix timestamp when the experiment was built</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;start_time&quot;</span></code>: the Unix timestamp when the experiment was built</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;expid&quot;</span></code>: experiment description, including submission arguments</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;datasets&quot;</span></code>: dictionary containing all set datasets</p></li>
 </ul>
@@ -176,41 +177,74 @@
 
 <dl class="function">
 <dt id="oitg.results.load_result">
-<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">load_result</code><span class="sig-paren">(</span><em class="sig-param">day=None</em>, <em class="sig-param">rid=None</em>, <em class="sig-param">experiment=None</em>, <em class="sig-param">root_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#load_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_result" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">load_result</code><span class="sig-paren">(</span><em class="sig-param">day: Union[None</em>, <em class="sig-param">str</em>, <em class="sig-param">List[str]] = None</em>, <em class="sig-param">hour: Union[None</em>, <em class="sig-param">int</em>, <em class="sig-param">List[int]] = None</em>, <em class="sig-param">rid: Union[None</em>, <em class="sig-param">int</em>, <em class="sig-param">List[int]] = None</em>, <em class="sig-param">class_name: Union[None</em>, <em class="sig-param">str</em>, <em class="sig-param">List[str]] = None</em>, <em class="sig-param">experiment: Optional[str] = None</em>, <em class="sig-param">root_path: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict[str, Any]<a class="reference internal" href="_modules/oitg/results.html#load_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.load_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find and load an HDF5 results file from an ARTIQ master results directory.</p>
-<p>The results file is described by a rid and a day (provided date string,
-defaults to today). See <a class="reference internal" href="#oitg.results.find_results" title="oitg.results.find_results"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_results()</span></code></a> for a full description of the
-arguments.</p>
+<p>The results file is described by a rid and a day (provided date string, defaults to
+today). See <a class="reference internal" href="#oitg.results.find_results" title="oitg.results.find_results"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_results()</span></code></a> for a full description of the arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A dictionary containing the contents of the file; see
-<a class="reference internal" href="#oitg.results.load_hdf5_file" title="oitg.results.load_hdf5_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_hdf5_file()</span></code></a>.</p>
+<a class="reference internal" href="#oitg.results.load_hdf5_file" title="oitg.results.load_hdf5_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_hdf5_file()</span></code></a>.</p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="class">
+<dt id="oitg.results.Result">
+<em class="property">class </em><code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">Result</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">day</em>, <em class="sig-param">hour</em>, <em class="sig-param">cls</em><span class="sig-paren">)</span><a class="headerlink" href="#oitg.results.Result" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="oitg.results.Result.cls">
+<em class="property">property </em><code class="sig-name descname">cls</code><a class="headerlink" href="#oitg.results.Result.cls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="oitg.results.Result.day">
+<em class="property">property </em><code class="sig-name descname">day</code><a class="headerlink" href="#oitg.results.Result.day" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="oitg.results.Result.hour">
+<em class="property">property </em><code class="sig-name descname">hour</code><a class="headerlink" href="#oitg.results.Result.hour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="oitg.results.Result.path">
+<em class="property">property </em><code class="sig-name descname">path</code><a class="headerlink" href="#oitg.results.Result.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="oitg.results.find_results">
-<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">find_results</code><span class="sig-paren">(</span><em class="sig-param">day=None</em>, <em class="sig-param">rid=None</em>, <em class="sig-param">hour=None</em>, <em class="sig-param">class_name=None</em>, <em class="sig-param">experiment=None</em>, <em class="sig-param">root_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/results.html#find_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.find_results" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the ARTIQ result files for a given experiment.</p>
-<p>The ARTIQ results root search path is either the standard root path for the
-given experiment name (see oitg.paths.artiq_results_path()) or root_path
-(if root_path is given).</p>
+<code class="sig-prename descclassname">oitg.results.</code><code class="sig-name descname">find_results</code><span class="sig-paren">(</span><em class="sig-param">day: Union[None</em>, <em class="sig-param">str</em>, <em class="sig-param">List[str]] = None</em>, <em class="sig-param">hour: Union[None</em>, <em class="sig-param">int</em>, <em class="sig-param">List[int]] = None</em>, <em class="sig-param">rid: Union[None</em>, <em class="sig-param">int</em>, <em class="sig-param">List[int]] = None</em>, <em class="sig-param">class_name: Union[None</em>, <em class="sig-param">str</em>, <em class="sig-param">List[str]] = None</em>, <em class="sig-param">experiment: Optional[str] = None</em>, <em class="sig-param">root_path: Optional[str] = None</em><span class="sig-paren">)</span> &#x2192; Dict[int, oitg.results.Result]<a class="reference internal" href="_modules/oitg/results.html#find_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.results.find_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all ARTIQ result files matching the given filters.</p>
+<p>To implement this, the file system in the given <code class="docutils literal notranslate"><span class="pre">root_path</span></code> (or the standard root
+path for the given experiment as per <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">artiq_results_path()</span></code></a>) is searched for
+HDF5 files matching the standard ARTIQ folder/file name structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rid</strong> – An experiment run ID or list of run IDs to load. If None loads all rids.</p></li>
-<li><p><strong>hour</strong> – hour or list of hours when the experiment was build. If None loads all
-hours.</p></li>
-<li><p><strong>day</strong> – Datestring or list of datestrings. Defaults to today. Dates are in ISO
-format (yyyy-mm-dd).</p></li>
-<li><p><strong>class_name</strong> – is the experiment class name, or list of names. If None
-loads all classes.</p></li>
+<li><p><strong>day</strong> – Acquisition date of results to load, or list of dates, in ISO format
+(yyyy-mm-dd). If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the current date (today).</p></li>
+<li><p><strong>hour</strong> – Hour or list of hours when the experiment was built. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, loads
+all hours.</p></li>
+<li><p><strong>rid</strong> – An experiment run id or list of run ids to load. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, loads all
+rids.</p></li>
+<li><p><strong>class_name</strong> – The class name of the experiment to load, or a list of names. If
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, loads all classes.</p></li>
+<li><p><strong>experiment</strong> – The experiment name, used for determining the results path if
+<code class="docutils literal notranslate"><span class="pre">root_path</span></code> is not given. See <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">oitg.paths.artiq_results_path()</span></code></a>.</p></li>
+<li><p><strong>root_path</strong> – The ARTIQ results directory to search. If not given, defaults to
+the <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">oitg.paths.artiq_results_path()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A dict of results, indexed by rid. The dict entries are a named
-tuple <code class="docutils literal notranslate"><span class="pre">(path,</span> <span class="pre">day,</span> <span class="pre">hour,</span> <span class="pre">cls)</span></code>.</p>
+<dd class="field-even"><p>A dictionary of results, indexed by rid. The values are named tuples
+<code class="docutils literal notranslate"><span class="pre">(path,</span> <span class="pre">day,</span> <span class="pre">hour,</span> <span class="pre">cls)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -228,7 +262,7 @@ tuple <code class="docutils literal notranslate"><span class="pre">(path,</span>
         <a href="threshold.html" class="btn btn-neutral float-right" title="oitg.threshold API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="circuits.html" class="btn btn-neutral float-left" title="oitg.circuits API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="paths.html" class="btn btn-neutral float-left" title="oitg.paths API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

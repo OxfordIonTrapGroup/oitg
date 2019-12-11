@@ -86,6 +86,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="circuits.html">oitg.circuits API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paths.html">oitg.paths API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="results.html">oitg.results API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threshold.html">oitg.threshold API</a></li>
 </ul>
@@ -165,6 +166,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -184,10 +186,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="circuits.html#oitg.circuits.protocols.rpe.analyse.analyse">analyse() (in module oitg.circuits.protocols.rpe.analyse)</a>
 </li>
+      <li><a href="paths.html#oitg.paths.analysis_root_path">analysis_root_path() (in module oitg.paths)</a>
+</li>
       <li><a href="circuits.html#oitg.circuits.to_matrix.apply_gate_sequence">apply_gate_sequence() (in module oitg.circuits.to_matrix)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="paths.html#oitg.paths.artiq_results_path">artiq_results_path() (in module oitg.paths)</a>
+</li>
       <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data">auto_prepare_data() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
 </li>
       <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity">avg_gate_fidelity() (in module oitg.circuits.protocols.process_tomo.tools)</a>
@@ -224,6 +230,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cache.html#oitg.cache.clear_pickle_cache">clear_pickle_cache() (in module oitg.cache)</a>
 </li>
+      <li><a href="results.html#oitg.results.Result.cls">cls() (oitg.results.Result property)</a>
+</li>
       <li><a href="circuits.html#oitg.circuits.gate.collect_operands">collect_operands() (in module oitg.circuits.gate)</a>
 </li>
       <li><a href="circuits.html#oitg.circuits.results.collect_outcomes">collect_outcomes() (in module oitg.circuits.results)</a>
@@ -238,10 +246,12 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">diluted_mle_tomography() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
+      <li><a href="results.html#oitg.results.Result.day">day() (oitg.results.Result property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">diluted_mle_tomography() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
+</li>
       <li><a href="cache.html#oitg.cache.DIR_ENV_VAR">DIR_ENV_VAR (in module oitg.cache)</a>
 </li>
   </ul></td>
@@ -321,6 +331,14 @@
       <li><a href="circuits.html#oitg.circuits.protocols.gst.GSTSpec">GSTSpec (class in oitg.circuits.protocols.gst)</a>
 </li>
       <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split">guess_prepare_target_measure_split() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="results.html#oitg.results.Result.hour">hour() (oitg.results.Result property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -426,10 +444,10 @@
 </li>
       <li><a href="circuits.html#module-oitg.circuits.protocols.process_tomo.tools">oitg.circuits.protocols.process_tomo.tools (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="circuits.html#module-oitg.circuits.protocols.rbm">oitg.circuits.protocols.rbm (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="circuits.html#module-oitg.circuits.protocols.rbm.generate">oitg.circuits.protocols.rbm.generate (module)</a>
 </li>
       <li><a href="circuits.html#module-oitg.circuits.protocols.rpe">oitg.circuits.protocols.rpe (module)</a>
@@ -448,6 +466,8 @@
 </li>
       <li><a href="circuits.html#module-oitg.circuits.visualisation">oitg.circuits.visualisation (module)</a>
 </li>
+      <li><a href="paths.html#module-oitg.paths">oitg.paths (module)</a>
+</li>
       <li><a href="results.html#module-oitg.results">oitg.results (module)</a>
 </li>
       <li><a href="threshold.html#module-oitg.threshold">oitg.threshold (module)</a>
@@ -464,12 +484,14 @@
 </li>
       <li><a href="circuits.html#oitg.circuits.qasm.parse_gate_sequence_string">parse_gate_sequence_string() (in module oitg.circuits.qasm)</a>
 </li>
-      <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">pgdb_mle_tomography() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
+      <li><a href="results.html#oitg.results.Result.path">path() (oitg.results.Result property)</a>
 </li>
-      <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">prepare_data() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
+      <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">pgdb_mle_tomography() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">prepare_data() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
+</li>
       <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project">project() (oitg.circuits.protocols.process_tomo.analyse.TPProjector method)</a>
 </li>
       <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cp">project_into_cp() (in module oitg.circuits.protocols.process_tomo.analyse)</a>
@@ -492,6 +514,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="circuits.html#oitg.circuits.gate.remap_operands">remap_operands() (in module oitg.circuits.gate)</a>
 </li>
+      <li><a href="results.html#oitg.results.Result">Result (class in oitg.results)</a>
+</li>
       <li><a href="circuits.html#oitg.circuits.runner.SequenceRunner.run_sequences">run_sequences() (oitg.circuits.runner.SequenceRunner method)</a>
 </li>
   </ul></td>
@@ -506,10 +530,12 @@
 </li>
       <li><a href="circuits.html#oitg.circuits.runner.SequenceRunnerOptions">SequenceRunnerOptions (class in oitg.circuits.runner)</a>
 </li>
-      <li><a href="circuits.html#oitg.circuits.to_matrix.single_gate_matrix">single_gate_matrix() (in module oitg.circuits.to_matrix)</a>
+      <li><a href="paths.html#oitg.paths.shared_area_path">shared_area_path() (in module oitg.paths)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="circuits.html#oitg.circuits.to_matrix.single_gate_matrix">single_gate_matrix() (in module oitg.circuits.to_matrix)</a>
+</li>
       <li><a href="circuits.html#oitg.circuits.runner.stringify_gate_sequence">stringify_gate_sequence() (in module oitg.circuits.runner)</a>
 </li>
       <li><a href="circuits.html#oitg.circuits.qasm.stringify_param">stringify_param() (in module oitg.circuits.qasm)</a>
@@ -531,6 +557,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="circuits.html#oitg.circuits.composite_pulses.to_rxy">to_rxy() (in module oitg.circuits.composite_pulses)</a>
+</li>
+      <li><a href="paths.html#oitg.paths.todays_analysis_path">todays_analysis_path() (in module oitg.paths)</a>
 </li>
       <li><a href="circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector">TPProjector (class in oitg.circuits.protocols.process_tomo.analyse)</a>
 </li>
