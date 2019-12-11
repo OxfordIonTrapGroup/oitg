@@ -27,7 +27,7 @@ import numpy as np
 import warnings
 from typing import Dict, List, Optional
 from ...gate import *
-from ...to_matrix import apply_gate_sequence, gate_sequence_matrix
+from ...to_matrix import gate_sequence_matrix
 from .tools import *
 
 
