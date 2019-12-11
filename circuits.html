@@ -952,7 +952,7 @@ observations each (see <a class="reference internal" href="#oitg.circuits.protoc
 
 <dl class="function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.prepare_data">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">prepare_data</code><span class="sig-paren">(</span><em class="sig-param">outcomes: Dict[Tuple[Tuple[oitg.circuits.gate.Gate, ...], Tuple[oitg.circuits.gate.Gate, ...]], numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; Tuple[List[numpy.ndarray], List[numpy.ndarray], numpy.ndarray]<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">prepare_data</code><span class="sig-paren">(</span><em class="sig-param">outcomes: Dict[Tuple[Tuple[oitg.circuits.gate.Gate, ...], Tuple[oitg.circuits.gate.Gate, ...]], numpy.ndarray], initial_state: Optional[List[numpy.ndarray]] = None, readout_projectors: Optional[List[numpy.ndarray]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[List[numpy.ndarray], List[numpy.ndarray], numpy.ndarray]<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a dictionary of observed measurement outcomes indexed by pairs of the
 state preparation and measurement gate sequences used, compute the prepared/measured
 states and respective number of operations.</p>
@@ -973,26 +973,34 @@ different prepared states, and columns to the measured state. Measured states
 corresponding to the different outcomes are enumerated explicitly, so for a
 <span class="math notranslate nohighlight">\(n\)</span>-qubit system and <span class="math notranslate nohighlight">\(k\)</span> measurement fiducials, there will be
 <span class="math notranslate nohighlight">\(k\ 2^n\)</span> measured states/columns in the observation count matrix. All
-states are given as pure states.</p>
+states are given as density matrices/projectors.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">build_choi_predictor</code><span class="sig-paren">(</span><em class="sig-param">prep_states: Iterable[numpy.ndarray], meas_states: Iterable[numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#build_choi_predictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">build_choi_predictor</code><span class="sig-paren">(</span><em class="sig-param">prep_operators: Iterable[numpy.ndarray], meas_operators: Iterable[numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#build_choi_predictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a list of prepared and measured states as state vectors, return a matrix
 that predicts observed probabilities when applied to the Choi matrix of a process.</p>
-<p>In other words, for given prepared and measured states
-<span class="math notranslate nohighlight">\((\left|\psi_i\right&gt;)_i\)</span> and <span class="math notranslate nohighlight">\((\left|\psi_j\right&gt;)_j\)</span>, the returned
-matrix <span class="math notranslate nohighlight">\(m\)</span> computes the outcomes
-<span class="math notranslate nohighlight">\(p_{ij} = \operatorname{tr}\left(
-\mathcal{E}(\left|\psi_i\right&gt;\left&lt;\psi_i\right|)
-\left|\phi_j\right&gt;\left&lt;\phi_j\right|
-\right)\)</span> by applying it to the Choi matrix <span class="math notranslate nohighlight">\(C_\mathcal{E}\)</span>, i.e.
-<span class="math notranslate nohighlight">\(p = m\ C_\mathcal{E}\)</span>.</p>
+<p>In other words, for given prepared states <span class="math notranslate nohighlight">\(\rho_i\)</span> and measurement operators
+<span class="math notranslate nohighlight">\(P_j\)</span>, the returned matrix <span class="math notranslate nohighlight">\(M\)</span> computes the outcomes
+<span class="math notranslate nohighlight">\(p_{ij} = \operatorname{tr}\left(\mathcal{E}(\rho_i) P_j \right)\)</span> by applying
+it to the Choi matrix <span class="math notranslate nohighlight">\(C_\mathcal{E}\)</span>, i.e. <span class="math notranslate nohighlight">\(p = M\ C_\mathcal{E}\)</span>.</p>
 <p>This is the same convention for the order of entries in the outcome matrix
 <span class="math notranslate nohighlight">\(p\)</span> as used by <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="oitg.circuits.protocols.process_tomo.analyse.prepare_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_data()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prep_operators</strong> – The prepared states, given as density matrices. Typically,
+the states are pure states <span class="math notranslate nohighlight">\(\left(\left|\psi_i\right&gt;\right)_i\)</span>, and
+<span class="math notranslate nohighlight">\(\rho_i = \left|\psi_i\right&gt;\left&lt;\psi_i\right|\)</span>.</p></li>
+<li><p><strong>meas_operators</strong> – The measurement operators. Typically, the measurements are
+ideal projections onto states <span class="math notranslate nohighlight">\(\left(\left|\phi_j\right&gt;\right)_j\)</span>, and
+<span class="math notranslate nohighlight">\(P_j = \left|\phi_j\right&gt;\left&lt;\phi_j\right|\)</span>.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -1022,15 +1030,15 @@ physical, i.e. neither completely positive nor trace-preserving.</p>
 
 <dl class="function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">linear_inversion_tomography</code><span class="sig-paren">(</span><em class="sig-param">prep_states: List[numpy.ndarray], meas_states: List[numpy.ndarray], observations: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#linear_inversion_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">linear_inversion_tomography</code><span class="sig-paren">(</span><em class="sig-param">prep_projectors: List[numpy.ndarray], meas_operators: List[numpy.ndarray], observations: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#linear_inversion_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the linear inversion estimate of the quantum process that has produced
 the given observations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prep_states</strong> – A list of the pure states prepared in the tomography experiment.</p></li>
-<li><p><strong>meas_states</strong> – A list of the pure states projected onto in the tomography
-experiment.</p></li>
+<li><p><strong>prep_projectors</strong> – A list of the states prepared in the tomography experiment.</p></li>
+<li><p><strong>meas_operators</strong> – A list of the measurement operators (projectors) in the
+tomography experiment.</p></li>
 <li><p><strong>observations</strong> – A matrix giving the number of times each outcome was observed
 in the experiment; see <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="oitg.circuits.protocols.process_tomo.analyse.prepare_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_data()</span></code></a>.</p></li>
 </ul>

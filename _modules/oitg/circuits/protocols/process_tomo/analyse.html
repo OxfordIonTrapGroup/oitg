@@ -177,9 +177,9 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">...gate</span> <span class="k">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">...to_matrix</span> <span class="k">import</span> <span class="n">apply_gate_sequence</span><span class="p">,</span> <span class="n">gate_sequence_matrix</span>
+<span class="kn">from</span> <span class="nn">...to_matrix</span> <span class="k">import</span> <span class="n">gate_sequence_matrix</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="k">import</span> <span class="o">*</span>
 
 
@@ -234,7 +234,9 @@
     <span class="k">return</span> <span class="n">prepare_data</span><span class="p">({</span><span class="n">f</span><span class="p">:</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fiducial_pairs</span><span class="p">,</span> <span class="n">seqs</span><span class="p">)})</span></div>
 
 
-<div class="viewcode-block" id="prepare_data"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">[docs]</a><span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+<div class="viewcode-block" id="prepare_data"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">[docs]</a><span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                 <span class="n">initial_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">readout_projectors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a dictionary of observed measurement outcomes indexed by pairs of the</span>
 <span class="sd">    state preparation and measurement gate sequences used, compute the prepared/measured</span>
@@ -255,7 +257,7 @@
 <span class="sd">        corresponding to the different outcomes are enumerated explicitly, so for a</span>
 <span class="sd">        :math:`n`-qubit system and :math:`k` measurement fiducials, there will be</span>
 <span class="sd">        :math:`k\ 2^n` measured states/columns in the observation count matrix. All</span>
-<span class="sd">        states are given as pure states.</span>
+<span class="sd">        states are given as density matrices/projectors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fiducial_pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">outcomes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
@@ -267,15 +269,32 @@
 
     <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
         <span class="nb">max</span><span class="p">(</span><span class="n">collect_operands</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">initial_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
-    <span class="n">initial_state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">prep_states</span> <span class="o">=</span> <span class="p">[</span><span class="n">apply_gate_sequence</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prep_sequences</span><span class="p">]</span>
 
-    <span class="n">meas_unitaries</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">meas_sequences</span>
+    <span class="k">def</span> <span class="nf">basis_ket</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">psi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">psi</span>
+
+    <span class="c1">###</span>
+
+    <span class="k">if</span> <span class="n">initial_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">initial_state</span> <span class="o">=</span> <span class="n">projector</span><span class="p">(</span><span class="n">basis_ket</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">prep_unitaries</span> <span class="o">=</span> <span class="p">[</span><span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prep_sequences</span><span class="p">]</span>
+    <span class="n">prep_projectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="o">@</span> <span class="n">initial_state</span> <span class="o">@</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">prep_unitaries</span><span class="p">]</span>
+
+    <span class="c1">###</span>
+
+    <span class="n">meas_unitaries</span> <span class="o">=</span> <span class="p">[</span><span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">meas_sequences</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">readout_projectors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">readout_projectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">projector</span><span class="p">(</span><span class="n">basis_ket</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">)]</span>
+    <span class="n">meas_projectors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">readout_projector</span> <span class="o">@</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">meas_unitaries</span>
+        <span class="k">for</span> <span class="n">readout_projector</span> <span class="ow">in</span> <span class="n">readout_projectors</span>
     <span class="p">]</span>
-    <span class="n">meas_states</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">meas_unitaries</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">)]</span>
-    <span class="n">observations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">prep_states</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">meas_sequences</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">###</span>
+
+    <span class="n">observations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">meas_projectors</span><span class="p">)),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">prep_idx</span><span class="p">,</span> <span class="n">meas_idx</span><span class="p">,</span> <span class="n">fids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">prep_indices</span><span class="p">,</span> <span class="n">meas_indices</span><span class="p">,</span> <span class="n">fiducial_pairs</span><span class="p">):</span>
         <span class="n">meas_base_idx</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span> <span class="o">*</span> <span class="n">meas_idx</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">counts</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outcomes</span><span class="p">[</span><span class="n">fids</span><span class="p">]):</span>
@@ -283,30 +302,32 @@
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
             <span class="s2">&quot;Currently assuming all prepare/measure combinations are present&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">prep_states</span><span class="p">,</span> <span class="n">meas_states</span><span class="p">,</span> <span class="n">observations</span></div>
+    <span class="k">return</span> <span class="n">prep_projectors</span><span class="p">,</span> <span class="n">meas_projectors</span><span class="p">,</span> <span class="n">observations</span></div>
 
 
-<div class="viewcode-block" id="build_choi_predictor"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">[docs]</a><span class="k">def</span> <span class="nf">build_choi_predictor</span><span class="p">(</span><span class="n">prep_states</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                         <span class="n">meas_states</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="build_choi_predictor"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">[docs]</a><span class="k">def</span> <span class="nf">build_choi_predictor</span><span class="p">(</span><span class="n">prep_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                         <span class="n">meas_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a list of prepared and measured states as state vectors, return a matrix</span>
 <span class="sd">    that predicts observed probabilities when applied to the Choi matrix of a process.</span>
 
-<span class="sd">    In other words, for given prepared and measured states</span>
-<span class="sd">    :math:`(\left|\psi_i\right&gt;)_i` and :math:`(\left|\psi_j\right&gt;)_j`, the returned</span>
-<span class="sd">    matrix :math:`m` computes the outcomes</span>
-<span class="sd">    :math:`p_{ij} = \operatorname{tr}\left(</span>
-<span class="sd">    \mathcal{E}(\left|\psi_i\right&gt;\left&lt;\psi_i\right|)</span>
-<span class="sd">    \left|\phi_j\right&gt;\left&lt;\phi_j\right|</span>
-<span class="sd">    \right)` by applying it to the Choi matrix :math:`C_\mathcal{E}`, i.e.</span>
-<span class="sd">    :math:`p = m\ C_\mathcal{E}`.</span>
+<span class="sd">    In other words, for given prepared states :math:`\rho_i` and measurement operators</span>
+<span class="sd">    :math:`P_j`, the returned matrix :math:`M` computes the outcomes</span>
+<span class="sd">    :math:`p_{ij} = \operatorname{tr}\left(\mathcal{E}(\rho_i) P_j \right)` by applying</span>
+<span class="sd">    it to the Choi matrix :math:`C_\mathcal{E}`, i.e. :math:`p = M\ C_\mathcal{E}`.</span>
 
 <span class="sd">    This is the same convention for the order of entries in the outcome matrix</span>
 <span class="sd">    :math:`p` as used by :func:`prepare_data`.</span>
+
+<span class="sd">    :param prep_operators: The prepared states, given as density matrices. Typically,</span>
+<span class="sd">        the states are pure states :math:`\left(\left|\psi_i\right&gt;\right)_i`, and</span>
+<span class="sd">        :math:`\rho_i = \left|\psi_i\right&gt;\left&lt;\psi_i\right|`.</span>
+<span class="sd">    :param meas_operators: The measurement operators. Typically, the measurements are</span>
+<span class="sd">        ideal projections onto states :math:`\left(\left|\phi_j\right&gt;\right)_j`, and</span>
+<span class="sd">        :math:`P_j = \left|\phi_j\right&gt;\left&lt;\phi_j\right|`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span>
-        <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">projector</span><span class="p">(</span><span class="n">prep</span><span class="p">),</span>
-                        <span class="n">projector</span><span class="p">(</span><span class="n">meas</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">prep_states</span>
-        <span class="k">for</span> <span class="n">meas</span> <span class="ow">in</span> <span class="n">meas_states</span>
+        <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="n">meas</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">prep_operators</span>
+        <span class="k">for</span> <span class="n">meas</span> <span class="ow">in</span> <span class="n">meas_operators</span>
     <span class="p">])</span></div>
 
 
@@ -352,22 +373,22 @@
     <span class="k">return</span> <span class="n">vec2mat</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="o">/</span> <span class="n">pure_state_dimension</span></div>
 
 
-<div class="viewcode-block" id="linear_inversion_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">[docs]</a><span class="k">def</span> <span class="nf">linear_inversion_tomography</span><span class="p">(</span><span class="n">prep_states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                                <span class="n">meas_states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+<div class="viewcode-block" id="linear_inversion_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">[docs]</a><span class="k">def</span> <span class="nf">linear_inversion_tomography</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                                <span class="n">meas_operators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
                                 <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Calculate the linear inversion estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations.</span>
 
-<span class="sd">    :param prep_states: A list of the pure states prepared in the tomography experiment.</span>
-<span class="sd">    :param meas_states: A list of the pure states projected onto in the tomography</span>
-<span class="sd">        experiment.</span>
+<span class="sd">    :param prep_projectors: A list of the states prepared in the tomography experiment.</span>
+<span class="sd">    :param meas_operators: A list of the measurement operators (projectors) in the</span>
+<span class="sd">        tomography experiment.</span>
 <span class="sd">    :param observations: A matrix giving the number of times each outcome was observed</span>
 <span class="sd">        in the experiment; see :func:`prepare_data`.</span>
 
 <span class="sd">    :return: The linear inversion tomography estimate for the process as a Choi matrix;</span>
 <span class="sd">        see :func:`invert_choi_predictor`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">predictor</span> <span class="o">=</span> <span class="n">build_choi_predictor</span><span class="p">(</span><span class="n">prep_states</span><span class="p">,</span> <span class="n">meas_states</span><span class="p">)</span>
+    <span class="n">predictor</span> <span class="o">=</span> <span class="n">build_choi_predictor</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">,</span> <span class="n">meas_operators</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">invert_choi_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">outcomes</span><span class="p">)</span></div>
 
 
