@@ -15,6 +15,7 @@ requirements:
   build:
     - python 3.5*
     - setuptools
+    - statsmodels
   run:
     - python 3.5*
     - numpy
