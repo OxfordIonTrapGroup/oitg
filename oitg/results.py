@@ -97,14 +97,14 @@ def find_results(day: Union[None, str, List[str]] = None,
     path for the given experiment as per :func:`.artiq_results_path`) is searched for
     HDF5 files matching the standard ARTIQ folder/file name structure.
 
-    :param day: Acquisition date of results to load, or list of dates, in ISO format
+    :param day: Acquisition date of results to match, or list of dates, in ISO format
         (yyyy-mm-dd). If ``None``, defaults to the current date (today).
-    :param hour: Hour or list of hours when the experiment was built. If ``None``, loads
-        all hours.
-    :param rid: An experiment run id or list of run ids to load. If ``None``, loads all
-        rids.
-    :param class_name: The class name of the experiment to load, or a list of names. If
-        ``None``, loads all classes.
+    :param hour: Hour or list of hours when the experiment was built. If ``None``,
+        includes all hours.
+    :param rid: An experiment run id or list of run ids to match. If ``None``, includes
+        all rids.
+    :param class_name: The class name of the experiment to match, or a list of names. If
+        ``None``, includes all classes.
     :param experiment: The experiment name, used for determining the results path if
         ``root_path`` is not given. See :func:`oitg.paths.artiq_results_path`.
     :param root_path: The ARTIQ results directory to search. If not given, defaults to
@@ -121,9 +121,6 @@ def find_results(day: Union[None, str, List[str]] = None,
     if day is None:
         day = date.today().isoformat()
     days = _iterify(day)
-    rids = _iterify(rid)
-    hours = _iterify(hour)
-    class_names = _iterify(class_name)
 
     # Collect all the data files on these days
     paths = []
@@ -135,6 +132,9 @@ def find_results(day: Union[None, str, List[str]] = None,
             [y for x in os.walk(day_path) for y in glob(os.path.join(x[0], "*.h5"))])
 
     results = {}
+    rids = _iterify(rid)
+    hours = _iterify(hour)
+    class_names = _iterify(class_name)
     for path in paths:
         head, file_name = os.path.split(path)
         head, hour_str = os.path.split(head)
