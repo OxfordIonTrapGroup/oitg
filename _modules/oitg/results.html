@@ -250,14 +250,14 @@
 <span class="sd">    path for the given experiment as per :func:`.artiq_results_path`) is searched for</span>
 <span class="sd">    HDF5 files matching the standard ARTIQ folder/file name structure.</span>
 
-<span class="sd">    :param day: Acquisition date of results to load, or list of dates, in ISO format</span>
+<span class="sd">    :param day: Acquisition date of results to match, or list of dates, in ISO format</span>
 <span class="sd">        (yyyy-mm-dd). If ``None``, defaults to the current date (today).</span>
-<span class="sd">    :param hour: Hour or list of hours when the experiment was built. If ``None``, loads</span>
-<span class="sd">        all hours.</span>
-<span class="sd">    :param rid: An experiment run id or list of run ids to load. If ``None``, loads all</span>
-<span class="sd">        rids.</span>
-<span class="sd">    :param class_name: The class name of the experiment to load, or a list of names. If</span>
-<span class="sd">        ``None``, loads all classes.</span>
+<span class="sd">    :param hour: Hour or list of hours when the experiment was built. If ``None``,</span>
+<span class="sd">        includes all hours.</span>
+<span class="sd">    :param rid: An experiment run id or list of run ids to match. If ``None``, includes</span>
+<span class="sd">        all rids.</span>
+<span class="sd">    :param class_name: The class name of the experiment to match, or a list of names. If</span>
+<span class="sd">        ``None``, includes all classes.</span>
 <span class="sd">    :param experiment: The experiment name, used for determining the results path if</span>
 <span class="sd">        ``root_path`` is not given. See :func:`oitg.paths.artiq_results_path`.</span>
 <span class="sd">    :param root_path: The ARTIQ results directory to search. If not given, defaults to</span>
@@ -274,9 +274,6 @@
     <span class="k">if</span> <span class="n">day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">day</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
     <span class="n">days</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
-    <span class="n">rids</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
-    <span class="n">hours</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span>
-    <span class="n">class_names</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
 
     <span class="c1"># Collect all the data files on these days</span>
     <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
@@ -288,6 +285,9 @@
             <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">day_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;*.h5&quot;</span><span class="p">))])</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">rids</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
+    <span class="n">hours</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span>
+    <span class="n">class_names</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
         <span class="n">head</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">head</span><span class="p">,</span> <span class="n">hour_str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>

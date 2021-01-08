@@ -228,14 +228,14 @@ HDF5 files matching the standard ARTIQ folder/file name structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>day</strong> – Acquisition date of results to load, or list of dates, in ISO format
+<li><p><strong>day</strong> – Acquisition date of results to match, or list of dates, in ISO format
 (yyyy-mm-dd). If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the current date (today).</p></li>
-<li><p><strong>hour</strong> – Hour or list of hours when the experiment was built. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, loads
-all hours.</p></li>
-<li><p><strong>rid</strong> – An experiment run id or list of run ids to load. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, loads all
-rids.</p></li>
-<li><p><strong>class_name</strong> – The class name of the experiment to load, or a list of names. If
-<code class="docutils literal notranslate"><span class="pre">None</span></code>, loads all classes.</p></li>
+<li><p><strong>hour</strong> – Hour or list of hours when the experiment was built. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+includes all hours.</p></li>
+<li><p><strong>rid</strong> – An experiment run id or list of run ids to match. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, includes
+all rids.</p></li>
+<li><p><strong>class_name</strong> – The class name of the experiment to match, or a list of names. If
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, includes all classes.</p></li>
 <li><p><strong>experiment</strong> – The experiment name, used for determining the results path if
 <code class="docutils literal notranslate"><span class="pre">root_path</span></code> is not given. See <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">oitg.paths.artiq_results_path()</span></code></a>.</p></li>
 <li><p><strong>root_path</strong> – The ARTIQ results directory to search. If not given, defaults to
