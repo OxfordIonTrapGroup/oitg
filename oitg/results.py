@@ -7,7 +7,7 @@ import os
 import re
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 from . import rid_index
-from .paths import artiq_results_path, resolve_experiment
+from .paths import artiq_results_path
 
 
 def _iterify(x):
