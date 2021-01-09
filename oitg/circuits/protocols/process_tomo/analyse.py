@@ -39,7 +39,7 @@ def _find_first_index(needle, haystack):
 
 
 def guess_prepare_target_measure_split(
-        all_sequences: List[GateSequence]
+    all_sequences: List[GateSequence]
 ) -> Tuple[GateSequence, List[Tuple[GateSequence, GateSequence]]]:
     """For a given list of gate sequences making up a tomography experiment, guesses
     which is the target sequence to be analysed, and the preparation/measuemrent
@@ -65,8 +65,9 @@ def guess_prepare_target_measure_split(
                         for t, s in zip(target_start_idxs, all_sequences)]
 
 
-def auto_prepare_data(outcomes: Dict[GateSequence, np.ndarray]
-                      ) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
+def auto_prepare_data(
+    outcomes: Dict[GateSequence, np.ndarray]
+) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
     """Given a results dictionary, guess the target and fiducial sequences and extract
     the tomography input data.
 
@@ -82,10 +83,11 @@ def auto_prepare_data(outcomes: Dict[GateSequence, np.ndarray]
     return prepare_data({f: outcomes[s] for f, s in zip(fiducial_pairs, seqs)})
 
 
-def prepare_data(outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray],
-                 initial_state: Optional[List[np.ndarray]] = None,
-                 readout_projectors: Optional[List[np.ndarray]] = None
-                 ) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
+def prepare_data(
+    outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray],
+    initial_state: Optional[List[np.ndarray]] = None,
+    readout_projectors: Optional[List[np.ndarray]] = None
+) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
     r"""Given a dictionary of observed measurement outcomes indexed by pairs of the
     state preparation and measurement gate sequences used, compute the prepared/measured
     states and respective number of operations.

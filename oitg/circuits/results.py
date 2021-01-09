@@ -35,9 +35,9 @@ def collect_outcomes(sequences: List[GateSequence], run_order: List[int],
     return result
 
 
-def collect_outcomes_from_datasets(datasets: Dict[str, Any],
-                                   prefix: str = "data.circuits."
-                                   ) -> Dict[GateSequence, np.ndarray]:
+def collect_outcomes_from_datasets(
+        datasets: Dict[str, Any],
+        prefix: str = "data.circuits.") -> Dict[GateSequence, np.ndarray]:
     """Total up the number of observations per outcome for gate sequence runner
     experiments.
 
