@@ -1,41 +1,44 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>oitg.circuits API &mdash; oitg  documentation</title>
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
   
+  
+
   
   
     <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/circuits.html"/>
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="oitg.paths API" href="paths.html" />
@@ -76,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -134,6 +138,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -168,18 +173,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>oitg.circuits API</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             
               <a href="https://github.com/OxfordIonTrapGroup/oitg/blob/master/docs/circuits.rst" class="fa fa-github"> Edit on GitHub</a>
             
@@ -233,50 +240,50 @@ semantics) are hashable.</p>
 <code class="docutils literal notranslate"><span class="pre">Iterable</span></code> interface. Note that this will in general <em>not</em> be a list that support
 indexing, but for instance an iterator. Use e.g. <code class="docutils literal notranslate"><span class="pre">tuple(…)</span></code> (or similar) to convert
 the result to a <a class="reference internal" href="#oitg.circuits.gate.GateSequence" title="oitg.circuits.gate.GateSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">GateSequence</span></code></a>.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.gate.Gate">
-<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">Gate</code><span class="sig-paren">(</span><em class="sig-param">kind</em>, <em class="sig-param">parameters</em>, <em class="sig-param">operands</em><span class="sig-paren">)</span><a class="headerlink" href="#oitg.circuits.gate.Gate" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">Gate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kind</span></em>, <em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">operands</span></em><span class="sig-paren">)</span><a class="headerlink" href="#oitg.circuits.gate.Gate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
 <dt id="oitg.circuits.gate.Gate.kind">
-<em class="property">property </em><code class="sig-name descname">kind</code><a class="headerlink" href="#oitg.circuits.gate.Gate.kind" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">kind</code><em class="property">: str</em><a class="headerlink" href="#oitg.circuits.gate.Gate.kind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py attribute">
 <dt id="oitg.circuits.gate.Gate.operands">
-<em class="property">property </em><code class="sig-name descname">operands</code><a class="headerlink" href="#oitg.circuits.gate.Gate.operands" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">operands</code><em class="property">: Tuple<span class="p">[</span>int<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#oitg.circuits.gate.Gate.operands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 2</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py attribute">
 <dt id="oitg.circuits.gate.Gate.parameters">
-<em class="property">property </em><code class="sig-name descname">parameters</code><a class="headerlink" href="#oitg.circuits.gate.Gate.parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">parameters</code><em class="property">: Tuple<span class="p">[</span>float<span class="p">, </span><span class="p">…</span><span class="p">]</span></em><a class="headerlink" href="#oitg.circuits.gate.Gate.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py data">
 <dt id="oitg.circuits.gate.GateSequence">
 <code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">GateSequence</code><a class="headerlink" href="#oitg.circuits.gate.GateSequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Tuple</span></code></p>
+<dd><p>alias of Tuple[oitg.circuits.gate.Gate, …]</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py data">
 <dt id="oitg.circuits.gate.GateGenerator">
 <code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">GateGenerator</code><a class="headerlink" href="#oitg.circuits.gate.GateGenerator" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.Iterable</span></code></p>
+<dd><p>alias of Iterable[oitg.circuits.gate.Gate]</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.gate.collect_operands">
-<code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">collect_operands</code><span class="sig-paren">(</span><em class="sig-param">gates: Iterable[oitg.circuits.gate.Gate]</em><span class="sig-paren">)</span> &#x2192; Set[int]<a class="reference internal" href="_modules/oitg/circuits/gate.html#collect_operands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.gate.collect_operands" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">collect_operands</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gates</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Set<span class="p">[</span>int<span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/gate.html#collect_operands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.gate.collect_operands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return all the qubit operands used in the given gate sequence.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.gate.remap_operands">
-<code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">remap_operands</code><span class="sig-paren">(</span><em class="sig-param">gates: Iterable[oitg.circuits.gate.Gate], operand_map: Dict[int, int]</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/gate.html#remap_operands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.gate.remap_operands" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.gate.</code><code class="sig-name descname">remap_operands</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gates</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">operand_map</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>int<span class="p">, </span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/gate.html#remap_operands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.gate.remap_operands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change all the operand indices in a gate string according to the given map.</p>
 <p>For instance, <code class="docutils literal notranslate"><span class="pre">remap_operands(sequence,</span> <span class="pre">{0:</span> <span class="pre">1})</span></code> will make all gates in the
 sequence that target qubit <code class="docutils literal notranslate"><span class="pre">0</span></code> act on qubit <code class="docutils literal notranslate"><span class="pre">1</span></code> instead (including cases where
@@ -287,9 +294,9 @@ sequence that target qubit <code class="docutils literal notranslate"><span clas
 <div class="section" id="module-oitg.circuits.to_matrix">
 <span id="oitg-circuits-to-matrix-module"></span><h3><a class="reference internal" href="#module-oitg.circuits.to_matrix" title="oitg.circuits.to_matrix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.to_matrix</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.to_matrix" title="Permalink to this headline">¶</a></h3>
 <p>Tools for converting common gates to unitary matrices.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.to_matrix.local_matrix">
-<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">local_matrix</code><span class="sig-paren">(</span><em class="sig-param">gate: oitg.circuits.gate.Gate</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#local_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.local_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">local_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#local_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.local_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the unitary matrix that describes <code class="docutils literal notranslate"><span class="pre">gate</span></code> on its operands only.</p>
 <p>The resulting matrix is the same no matter which target qubit(s) the gate operates
 on; the first copy of <span class="math notranslate nohighlight">\(\mathbb{C}^2\)</span> corresponds to the first operand, etc.</p>
@@ -297,9 +304,9 @@ on; the first copy of <span class="math notranslate nohighlight">\(\mathbb{C}^2\
 operands in a larger system.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.to_matrix.single_gate_matrix">
-<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">single_gate_matrix</code><span class="sig-paren">(</span><em class="sig-param">gate: oitg.circuits.gate.Gate</em>, <em class="sig-param">num_qubits: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#single_gate_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.single_gate_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">single_gate_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a></span></em>, <em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#single_gate_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.single_gate_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the unitary matrix that describes the action of the given gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -311,9 +318,9 @@ operands in a larger system.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.to_matrix.gate_sequence_matrix">
-<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">gate_sequence_matrix</code><span class="sig-paren">(</span><em class="sig-param">gates: Iterable[oitg.circuits.gate.Gate], num_qubits: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#gate_sequence_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.gate_sequence_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">gate_sequence_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gates</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#gate_sequence_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.gate_sequence_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the unitary matrix that describes the action of the given gate sequence.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -327,9 +334,9 @@ qubit index used).</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.to_matrix.apply_gate_sequence">
-<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">apply_gate_sequence</code><span class="sig-paren">(</span><em class="sig-param">gates: Iterable[oitg.circuits.gate.Gate], initial_state: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#apply_gate_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.apply_gate_sequence" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.to_matrix.</code><code class="sig-name descname">apply_gate_sequence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gates</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/to_matrix.html#apply_gate_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.to_matrix.apply_gate_sequence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a gate sequence to the given initial state and return the resulting state
 vector.</p>
 </dd></dl>
@@ -351,9 +358,9 @@ for the single- and two-qubit Clifford groups <span class="math notranslate nohi
 this should just directly integrate my decomposition search code and transparently use
 <a class="reference internal" href="cache.html#module-oitg.cache" title="oitg.cache"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.cache</span></code></a> for caching. In the meantime, just ask if you want to use a different
 gate set.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.clifford.GateGroup">
-<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">GateGroup</code><span class="sig-paren">(</span><em class="sig-param">num_qubits: int, gate_sequences: List[Tuple[oitg.circuits.gate.Gate, ...]], matrices: List[numpy.ndarray], inverse_idxs: Dict[bytearray, int]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">GateGroup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">gate_sequences</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">matrices</span><span class="p">:</span> <span class="n">List<span class="p">[</span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">inverse_idxs</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>bytearray<span class="p">, </span>int<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>A group (in the mathematical sense) of gates, where each element is represented
 by its index in some canonical order.</p>
 <dl class="field-list simple">
@@ -369,60 +376,60 @@ element index.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="oitg.circuits.clifford.GateGroup.num_elements">
 <code class="sig-name descname">num_elements</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.num_elements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.num_elements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the total number of elements in the group.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="oitg.circuits.clifford.GateGroup.gates_for_idx">
-<code class="sig-name descname">gates_for_idx</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Tuple[oitg.circuits.gate.Gate, ...]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.gates_for_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.gates_for_idx" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">gates_for_idx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.gates_for_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.gates_for_idx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the gate sequence for the given element index.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="oitg.circuits.clifford.GateGroup.matrix_for_idx">
-<code class="sig-name descname">matrix_for_idx</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.matrix_for_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.matrix_for_idx" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">matrix_for_idx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.matrix_for_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.matrix_for_idx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the unitary matrix for the given element index.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="oitg.circuits.clifford.GateGroup.find_inverse_idx">
-<code class="sig-name descname">find_inverse_idx</code><span class="sig-paren">(</span><em class="sig-param">matrix: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.find_inverse_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.find_inverse_idx" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">find_inverse_idx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="_modules/oitg/circuits/clifford.html#GateGroup.find_inverse_idx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.GateGroup.find_inverse_idx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Look up the index of the element that is the inverse of the given unitary
 matrix.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.to_canonical_matrix">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">to_canonical_matrix</code><span class="sig-paren">(</span><em class="sig-param">gate_matrix: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/clifford.html#to_canonical_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.to_canonical_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">to_canonical_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/clifford.html#to_canonical_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.to_canonical_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the given gate matrix to a canonical form, which is exactly the same
 no matter the global phase or rounding errors.</p>
 <p>Note that this rounds to 4 decimal places for robustness, which is plenty for
 Clifford group calculations, but might not be sufficient for other applications.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.to_canonical_matrix_key">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">to_canonical_matrix_key</code><span class="sig-paren">(</span><em class="sig-param">gate_matrix: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; bytearray<a class="reference internal" href="_modules/oitg/circuits/clifford.html#to_canonical_matrix_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.to_canonical_matrix_key" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">to_canonical_matrix_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; bytearray<a class="reference internal" href="_modules/oitg/circuits/clifford.html#to_canonical_matrix_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.to_canonical_matrix_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the canonical matrix corresponding to <cite>gate_matrix</cite> in a form suitable
 for use as a dictionary key.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.make_clifford_group">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">make_clifford_group</code><span class="sig-paren">(</span><em class="sig-param">num_qubits: int, implementation: Callable[int, Iterable[oitg.circuits.gate.Gate]]</em><span class="sig-paren">)</span> &#x2192; oitg.circuits.clifford.GateGroup<a class="reference internal" href="_modules/oitg/circuits/clifford.html#make_clifford_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.make_clifford_group" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">make_clifford_group</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">implementation</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#oitg.circuits.clifford.GateGroup" title="oitg.circuits.clifford.GateGroup">oitg.circuits.clifford.GateGroup</a><a class="reference internal" href="_modules/oitg/circuits/clifford.html#make_clifford_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.make_clifford_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a <a class="reference internal" href="#oitg.circuits.clifford.GateGroup" title="oitg.circuits.clifford.GateGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">GateGroup</span></code></a> instance which enumerates all elements of the
 <code class="docutils literal notranslate"><span class="pre">num_qubit</span></code>-qubit Clifford group, with elements decomposed according to the given
 <code class="docutils literal notranslate"><span class="pre">implementation</span></code>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_clifford_1q_xypm_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_1q_xypm_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_1q_xypm_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_1q_xypm_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_1q_xypm_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_1q_xypm_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_1q_xypm_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an implementation of the 1-qubit Clifford group element with the given
 index as ±π/2 rotations about the x and y axes.</p>
 <dl class="field-list simple">
@@ -432,9 +439,9 @@ index as ±π/2 rotations about the x and y axes.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_clifford_1q_xzpm2_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_1q_xzpm2_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_1q_xzpm2_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_1q_xzpm2_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_1q_xzpm2_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_1q_xzpm2_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_1q_xzpm2_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an implementation of the 1-qubit Clifford group element with the given
 index as ±π/2 and π rotations about the x and z axes.</p>
 <dl class="field-list simple">
@@ -444,31 +451,31 @@ index as ±π/2 and π rotations about the x and z axes.</p>
 </dl>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.clifford.EntanglingGate">
-<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">EntanglingGate</code><a class="reference internal" href="_modules/oitg/circuits/clifford.html#EntanglingGate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.EntanglingGate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">EntanglingGate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#EntanglingGate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.EntanglingGate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the equivalence class (up to local single-qubit Cliffords) of a
 non-trivial two-qubit Clifford operation.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="oitg.circuits.clifford.EntanglingGate.cz_like">
 <code class="sig-name descname">cz_like</code><em class="property"> = 0</em><a class="headerlink" href="#oitg.circuits.clifford.EntanglingGate.cz_like" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="oitg.circuits.clifford.EntanglingGate.iswap_like">
 <code class="sig-name descname">iswap_like</code><em class="property"> = 1</em><a class="headerlink" href="#oitg.circuits.clifford.EntanglingGate.iswap_like" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="oitg.circuits.clifford.EntanglingGate.swap_like">
 <code class="sig-name descname">swap_like</code><em class="property"> = 2</em><a class="headerlink" href="#oitg.circuits.clifford.EntanglingGate.swap_like" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_clifford_2q_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int, clifford_1q_impl: Callable[int, Iterable[oitg.circuits.gate.Gate]], entangling_gates_impl: Callable[[oitg.circuits.clifford.EntanglingGate, Callable[int, Iterable[oitg.circuits.gate.Gate]]], Iterable[oitg.circuits.gate.Gate]]</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">clifford_1q_impl</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">entangling_gates_impl</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span><a class="reference internal" href="#oitg.circuits.clifford.EntanglingGate" title="oitg.circuits.clifford.EntanglingGate">oitg.circuits.clifford.EntanglingGate</a><span class="p">, </span>Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">, </span>Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the 2-qubit Clifford group element with the given
 index.</p>
 <dl class="field-list simple">
@@ -483,37 +490,37 @@ index.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_cz_entangling_gate_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_cz_entangling_gate_implementation</code><span class="sig-paren">(</span><em class="sig-param">kind: oitg.circuits.clifford.EntanglingGate, clifford_1q_impl_0: Callable[int, Iterable[oitg.circuits.gate.Gate]]</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_cz_entangling_gate_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_cz_entangling_gate_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_cz_entangling_gate_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kind</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.clifford.EntanglingGate" title="oitg.circuits.clifford.EntanglingGate">oitg.circuits.clifford.EntanglingGate</a></span></em>, <em class="sig-param"><span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_cz_entangling_gate_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_cz_entangling_gate_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given entangling gate category using CZ gates
 and the given single-qubit gate implementation.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_zzw_entangling_gate_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_zzw_entangling_gate_implementation</code><span class="sig-paren">(</span><em class="sig-param">kind: oitg.circuits.clifford.EntanglingGate, clifford_1q_impl_0: Callable[int, Iterable[oitg.circuits.gate.Gate]]</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_zzw_entangling_gate_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_zzw_entangling_gate_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_zzw_entangling_gate_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kind</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.clifford.EntanglingGate" title="oitg.circuits.clifford.EntanglingGate">oitg.circuits.clifford.EntanglingGate</a></span></em>, <em class="sig-param"><span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">Callable<span class="p">[</span><span class="p">[</span>int<span class="p">]</span><span class="p">, </span>Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_zzw_entangling_gate_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_zzw_entangling_gate_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given entangling gate category using symmetric
 ZZ (wobble) gates and the given single-qubit gate implementation.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_clifford_2q_xypm_cz_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xypm_cz_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xypm_cz_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xypm_cz_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xypm_cz_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xypm_cz_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xypm_cz_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given 2-qubit Clifford group element using CZ
 gates and local single-qubit ±π/2 rotations about the x and y axes.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_clifford_2q_xzpm2_cz_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xzpm2_cz_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xzpm2_cz_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xzpm2_cz_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xzpm2_cz_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xzpm2_cz_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xzpm2_cz_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given 2-qubit Clifford group element using CZ
 gates and local single-qubit ±π/2 and π rotations about the x and z axes.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation">
-<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xzpm2_zzw_implementation</code><span class="sig-paren">(</span><em class="sig-param">idx: int</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xzpm2_zzw_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.clifford.</code><code class="sig-name descname">get_clifford_2q_xzpm2_zzw_implementation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">idx</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/clifford.html#get_clifford_2q_xzpm2_zzw_implementation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an implementation of the given 2-qubit Clifford group element using a
 symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local
 single-qubit ±π/2 and π rotations about the x and z axes.</p>
@@ -540,15 +547,15 @@ control noise. Phys. Rev. A 90, 012316 (2014).</p>
 Use in Advanced NMR Experiments. Journal of Magnetic Resonance 109, 221–231 (1994).</p>
 </dd>
 </dl>
-<dl class="exception">
+<dl class="py exception">
 <dt id="oitg.circuits.composite_pulses.UnsupportedGate">
 <em class="property">exception </em><code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">UnsupportedGate</code><a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#UnsupportedGate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.UnsupportedGate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Raised if a given gate cannot be expanded in the requested form.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.composite_pulses.to_rxy">
-<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">to_rxy</code><span class="sig-paren">(</span><em class="sig-param">gate: oitg.circuits.gate.Gate</em><span class="sig-paren">)</span> &#x2192; oitg.circuits.gate.Gate<a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#to_rxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.to_rxy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">to_rxy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#to_rxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.to_rxy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Canonicalise all single-qubit rotations in the xy-plane to <code class="docutils literal notranslate"><span class="pre">rxy</span></code> gates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -557,9 +564,9 @@ Use in Advanced NMR Experiments. Journal of Magnetic Resonance 109, 221–231 (1
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.composite_pulses.bb1">
-<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">bb1</code><span class="sig-paren">(</span><em class="sig-param">gate: oitg.circuits.gate.Gate</em>, <em class="sig-param">symmetric: bool = False</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#bb1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.bb1" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">bb1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a></span></em>, <em class="sig-param"><span class="n">symmetric</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#bb1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.bb1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate implementation of the given single-qubit rotation using a BB1 composite
 pulse.</p>
 <p>BB1, as per <a class="reference internal" href="#wimp94" id="id1"><span>[Wimp94]</span></a>, is a broadband amplitude noise suppression sequence,
@@ -576,9 +583,9 @@ using 4 pulses. The latter has slightly nicer behaviour under detuning errors.</
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.composite_pulses.reduced_c_in_sk">
-<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">reduced_c_in_sk</code><span class="sig-paren">(</span><em class="sig-param">gate: oitg.circuits.gate.Gate</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#reduced_c_in_sk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.reduced_c_in_sk" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">reduced_c_in_sk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a></span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#reduced_c_in_sk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.reduced_c_in_sk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate implementation of the given single-qubit rotation using a reduced
 CORPSE/SK1 concatenated composite pulse.</p>
 <p>Reduced CinSK, as described in <a class="reference internal" href="#bikn13" id="id2"><span>[BIKN13]</span></a> (and among those analysed in <a class="reference internal" href="#kgk-14" id="id3"><span>[KGK+14]</span></a>) is
@@ -586,9 +593,9 @@ robust against both pulse amplitude and detuning errors. Note that the CORPSE pa
 (that gives detuning robustness) requires non-multiple-of-π/2 gate rotation amounts.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.composite_pulses.expand_using">
-<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">expand_using</code><span class="sig-paren">(</span><em class="sig-param">method: Callable, gates: Iterable[oitg.circuits.gate.Gate], ignore_kinds: Iterable[str] = [], ignore_unsupported_gates: bool = True, insert_barriers: bool = True</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#expand_using"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.expand_using" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.composite_pulses.</code><code class="sig-name descname">expand_using</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">gates</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">ignore_kinds</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">ignore_unsupported_gates</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">insert_barriers</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/composite_pulses.html#expand_using"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.composite_pulses.expand_using" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expand all gates in the given sequence using composite pulses.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -613,28 +620,28 @@ circuit model. At this point, we do not support any classical feedback, etc.; ju
 straight-line gate sequences starting with state preparation and ending with
 measurement.</p>
 <p>For more complex QASM support, we should integrate an external library.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.qasm.stringify_param">
-<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">stringify_param</code><span class="sig-paren">(</span><em class="sig-param">p</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/circuits/qasm.html#stringify_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.stringify_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">stringify_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/circuits/qasm.html#stringify_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.stringify_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the string form of a parameter p; with fractions of π pretty-printed for
 readability.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.qasm.gate_to_qasm">
-<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">gate_to_qasm</code><span class="sig-paren">(</span><em class="sig-param">gate: oitg.circuits.gate.Gate</em><span class="sig-paren">)</span> &#x2192; Iterable[str]<a class="reference internal" href="_modules/oitg/circuits/qasm.html#gate_to_qasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.gate_to_qasm" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">gate_to_qasm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gate</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a></span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span>str<span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/qasm.html#gate_to_qasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.gate_to_qasm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a QASM statement corresponding to the given <a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gate</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.qasm.stringify_qasm">
-<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">stringify_qasm</code><span class="sig-paren">(</span><em class="sig-param">stmts: Iterable[str]</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/circuits/qasm.html#stringify_qasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.stringify_qasm" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">stringify_qasm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stmts</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/circuits/qasm.html#stringify_qasm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.stringify_qasm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Concatenate/format a list of QASM statements into a single string.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.qasm.parse_gate_sequence_string">
-<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">parse_gate_sequence_string</code><span class="sig-paren">(</span><em class="sig-param">string: str</em><span class="sig-paren">)</span> &#x2192; Iterable[oitg.circuits.gate.Gate]<a class="reference internal" href="_modules/oitg/circuits/qasm.html#parse_gate_sequence_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.parse_gate_sequence_string" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.qasm.</code><code class="sig-name descname">parse_gate_sequence_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">string</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/qasm.html#parse_gate_sequence_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.qasm.parse_gate_sequence_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a simple gate sequence in ;-delimited string form into its constituent
 gates.</p>
 </dd></dl>
@@ -644,9 +651,9 @@ gates.</p>
 <span id="oitg-circuits-results-module"></span><h3><a class="reference internal" href="#module-oitg.circuits.results" title="oitg.circuits.results"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.results</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.results" title="Permalink to this headline">¶</a></h3>
 <p>Common helpers for analysing experiment results.</p>
 <p>Also see <a class="reference internal" href="results.html#module-oitg.results" title="oitg.results"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.results</span></code></a> for finding and loading HDF5 files.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.results.collect_outcomes">
-<code class="sig-prename descclassname">oitg.circuits.results.</code><code class="sig-name descname">collect_outcomes</code><span class="sig-paren">(</span><em class="sig-param">sequences: List[Tuple[oitg.circuits.gate.Gate, ...]], run_order: List[int], outcomes: List[numpy.ndarray]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/results.html#collect_outcomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.results.collect_outcomes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.results.</code><code class="sig-name descname">collect_outcomes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sequences</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">run_order</span><span class="p">:</span> <span class="n">List<span class="p">[</span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">outcomes</span><span class="p">:</span> <span class="n">List<span class="p">[</span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/results.html#collect_outcomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.results.collect_outcomes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Total up the number of observations per outcome for gate sequence runner
 experiments.</p>
 <p>This function works on the arrays passed to/returned by <a class="reference internal" href="#module-oitg.circuits.runner" title="oitg.circuits.runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.runner</span></code></a>
@@ -670,9 +677,9 @@ represent the different qubit measurement outcomes in canonical order (i.e.
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.results.collect_outcomes_from_datasets">
-<code class="sig-prename descclassname">oitg.circuits.results.</code><code class="sig-name descname">collect_outcomes_from_datasets</code><span class="sig-paren">(</span><em class="sig-param">datasets: Dict[str, Any], prefix: str = 'data.circuits.'</em><span class="sig-paren">)</span> &#x2192; Dict[Tuple[oitg.circuits.gate.Gate, ...], numpy.ndarray]<a class="reference internal" href="_modules/oitg/circuits/results.html#collect_outcomes_from_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.results.collect_outcomes_from_datasets" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.results.</code><code class="sig-name descname">collect_outcomes_from_datasets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datasets</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">prefix</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'data.circuits.'</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/results.html#collect_outcomes_from_datasets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.results.collect_outcomes_from_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Total up the number of observations per outcome for gate sequence runner
 experiments.</p>
 <p>This function works on the datasets written by <a class="reference internal" href="#module-oitg.circuits.runner" title="oitg.circuits.runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.runner</span></code></a>
@@ -697,9 +704,9 @@ each measurement outcome was observed after running them; see
 </div>
 <div class="section" id="module-oitg.circuits.visualisation">
 <span id="oitg-circuits-visualisation-module"></span><h3><a class="reference internal" href="#module-oitg.circuits.visualisation" title="oitg.circuits.visualisation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.visualisation</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.visualisation" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.visualisation.save_circuit_pdf">
-<code class="sig-prename descclassname">oitg.circuits.visualisation.</code><code class="sig-name descname">save_circuit_pdf</code><span class="sig-paren">(</span><em class="sig-param">filename: str, gates: Tuple[oitg.circuits.gate.Gate, ...]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/visualisation.html#save_circuit_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.visualisation.save_circuit_pdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.visualisation.</code><code class="sig-name descname">save_circuit_pdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">gates</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/visualisation.html#save_circuit_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.visualisation.save_circuit_pdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render a gate sequence as a circuit diagram and save it to PDF.</p>
 <p>This requires Matplotlib and Qiskit Terra to be installed.</p>
 <dl class="field-list simple">
@@ -752,9 +759,9 @@ fault tolerance threshold with gate set tomography. Nature Communications 8, (20
 <dd><p>A python implementation of Gate Set Tomography. <a class="reference external" href="http://www.pygsti.info/">http://www.pygsti.info/</a></p>
 </dd>
 </dl>
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.protocols.gst.GSTSpec">
-<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.protocols.gst.</code><code class="sig-name descname">GSTSpec</code><span class="sig-paren">(</span><em class="sig-param">prep_fiducials: List[Tuple[oitg.circuits.gate.Gate, ...]], meas_fiducials: List[Tuple[oitg.circuits.gate.Gate, ...]], germs: List[Tuple[oitg.circuits.gate.Gate, ...]], pygsti_name: str = ''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/gst.html#GSTSpec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.GSTSpec" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.protocols.gst.</code><code class="sig-name descname">GSTSpec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prep_fiducials</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">meas_fiducials</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">germs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">pygsti_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/gst.html#GSTSpec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.GSTSpec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies a model for Gate Set Tomography.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -771,9 +778,9 @@ if any.</p></li>
 
 <div class="section" id="module-oitg.circuits.protocols.gst.generate">
 <span id="oitg-circuits-protocols-gst-generate-module"></span><h4><a class="reference internal" href="#module-oitg.circuits.protocols.gst.generate" title="oitg.circuits.protocols.gst.generate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.protocols.gst.generate</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.protocols.gst.generate" title="Permalink to this headline">¶</a></h4>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.gst.generate.generate_std_gst_sequences">
-<code class="sig-prename descclassname">oitg.circuits.protocols.gst.generate.</code><code class="sig-name descname">generate_std_gst_sequences</code><span class="sig-paren">(</span><em class="sig-param">spec: oitg.circuits.protocols.gst.GSTSpec</em>, <em class="sig-param">max_len_exponent: int</em><span class="sig-paren">)</span> &#x2192; List[Tuple[oitg.circuits.gate.Gate, ...]]<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/generate.html#generate_std_gst_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.generate.generate_std_gst_sequences" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.generate.</code><code class="sig-name descname">generate_std_gst_sequences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spec</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.protocols.gst.GSTSpec" title="oitg.circuits.protocols.gst.GSTSpec">oitg.circuits.protocols.gst.GSTSpec</a></span></em>, <em class="sig-param"><span class="n">max_len_exponent</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/gst/generate.html#generate_std_gst_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.generate.generate_std_gst_sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of sequences to run to perform gate set tomography according to
 the given spec, with standard power-of-two sequence lengths up to (approximately)
 <span class="math notranslate nohighlight">\(2^{\mathrm{max\_len\_exponent}}\)</span>.</p>
@@ -788,9 +795,9 @@ the given spec, with standard power-of-two sequence lengths up to (approximately
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.gst.generate.generate_gst_sequences">
-<code class="sig-prename descclassname">oitg.circuits.protocols.gst.generate.</code><code class="sig-name descname">generate_gst_sequences</code><span class="sig-paren">(</span><em class="sig-param">spec: oitg.circuits.protocols.gst.GSTSpec, target_lens: Sequence[int]</em><span class="sig-paren">)</span> &#x2192; List[Tuple[oitg.circuits.gate.Gate, ...]]<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/generate.html#generate_gst_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.generate.generate_gst_sequences" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.generate.</code><code class="sig-name descname">generate_gst_sequences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">spec</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.protocols.gst.GSTSpec" title="oitg.circuits.protocols.gst.GSTSpec">oitg.circuits.protocols.gst.GSTSpec</a></span></em>, <em class="sig-param"><span class="n">target_lens</span><span class="p">:</span> <span class="n">Sequence<span class="p">[</span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/gst/generate.html#generate_gst_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.generate.generate_gst_sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of sequences to run to perform gate set tomography according to
 the given spec, with number of gates per sequence limited to the given lengths.</p>
 <p>Matches pyGSTi’s default method of truncating sequences, where germs are only
@@ -813,23 +820,23 @@ fiducial lengths do not count.</p>
 <div class="section" id="module-oitg.circuits.protocols.gst.specs">
 <span id="oitg-circuits-protocols-gst-specs-module"></span><h4><a class="reference internal" href="#module-oitg.circuits.protocols.gst.specs" title="oitg.circuits.protocols.gst.specs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.protocols.gst.specs</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.protocols.gst.specs" title="Permalink to this headline">¶</a></h4>
 <p>Predefined <code class="xref py py-class docutils literal notranslate"><span class="pre">GSTSpec</span></code>s corresponding to commonly used gate sets.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.gst.specs.make_1q_xz_pi_2_spec">
-<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_1q_xz_pi_2_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_1q_xz_pi_2_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_1q_xz_pi_2_spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_1q_xz_pi_2_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#oitg.circuits.protocols.gst.GSTSpec" title="oitg.circuits.protocols.gst.GSTSpec">oitg.circuits.protocols.gst.GSTSpec</a><a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_1q_xz_pi_2_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_1q_xz_pi_2_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a single-qubit gate set using π/2 x- and z-rotations, corresponding to
 pyGSTi’s <cite>std1Q_XZ</cite> model.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec">
-<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xy_pi_2_cphase_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xy_pi_2_cphase_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xy_pi_2_cphase_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#oitg.circuits.protocols.gst.GSTSpec" title="oitg.circuits.protocols.gst.GSTSpec">oitg.circuits.protocols.gst.GSTSpec</a><a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xy_pi_2_cphase_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_cphase_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a two-qubit gate set using a CPHASE (CZ) gate and local π/2 x- and
 y-rotations, corresponding to pyGSTi’s <cite>std2Q_XYCPHASE</cite> model.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_wobble_spec">
-<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xy_pi_2_wobble_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xy_pi_2_wobble_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_wobble_spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xy_pi_2_wobble_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#oitg.circuits.protocols.gst.GSTSpec" title="oitg.circuits.protocols.gst.GSTSpec">oitg.circuits.protocols.gst.GSTSpec</a><a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xy_pi_2_wobble_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xy_pi_2_wobble_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a two-qubit gate set using a wobble gate and local π/2 x- and
 y-rotations.</p>
 <p>Fiducial/germ selection is based on pyGSTi’s <cite>std2Q_XYCNOT</cite> model, with CNOT
@@ -840,9 +847,9 @@ after switching to the wobble gate; fiducials are only single-qubit and hence th
 same for both anyway.)</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.gst.specs.make_2q_xz_pi_2_wobble_spec">
-<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xz_pi_2_wobble_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; oitg.circuits.protocols.gst.GSTSpec<a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xz_pi_2_wobble_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xz_pi_2_wobble_spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.gst.specs.</code><code class="sig-name descname">make_2q_xz_pi_2_wobble_spec</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#oitg.circuits.protocols.gst.GSTSpec" title="oitg.circuits.protocols.gst.GSTSpec">oitg.circuits.protocols.gst.GSTSpec</a><a class="reference internal" href="_modules/oitg/circuits/protocols/gst/specs.html#make_2q_xz_pi_2_wobble_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.gst.specs.make_2q_xz_pi_2_wobble_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a two-qubit gate set using a wobble gate and local π/2 x- and
 z-rotations.</p>
 <p>Fiducial/germ selection is based on pyGSTi’s optimisation functions, run
@@ -858,9 +865,9 @@ from scratch for the wobble gate.</p>
 process tomography for its robustness and favourable error scaling properties.</p>
 <div class="section" id="module-oitg.circuits.protocols.process_tomo.generate">
 <span id="oitg-circuits-protocols-process-tomo-generate-module"></span><h4><a class="reference internal" href="#module-oitg.circuits.protocols.process_tomo.generate" title="oitg.circuits.protocols.process_tomo.generate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.protocols.process_tomo.generate</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.protocols.process_tomo.generate" title="Permalink to this headline">¶</a></h4>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.generate.generate_process_tomography_sequences">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.generate.</code><code class="sig-name descname">generate_process_tomography_sequences</code><span class="sig-paren">(</span><em class="sig-param">target: Tuple[oitg.circuits.gate.Gate, ...], num_qubits: int</em><span class="sig-paren">)</span> &#x2192; List[Tuple[oitg.circuits.gate.Gate, ...]]<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/generate.html#generate_process_tomography_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.generate.generate_process_tomography_sequences" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.generate.</code><code class="sig-name descname">generate_process_tomography_sequences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/generate.html#generate_process_tomography_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.generate.generate_process_tomography_sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of gate sequences to perform process tomography on the given target
 sequence.</p>
 <p>The system is prepared in a tensor product of single-qubit Pauli-operator
@@ -915,9 +922,9 @@ Quantum process tomography via completely positive and trace-preserving projecti
 Physical Review A 98, (2018).</p>
 </dd>
 </dl>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">guess_prepare_target_measure_split</code><span class="sig-paren">(</span><em class="sig-param">all_sequences: List[Tuple[oitg.circuits.gate.Gate, ...]]</em><span class="sig-paren">)</span> &#x2192; Tuple[Tuple[oitg.circuits.gate.Gate, ...], List[Tuple[Tuple[oitg.circuits.gate.Gate, ...], Tuple[oitg.circuits.gate.Gate, ...]]]]<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#guess_prepare_target_measure_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">guess_prepare_target_measure_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">all_sequences</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Tuple<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#guess_prepare_target_measure_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split" title="Permalink to this definition">¶</a></dt>
 <dd><p>For a given list of gate sequences making up a tomography experiment, guesses
 which is the target sequence to be analysed, and the preparation/measuemrent
 fiducial sequences used.</p>
@@ -933,9 +940,9 @@ sequence before/measurement sequence after the tomography target.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">auto_prepare_data</code><span class="sig-paren">(</span><em class="sig-param">outcomes: Dict[Tuple[oitg.circuits.gate.Gate, ...], numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; Tuple[List[numpy.ndarray], List[numpy.ndarray], numpy.ndarray]<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#auto_prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">auto_prepare_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>List<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#auto_prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a results dictionary, guess the target and fiducial sequences and extract
 the tomography input data.</p>
 <p>See <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="oitg.circuits.protocols.process_tomo.analyse.prepare_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_data()</span></code></a> for details.</p>
@@ -951,9 +958,9 @@ observations each (see <a class="reference internal" href="#oitg.circuits.protoc
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.prepare_data">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">prepare_data</code><span class="sig-paren">(</span><em class="sig-param">outcomes: Dict[Tuple[Tuple[oitg.circuits.gate.Gate, ...], Tuple[oitg.circuits.gate.Gate, ...]], numpy.ndarray], initial_state: Optional[List[numpy.ndarray]] = None, readout_projectors: Optional[List[numpy.ndarray]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[List[numpy.ndarray], List[numpy.ndarray], numpy.ndarray]<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">prepare_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>Tuple<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">readout_projectors</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>List<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>numpy.ndarray<span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.prepare_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a dictionary of observed measurement outcomes indexed by pairs of the
 state preparation and measurement gate sequences used, compute the prepared/measured
 states and respective number of operations.</p>
@@ -979,9 +986,9 @@ states are given as density matrices/projectors.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">build_choi_predictor</code><span class="sig-paren">(</span><em class="sig-param">prep_operators: Iterable[numpy.ndarray], meas_operators: Iterable[numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#build_choi_predictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">build_choi_predictor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prep_operators</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">meas_operators</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#build_choi_predictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a list of prepared and measured states as state vectors, return a matrix
 that predicts observed probabilities when applied to the Choi matrix of a process.</p>
 <p>In other words, for given prepared states <span class="math notranslate nohighlight">\(\rho_i\)</span> and measurement operators
@@ -1004,9 +1011,9 @@ ideal projections onto states <span class="math notranslate nohighlight">\(\left
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">invert_choi_predictor</code><span class="sig-paren">(</span><em class="sig-param">choi_predictor: numpy.ndarray</em>, <em class="sig-param">observations: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#invert_choi_predictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">invert_choi_predictor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">observations</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#invert_choi_predictor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain an estimate for the process <span class="math notranslate nohighlight">\(\mathcal{E}\)</span> by applying the inverse
 of the given Choi predictor to a matrix of experimentally measured outcomes.</p>
 <p>If the set of measurements is over-complete, the least-squares estimate will be
@@ -1029,9 +1036,9 @@ physical, i.e. neither completely positive nor trace-preserving.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">linear_inversion_tomography</code><span class="sig-paren">(</span><em class="sig-param">prep_projectors: List[numpy.ndarray], meas_operators: List[numpy.ndarray], observations: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#linear_inversion_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">linear_inversion_tomography</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prep_projectors</span><span class="p">:</span> <span class="n">List<span class="p">[</span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">meas_operators</span><span class="p">:</span> <span class="n">List<span class="p">[</span>numpy.ndarray<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">observations</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#linear_inversion_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the linear inversion estimate of the quantum process that has produced
 the given observations.</p>
 <dl class="field-list simple">
@@ -1051,18 +1058,18 @@ see <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.an
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">negative_log_likelihood</code><span class="sig-paren">(</span><em class="sig-param">choi_predictor: numpy.ndarray</em>, <em class="sig-param">observation_vec: numpy.ndarray</em>, <em class="sig-param">choi: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#negative_log_likelihood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">negative_log_likelihood</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">observation_vec</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">choi</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#negative_log_likelihood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the negative log-likelihood for the given outcomes to be observed (with
 experiments as described by the Choi predictor) as a function of the given
 superoperator in Choi representation.</p>
 <p>See <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient" title="oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient"><code class="xref py py-func docutils literal notranslate"><span class="pre">negative_log_likelihood_gradient()</span></code></a> for calculating the gradient.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">negative_log_likelihood_gradient</code><span class="sig-paren">(</span><em class="sig-param">choi_predictor: numpy.ndarray</em>, <em class="sig-param">observation_vec: numpy.ndarray</em>, <em class="sig-param">choi: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#negative_log_likelihood_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">negative_log_likelihood_gradient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">observation_vec</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">choi</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#negative_log_likelihood_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the derivative of the log-likelihood
 <span class="math notranslate nohighlight">\(\mathcal{L}(C_\mathcal{E})\)</span> around the given Choi matrix
 <span class="math notranslate nohighlight">\(C_\mathcal{E}\)</span>.</p>
@@ -1076,9 +1083,9 @@ element-wise matrix calculus sense.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">diluted_mle_tomography</code><span class="sig-paren">(</span><em class="sig-param">choi_predictor: numpy.ndarray</em>, <em class="sig-param">observations: numpy.ndarray</em>, <em class="sig-param">rel_tol: float = 1e-10</em>, <em class="sig-param">iteration_limit: int = 10000</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#diluted_mle_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">diluted_mle_tomography</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">observations</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">rel_tol</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">1e-10</span></em>, <em class="sig-param"><span class="n">iteration_limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10000</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#diluted_mle_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the tomography estimate of the quantum process that has produced
 the given observations using a diluted fixed-point iteration method.</p>
 <p>By definition, the maximum-likelihood estimate for the superoperator maximises the
@@ -1109,17 +1116,17 @@ representation.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.project_into_cp">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">project_into_cp</code><span class="sig-paren">(</span><em class="sig-param">choi: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#project_into_cp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.project_into_cp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">project_into_cp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#project_into_cp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.project_into_cp" title="Permalink to this definition">¶</a></dt>
 <dd><p>For the given superoperator (in Choi representation), return the nearest
 completely-positive one.</p>
 <p>See <a class="reference internal" href="#kblg18" id="id13"><span>[KBLG18]</span></a> eq. 8.</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.TPProjector">
-<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">TPProjector</code><span class="sig-paren">(</span><em class="sig-param">pure_state_dimension</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#TPProjector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.TPProjector" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">TPProjector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pure_state_dimension</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#TPProjector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.TPProjector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Projects superoperators into the trace-preserving subspace.</p>
 <p>(This is a class to allow some ancillary matrices to be re-used across different
 <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project" title="oitg.circuits.protocols.process_tomo.analyse.TPProjector.project"><code class="xref py py-meth docutils literal notranslate"><span class="pre">project()</span></code></a> invocations.)</p>
@@ -1131,9 +1138,9 @@ density operators of which the superoperators to project act on; i.e.
 <span class="math notranslate nohighlight">\(d^2 \times d^2\)</span> in size.</p>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.TPProjector.project">
-<code class="sig-name descname">project</code><span class="sig-paren">(</span><em class="sig-param">choi: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#TPProjector.project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#TPProjector.project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the result of orthogonally projecting the given Choi operator into the
 trace-preserving subspace.</p>
 <p>See <a class="reference internal" href="#kblg18" id="id14"><span>[KBLG18]</span></a> eq. 12.</p>
@@ -1141,9 +1148,9 @@ trace-preserving subspace.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.project_into_cptp">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">project_into_cptp</code><span class="sig-paren">(</span><em class="sig-param">choi: numpy.ndarray</em>, <em class="sig-param">tp_projector: oitg.circuits.protocols.process_tomo.analyse.TPProjector</em>, <em class="sig-param">tol: float = 0.0001</em>, <em class="sig-param">iteration_limit: int = 10000</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#project_into_cptp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.project_into_cptp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">project_into_cptp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">tp_projector</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.protocols.process_tomo.analyse.TPProjector" title="oitg.circuits.protocols.process_tomo.analyse.TPProjector">oitg.circuits.protocols.process_tomo.analyse.TPProjector</a></span></em>, <em class="sig-param"><span class="n">tol</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">iteration_limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10000</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#project_into_cptp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.project_into_cptp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project the given Choi matrix onto the closest superoperator that is both
 completely positive and trace-preserving.</p>
 <p>This implements Algorithm 1 from <a class="reference internal" href="#kblg18" id="id15"><span>[KBLG18]</span></a>.</p>
@@ -1151,9 +1158,9 @@ completely positive and trace-preserving.</p>
 raised.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">pgdb_mle_tomography</code><span class="sig-paren">(</span><em class="sig-param">choi_predictor: numpy.ndarray</em>, <em class="sig-param">observations: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#pgdb_mle_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.analyse.</code><code class="sig-name descname">pgdb_mle_tomography</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">observations</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/analyse.html#pgdb_mle_tomography"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the tomography estimate of the quantum process that has produced
 the given observations using a projected gradient descent algorithm with
 backtracking, as proposed by <a class="reference internal" href="#kblg18" id="id16"><span>[KBLG18]</span></a>.</p>
@@ -1176,48 +1183,48 @@ representation.</p>
 <div class="section" id="module-oitg.circuits.protocols.process_tomo.tools">
 <span id="oitg-circuits-protocols-process-tomo-tools-module"></span><h4><a class="reference internal" href="#module-oitg.circuits.protocols.process_tomo.tools" title="oitg.circuits.protocols.process_tomo.tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.protocols.process_tomo.tools</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.protocols.process_tomo.tools" title="Permalink to this headline">¶</a></h4>
 <p>A few helpers for manipulating quantum states/channels as NumPy arrays.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.tools.mat2vec">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">mat2vec</code><span class="sig-paren">(</span><em class="sig-param">matrix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#mat2vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.mat2vec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">mat2vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#mat2vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.mat2vec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the given matrix in vector form.</p>
 <p>As per NumPy shape conventions, this is done by stacking rows one after another. The
 convention chosen is irrelevant, though, as long as it is used consistently.</p>
 <p>See <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.tools.vec2mat" title="oitg.circuits.protocols.process_tomo.tools.vec2mat"><code class="xref py py-func docutils literal notranslate"><span class="pre">vec2mat()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.tools.vec2mat">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">vec2mat</code><span class="sig-paren">(</span><em class="sig-param">vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#vec2mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.vec2mat" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">vec2mat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#vec2mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.vec2mat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a matrix-as-vector back into a matrix.</p>
 <p>See <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.tools.mat2vec" title="oitg.circuits.protocols.process_tomo.tools.mat2vec"><code class="xref py py-func docutils literal notranslate"><span class="pre">mat2vec()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.tools.projector">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">projector</code><span class="sig-paren">(</span><em class="sig-param">ket</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#projector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.projector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">projector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ket</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#projector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.projector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the projector <span class="math notranslate nohighlight">\(\left|\psi\right&gt;\left&lt;\psi\right|\)</span> for the given ket
 <span class="math notranslate nohighlight">\(\left|\psi\right&gt;\)</span> as a dense matrix.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.tools.choi2liou">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">choi2liou</code><span class="sig-paren">(</span><em class="sig-param">choi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#choi2liou"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.choi2liou" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">choi2liou</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">choi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#choi2liou"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.choi2liou" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a superoperator in Choi representation to Liouville representation.</p>
 <p>With our normalisation convention, this is <em>almost</em> an involution up to the
 different normalisation factors.</p>
 <p>See <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.tools.liou2choi" title="oitg.circuits.protocols.process_tomo.tools.liou2choi"><code class="xref py py-func docutils literal notranslate"><span class="pre">liou2choi()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.tools.liou2choi">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">liou2choi</code><span class="sig-paren">(</span><em class="sig-param">liou</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#liou2choi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.liou2choi" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">liou2choi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">liou</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#liou2choi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.liou2choi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a superoperator in Liouville representation to Choi representation.</p>
 <p>See <a class="reference internal" href="#oitg.circuits.protocols.process_tomo.tools.choi2liou" title="oitg.circuits.protocols.process_tomo.tools.choi2liou"><code class="xref py py-func docutils literal notranslate"><span class="pre">choi2liou()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity">
-<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">avg_gate_fidelity</code><span class="sig-paren">(</span><em class="sig-param">liou</em>, <em class="sig-param">target_unitary</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#avg_gate_fidelity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.tools.</code><code class="sig-name descname">avg_gate_fidelity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">liou</span></em>, <em class="sig-param"><span class="n">target_unitary</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/tools.html#avg_gate_fidelity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the average gate fidelity of the given superoperator to the target
 unitary.</p>
 <dl class="field-list simple">
@@ -1247,9 +1254,9 @@ systems.</p>
 <p>In the same spirit as <a class="reference internal" href="#module-oitg.circuits.clifford" title="oitg.circuits.clifford"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.clifford</span></code></a>, this implements pretty much the
 most pedestrian scheme possible and just tracks the total unitary generated instead of
 implementing stabilizer calculations.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.rbm.generate.generate_rbm_experiment">
-<code class="sig-prename descclassname">oitg.circuits.protocols.rbm.generate.</code><code class="sig-name descname">generate_rbm_experiment</code><span class="sig-paren">(</span><em class="sig-param">group: oitg.circuits.clifford.GateGroup, sequence_lengths: Iterable[int], randomisations_per_length: int, pauli_randomize_last=True, interleave_gates=None, derive_shorter_by_truncation=False, seed=None</em><span class="sig-paren">)</span> &#x2192; List[Tuple[List[int], Tuple[oitg.circuits.gate.Gate, ...], int]]<a class="reference internal" href="_modules/oitg/circuits/protocols/rbm/generate.html#generate_rbm_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rbm.generate.generate_rbm_experiment" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.rbm.generate.</code><code class="sig-name descname">generate_rbm_experiment</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#oitg.circuits.clifford.GateGroup" title="oitg.circuits.clifford.GateGroup">oitg.circuits.clifford.GateGroup</a></span></em>, <em class="sig-param"><span class="n">sequence_lengths</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>int<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">randomisations_per_length</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">pauli_randomize_last</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">interleave_gates</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">derive_shorter_by_truncation</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span>List<span class="p">[</span>int<span class="p">]</span><span class="p">, </span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>int<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/rbm/generate.html#generate_rbm_experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rbm.generate.generate_rbm_experiment" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1315,9 +1322,9 @@ of a Cheap and Accurate Phase Estimation. Physical Review Letters 118, 1–6 (20
 </dl>
 <div class="section" id="module-oitg.circuits.protocols.rpe.generate">
 <span id="oitg-circuits-protocols-rpe-generate-module"></span><h4><a class="reference internal" href="#module-oitg.circuits.protocols.rpe.generate" title="oitg.circuits.protocols.rpe.generate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.protocols.rpe.generate</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.protocols.rpe.generate" title="Permalink to this headline">¶</a></h4>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.rpe.generate.generate_rpe_sequences">
-<code class="sig-prename descclassname">oitg.circuits.protocols.rpe.generate.</code><code class="sig-name descname">generate_rpe_sequences</code><span class="sig-paren">(</span><em class="sig-param">target: Tuple[oitg.circuits.gate.Gate, ...], pi_2: Tuple[oitg.circuits.gate.Gate, ...], max_len_exponent: int</em><span class="sig-paren">)</span> &#x2192; Iterable[Tuple[oitg.circuits.gate.Gate, ...]]<a class="reference internal" href="_modules/oitg/circuits/protocols/rpe/generate.html#generate_rpe_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rpe.generate.generate_rpe_sequences" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.rpe.generate.</code><code class="sig-name descname">generate_rpe_sequences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">pi_2</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">max_len_exponent</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/rpe/generate.html#generate_rpe_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rpe.generate.generate_rpe_sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate sequences for robust phase estimation, up to a total sequence length
 of <span class="math notranslate nohighlight">\(2^{\mathrm{max\_len\_exponent}} + 1\)</span>.</p>
 <dl class="field-list simple">
@@ -1338,9 +1345,9 @@ target gate. (Can be same as <cite>target</cite> for measuring a π/2 pulse).</p
 </div>
 <div class="section" id="module-oitg.circuits.protocols.rpe.analyse">
 <span id="oitg-circuits-protocols-rpe-analyse-module"></span><h4><a class="reference internal" href="#module-oitg.circuits.protocols.rpe.analyse" title="oitg.circuits.protocols.rpe.analyse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">oitg.circuits.protocols.rpe.analyse</span></code></a> module<a class="headerlink" href="#module-oitg.circuits.protocols.rpe.analyse" title="Permalink to this headline">¶</a></h4>
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.protocols.rpe.analyse.analyse">
-<code class="sig-prename descclassname">oitg.circuits.protocols.rpe.analyse.</code><code class="sig-name descname">analyse</code><span class="sig-paren">(</span><em class="sig-param">outcomes: Dict[Tuple[oitg.circuits.gate.Gate, ...], numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/oitg/circuits/protocols/rpe/analyse.html#analyse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rpe.analyse.analyse" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.protocols.rpe.analyse.</code><code class="sig-name descname">analyse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/oitg/circuits/protocols/rpe/analyse.html#analyse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rpe.analyse.analyse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Analyse a Robust Phase Estimation data set and return the gate rotation angle
 estimate.</p>
 <p>Follows the algorithm described in <a class="reference internal" href="#rklm17" id="id19"><span>[RKLM17]</span></a>.</p>
@@ -1411,9 +1418,9 @@ few shots per repeat, but many repeats per chunk. If you are concerned about slo
 drifts, use fewer total shots per chunk, but more global repeats.</p>
 <p>See e.g. <code class="docutils literal notranslate"><span class="pre">oxart.circuits.runner</span></code> for actual sequence runner implementations using
 ARTIQ.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.runner.SequenceRunnerOptions">
-<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.runner.</code><code class="sig-name descname">SequenceRunnerOptions</code><span class="sig-paren">(</span><em class="sig-param">num_global_repeats: int = 1</em>, <em class="sig-param">randomise_globally: bool = True</em>, <em class="sig-param">chunk_size: int = 1</em>, <em class="sig-param">num_repeats_per_chunk: int = 1</em>, <em class="sig-param">num_shots_per_repeat: int = 100</em>, <em class="sig-param">randomise_per_repeat: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunnerOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunnerOptions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.runner.</code><code class="sig-name descname">SequenceRunnerOptions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_global_repeats</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">randomise_globally</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">num_repeats_per_chunk</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">num_shots_per_repeat</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">randomise_per_repeat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunnerOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunnerOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies common <a class="reference internal" href="#oitg.circuits.runner.SequenceRunner" title="oitg.circuits.runner.SequenceRunner"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceRunner</span></code></a> options.</p>
 <p>See the <a class="reference internal" href="#module-oitg.circuits.runner" title="oitg.circuits.runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module</span></code></a>-level docstring for background on
 the concepts.</p>
@@ -1441,14 +1448,14 @@ repeat.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="oitg.circuits.runner.SequenceRunner">
 <em class="property">class </em><code class="sig-prename descclassname">oitg.circuits.runner.</code><code class="sig-name descname">SequenceRunner</code><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes a number of gate sequences to gather outcome statistics.</p>
 <p>See the <a class="reference internal" href="#module-oitg.circuits.runner" title="oitg.circuits.runner"><code class="xref py py-mod docutils literal notranslate"><span class="pre">module</span></code></a>-level docstring for details.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="oitg.circuits.runner.SequenceRunner.run_sequences">
-<code class="sig-name descname">run_sequences</code><span class="sig-paren">(</span><em class="sig-param">sequences: Iterable[Tuple[oitg.circuits.gate.Gate, ...]], num_qubits: Union[None, int] = None, progress_callback: Callable[[numpy.ndarray, numpy.ndarray], None] = None, progress_callback_interval: float = 5.0, dataset_prefix: Union[None, str] = 'data.circuits.'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunner.run_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunner.run_sequences" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_sequences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sequences</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">progress_callback</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><span class="p">[</span>numpy.ndarray<span class="p">, </span>numpy.ndarray<span class="p">]</span><span class="p">, </span>None<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">progress_callback_interval</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">5.0</span></em>, <em class="sig-param"><span class="n">dataset_prefix</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>None<span class="p">, </span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">'data.circuits.'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#SequenceRunner.run_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.SequenceRunner.run_sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the given sequences and returns result statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1485,9 +1492,9 @@ to projection onto <span class="math notranslate nohighlight">\(\left|0\ldots00\
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="oitg.circuits.runner.stringify_gate_sequence">
-<code class="sig-prename descclassname">oitg.circuits.runner.</code><code class="sig-name descname">stringify_gate_sequence</code><span class="sig-paren">(</span><em class="sig-param">seq: Iterable[oitg.circuits.gate.Gate]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#stringify_gate_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.stringify_gate_sequence" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">oitg.circuits.runner.</code><code class="sig-name descname">stringify_gate_sequence</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seq</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/circuits/runner.html#stringify_gate_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.runner.stringify_gate_sequence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the string used to represent <code class="docutils literal notranslate"><span class="pre">seq</span></code> in the result datasets.</p>
 </dd></dl>
 
@@ -1500,29 +1507,29 @@ to projection onto <span class="math notranslate nohighlight">\(\left|0\ldots00\
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="paths.html" class="btn btn-neutral float-right" title="oitg.paths API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="cache.html" class="btn btn-neutral float-left" title="oitg.cache API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="paths.html" class="btn btn-neutral float-right" title="oitg.paths API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cache.html" class="btn btn-neutral float-left" title="oitg.cache API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Ion Trap Quantum Computing group
+        &#169; Copyright 2019, Ion Trap Quantum Computing group.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1530,7 +1537,6 @@ to projection onto <span class="math notranslate nohighlight">\(\left|0\ldots00\
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
