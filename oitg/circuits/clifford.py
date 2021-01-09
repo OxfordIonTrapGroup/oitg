@@ -243,8 +243,8 @@ class EntanglingGate(Enum):
 
 
 def get_clifford_2q_implementation(
-        idx: int, clifford_1q_impl: CliffordImpl,
-        entangling_gates_impl: Callable[[EntanglingGate, CliffordImpl], GateGenerator]
+    idx: int, clifford_1q_impl: CliffordImpl,
+    entangling_gates_impl: Callable[[EntanglingGate, CliffordImpl], GateGenerator]
 ) -> GateGenerator:
     """Generate an implementation of the 2-qubit Clifford group element with the given
     index.
@@ -312,9 +312,8 @@ def get_clifford_2q_implementation(
     raise ValueError("Invalid 2-qubit Clifford gate index: {}".format(idx))
 
 
-def get_cz_entangling_gate_implementation(kind: EntanglingGate,
-                                          clifford_1q_impl_0: CliffordImpl
-                                          ) -> GateGenerator:
+def get_cz_entangling_gate_implementation(
+        kind: EntanglingGate, clifford_1q_impl_0: CliffordImpl) -> GateGenerator:
     """Generate an implementation of the given entangling gate category using CZ gates
     and the given single-qubit gate implementation.
     """
@@ -340,9 +339,8 @@ def get_cz_entangling_gate_implementation(kind: EntanglingGate,
         assert False
 
 
-def get_zzw_entangling_gate_implementation(kind: EntanglingGate,
-                                           clifford_1q_impl_0: CliffordImpl
-                                           ) -> GateGenerator:
+def get_zzw_entangling_gate_implementation(
+        kind: EntanglingGate, clifford_1q_impl_0: CliffordImpl) -> GateGenerator:
     """Generate an implementation of the given entangling gate category using symmetric
     ZZ (wobble) gates and the given single-qubit gate implementation.
     """

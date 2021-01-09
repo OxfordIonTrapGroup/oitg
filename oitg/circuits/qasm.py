@@ -61,10 +61,10 @@ def default_epilogue(num_qubits: int) -> Statements:
     yield "measure q -> r"
 
 
-def gate_experiment_to_qasm(gates: GateGenerator,
-                            prologue_fn: Callable[[int], Statements] = default_prologue,
-                            epilogue_fn: Callable[[int], Statements] = default_epilogue
-                            ) -> Statements:
+def gate_experiment_to_qasm(
+        gates: GateGenerator,
+        prologue_fn: Callable[[int], Statements] = default_prologue,
+        epilogue_fn: Callable[[int], Statements] = default_epilogue) -> Statements:
     num_qubits = max(collect_operands(gates)) + 1
 
     yield from prologue_fn(num_qubits)
