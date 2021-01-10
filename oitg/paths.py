@@ -19,8 +19,14 @@ def shared_area_path() -> str:
     r"""Return the standard path to the shared area on the current platform.
 
     For Windows, the standard mount point is ``Z:\``, and for Unix-like systems
-    (Linux/macOS) it is ``~/steaneShared``.
+    (Linux/macOS) it is ``~/steaneShared``; this can be overwritten using the
+    ``OITG_SHARED_AREA`` environment variable.
     """
+
+    try:
+        return os.environ["OITG_SHARED_AREA"]
+    except KeyError:
+        pass
 
     if os.name == "nt":  # Windows
         return "Z:\\"
