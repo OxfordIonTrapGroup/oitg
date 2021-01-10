@@ -236,7 +236,8 @@ HDF5 files matching the standard ARTIQ folder/file name structure.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>day</strong> – Acquisition date of results to match, or list of dates, in ISO format
-(yyyy-mm-dd). If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the current date (today).</p></li>
+(yyyy-mm-dd). If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to the current date (today); if <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">rid</span></code> is given, the RID index is used to determine the location.</p></li>
 <li><p><strong>hour</strong> – Hour or list of hours when the experiment was built. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
 includes all hours.</p></li>
 <li><p><strong>rid</strong> – An experiment run id or list of run ids to match. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, includes

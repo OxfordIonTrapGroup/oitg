@@ -158,14 +158,15 @@
            <div itemprop="articleBody">
             
   <h1>Source code for oitg.results</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
 <span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
-
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rid_index</span>
 <span class="kn">from</span> <span class="nn">.paths</span> <span class="kn">import</span> <span class="n">artiq_results_path</span>
 
 
@@ -236,13 +237,24 @@
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;More than one matching results file found&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">load_hdf5_file</span><span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">load_hdf5_file</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Failure parsing results file&quot;</span><span class="p">)</span></div>
 
 
 <span class="n">Result</span> <span class="o">=</span> <span class="n">NamedTuple</span><span class="p">(</span><span class="s1">&#39;Result&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span>
                                <span class="p">(</span><span class="s1">&#39;cls&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
+
+
+<span class="k">def</span> <span class="nf">parse_result_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Result</span><span class="p">]:</span>
+    <span class="n">head</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">head</span><span class="p">,</span> <span class="n">hour_str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">this_day</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
+    <span class="n">rid_part</span><span class="p">,</span> <span class="n">class_part</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">rid_part</span><span class="p">),</span> <span class="n">Result</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+                                 <span class="bp">cls</span><span class="o">=</span><span class="n">class_part</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                                 <span class="n">day</span><span class="o">=</span><span class="n">this_day</span><span class="p">,</span>
+                                 <span class="n">hour</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">hour_str</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="find_results"><a class="viewcode-back" href="../../results.html#oitg.results.find_results">[docs]</a><span class="k">def</span> <span class="nf">find_results</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -258,7 +270,8 @@
 <span class="sd">    HDF5 files matching the standard ARTIQ folder/file name structure.</span>
 
 <span class="sd">    :param day: Acquisition date of results to match, or list of dates, in ISO format</span>
-<span class="sd">        (yyyy-mm-dd). If ``None``, defaults to the current date (today).</span>
+<span class="sd">        (yyyy-mm-dd). If ``None``, defaults to the current date (today); if ``&quot;auto&quot;``</span>
+<span class="sd">        and ``rid`` is given, the RID index is used to determine the location.</span>
 <span class="sd">    :param hour: Hour or list of hours when the experiment was built. If ``None``,</span>
 <span class="sd">        includes all hours.</span>
 <span class="sd">    :param rid: An experiment run id or list of run ids to match. If ``None``, includes</span>
@@ -280,47 +293,90 @@
     <span class="c1"># Form list of day strings to search over</span>
     <span class="k">if</span> <span class="n">day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">day</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
-    <span class="n">days</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
 
-    <span class="c1"># Collect all the data files on these days</span>
+    <span class="n">days</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+    <span class="n">rids</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
     <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
-        <span class="n">day_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_path</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
-        <span class="c1"># To increase speed on a slow filesystem (such as an SMB mount) we could only</span>
-        <span class="c1"># list directories with appropriate hours.</span>
-        <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">day_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;*.h5&quot;</span><span class="p">))])</span>
+    <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">days</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;auto&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Without day specified, rid(s) must be given&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">rid_index</span><span class="o">.</span><span class="n">read_index</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span>
+                <span class="s2">&quot;To resolve results with only RID specified, the result path for &quot;</span> <span class="o">+</span>
+                <span class="sa">f</span><span class="s2">&quot;the target experiment (</span><span class="si">{</span><span class="n">experiment</span><span class="si">}</span><span class="s2">) needs to be indexed. (Within &quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;the Oxford ion trap quantum computing group, this is done via &quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;nightly systemd jobs on 10.255.6.4.)&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rid</span> <span class="ow">in</span> <span class="n">rids</span><span class="p">:</span>
+            <span class="c1"># Discover location</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rid_index</span><span class="o">.</span><span class="n">resolve_rid</span><span class="p">(</span><span class="n">root_path</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">rid</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Collect all the data files on these days</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
+            <span class="n">day_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_path</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+            <span class="c1"># To increase speed on a slow filesystem (such as an SMB mount) we could</span>
+            <span class="c1"># only list directories with appropriate hours.</span>
+            <span class="n">paths</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+                <span class="n">y</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">day_path</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;*.h5&quot;</span><span class="p">))</span>
+            <span class="p">])</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">rids</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">rid</span><span class="p">)</span>
     <span class="n">hours</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span>
     <span class="n">class_names</span> <span class="o">=</span> <span class="n">_iterify</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
-        <span class="n">head</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">head</span><span class="p">,</span> <span class="n">hour_str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">this_day</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
-        <span class="n">rid_part</span><span class="p">,</span> <span class="n">class_part</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-        <span class="n">this_rid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rid_part</span><span class="p">)</span>
-        <span class="n">this_class</span> <span class="o">=</span> <span class="n">class_part</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">this_hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hour_str</span><span class="p">)</span>
+        <span class="n">this_rid</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">parse_result_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-        <span class="c1"># Filter on class name</span>
-        <span class="k">if</span> <span class="n">class_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">this_class</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">class_names</span><span class="p">:</span>
+        <span class="c1"># If any extra filters are given, skip if no match.</span>
+        <span class="k">if</span> <span class="n">class_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">class_names</span><span class="p">:</span>
             <span class="k">continue</span>
-
-        <span class="c1"># Filter on rid</span>
         <span class="k">if</span> <span class="n">rid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">this_rid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rids</span><span class="p">:</span>
             <span class="k">continue</span>
-
-        <span class="c1"># Filter on hours</span>
-        <span class="k">if</span> <span class="n">hours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">this_hour</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hours</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">hours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">hour</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hours</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="n">results</span><span class="p">[</span><span class="n">this_rid</span><span class="p">]</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
-                                   <span class="bp">cls</span><span class="o">=</span><span class="n">this_class</span><span class="p">,</span>
-                                   <span class="n">day</span><span class="o">=</span><span class="n">this_day</span><span class="p">,</span>
-                                   <span class="n">hour</span><span class="o">=</span><span class="n">this_hour</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">this_rid</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
     <span class="k">return</span> <span class="n">results</span></div>
+
+
+<span class="k">def</span> <span class="nf">normalise_experiment_magic</span><span class="p">(</span><span class="n">exp</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">exp</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;alice&quot;</span><span class="p">,</span> <span class="s2">&quot;bob&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;lab1_&quot;</span> <span class="o">+</span> <span class="n">exp</span>
+    <span class="k">return</span> <span class="n">exp</span>
+
+
+<span class="k">def</span> <span class="nf">parse_magic</span><span class="p">(</span><span class="n">rid</span><span class="p">):</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;([a-zA-Z]+_)?([0-9]{1,9})&quot;</span><span class="p">,</span> <span class="n">rid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">exp</span><span class="p">,</span> <span class="n">rid</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rid&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">rid</span><span class="p">)}</span>
+    <span class="k">if</span> <span class="n">exp</span><span class="p">:</span>
+        <span class="c1"># Strip trailing _.</span>
+        <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Don&#39;t treat &quot;rid_1234&quot; as an experiment name, as it shows up as the default</span>
+        <span class="c1"># ndscan source name if no source id dataset is set.</span>
+        <span class="k">if</span> <span class="n">exp</span> <span class="o">!=</span> <span class="s2">&quot;rid&quot;</span><span class="p">:</span>
+            <span class="n">spec</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalise_experiment_magic</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span>
+
+
+<span class="k">def</span> <span class="nf">find_by_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">parse_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">find_results</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="c1"># FIXME: This only really returns the expected result for files that are part of the</span>
+    <span class="c1"># date/hour-ordered tree (as opposed to e.g. copies made in a user&#39;s analysis</span>
+    <span class="c1"># folder, and passed as full path).</span>
+    <span class="n">rid</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">parse_result_path</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">rid</span><span class="p">:</span> <span class="n">info</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">load_by_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">parse_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">load_result</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">load_hdf5_file</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">)</span>
 </pre></div>
 
            </div>
