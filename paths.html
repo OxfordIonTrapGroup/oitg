@@ -172,7 +172,8 @@ computer/network setup.</p>
 <code class="sig-prename descclassname">oitg.paths.</code><code class="sig-name descname">shared_area_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/paths.html#shared_area_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.paths.shared_area_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the standard path to the shared area on the current platform.</p>
 <p>For Windows, the standard mount point is <code class="docutils literal notranslate"><span class="pre">Z:\</span></code>, and for Unix-like systems
-(Linux/macOS) it is <code class="docutils literal notranslate"><span class="pre">~/steaneShared</span></code>.</p>
+(Linux/macOS) it is <code class="docutils literal notranslate"><span class="pre">~/steaneShared</span></code>; this can be overwritten using the
+<code class="docutils literal notranslate"><span class="pre">OITG_SHARED_AREA</span></code> environment variable.</p>
 </dd></dl>
 
 <dl class="py function">

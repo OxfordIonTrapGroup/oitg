@@ -179,8 +179,14 @@
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the standard path to the shared area on the current platform.</span>
 
 <span class="sd">    For Windows, the standard mount point is ``Z:\``, and for Unix-like systems</span>
-<span class="sd">    (Linux/macOS) it is ``~/steaneShared``.</span>
+<span class="sd">    (Linux/macOS) it is ``~/steaneShared``; this can be overwritten using the</span>
+<span class="sd">    ``OITG_SHARED_AREA`` environment variable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OITG_SHARED_AREA&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
 
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span><span class="p">:</span>  <span class="c1"># Windows</span>
         <span class="k">return</span> <span class="s2">&quot;Z:</span><span class="se">\\</span><span class="s2">&quot;</span>
