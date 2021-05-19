@@ -4,7 +4,9 @@ from scipy.stats import poisson
 from scipy.special import gammainc
 
 
-def optimise_readout(bright_rate, dark_rate, dark_to_bright_rate=(1 / 1.168),
+def optimise_readout(bright_rate,
+                     dark_rate,
+                     dark_to_bright_rate=(1 / 1.168),
                      p_bright=0.5):
     """Calculate optimal threshold bin time & threshold count
 
@@ -24,19 +26,22 @@ def optimise_readout(bright_rate, dark_rate, dark_to_bright_rate=(1 / 1.168),
     :returns: (target_t_bin [s], threshold_count, p_error)"""
     thresh = 1
     error_last = 1.
-    t_bin, error = optimise_t_bin(
-        bright_rate, dark_rate, thresh, dark_to_bright_rate, p_bright)
+    t_bin, error = optimise_t_bin(bright_rate, dark_rate, thresh, dark_to_bright_rate,
+                                  p_bright)
     while error_last > error:
         error_last = error
         t_bin_last = t_bin
         thresh += 1
-        t_bin, error = optimise_t_bin(
-            bright_rate, dark_rate, thresh, dark_to_bright_rate, p_bright)
+        t_bin, error = optimise_t_bin(bright_rate, dark_rate, thresh,
+                                      dark_to_bright_rate, p_bright)
 
     return (t_bin_last, thresh - 1, error_last)
 
 
-def optimise_treshold(bright_rate, dark_rate, t_bin, dark_to_bright_rate=0.,
+def optimise_treshold(bright_rate,
+                      dark_rate,
+                      t_bin,
+                      dark_to_bright_rate=0.,
                       p_bright=0.5):
     """Calculate optimal threshold threshold count for a given bin time
 
@@ -51,23 +56,30 @@ def optimise_treshold(bright_rate, dark_rate, t_bin, dark_to_bright_rate=0.,
     :returns: (target_t_bin [s], threshold_count, p_error)"""
     # de-shelving increases the count rate of dark states (non-poissonian)
     # The no-de-shelving threshold is therefore a lower bound
-    thresh_min = poisson_optimal_thresh_count(
-        bright_rate * t_bin, dark_rate * t_bin, p_bright)
+    thresh_min = poisson_optimal_thresh_count(bright_rate * t_bin, dark_rate * t_bin,
+                                              p_bright)
     thresh_max = bright_rate * t_bin
 
     # thresholds are discrete - could implement discreet optimisation, but the
     # range of values is small in practice. Therefore we can try all options
     thresh_vec = np.arange(thresh_min, thresh_max + 1, dtype=np.int_)
-    err_vec = np.array([calc_p_error(bright_rate, dark_rate, t_bin,
-                                     i, dark_to_bright_rate,
-                                     p_bright=p_bright)
-                        for i in thresh_vec])
+    err_vec = np.array([
+        calc_p_error(bright_rate,
+                     dark_rate,
+                     t_bin,
+                     i,
+                     dark_to_bright_rate,
+                     p_bright=p_bright) for i in thresh_vec
+    ])
 
     min_idx = np.argmin(err_vec)
     return thresh_vec[min_idx], err_vec[min_idx]
 
 
-def optimise_t_bin(bright_rate, dark_rate, thresh_count, dark_to_bright_rate=0.,
+def optimise_t_bin(bright_rate,
+                   dark_rate,
+                   thresh_count,
+                   dark_to_bright_rate=0.,
                    p_bright=0.5):
     """Calculate optimal threshold bin time for a given threshold count
 
@@ -85,19 +97,26 @@ def optimise_t_bin(bright_rate, dark_rate, thresh_count, dark_to_bright_rate=0.,
     err_scale = 1e-6
 
     def p_error(x):
-        return calc_p_error(bright_rate, dark_rate, x[0] * t_scale,
-                            thresh_count, dark_to_bright_rate,
+        return calc_p_error(bright_rate,
+                            dark_rate,
+                            x[0] * t_scale,
+                            thresh_count,
+                            dark_to_bright_rate,
                             p_bright=p_bright) / err_scale
 
     result = minimize(p_error,
                       np.array([t_bin_init / t_scale]),
-                      bounds=((1 / bright_rate / t_scale, np.inf),))
+                      bounds=((1 / bright_rate / t_scale, np.inf), ))
 
     return result.x[0] * t_scale, result.fun * err_scale
 
 
-def calc_p_error(bright_rate, dark_rate, t_bin, thresh_count,
-                 dark_to_bright_rate=0., p_bright=0.5):
+def calc_p_error(bright_rate,
+                 dark_rate,
+                 t_bin,
+                 thresh_count,
+                 dark_to_bright_rate=0.,
+                 p_bright=0.5):
     """Calculate error probability for Poisson statistics with de-shelving
 
     See thesis: Alice Burrell, 2010
@@ -119,8 +138,8 @@ def calc_p_error(bright_rate, dark_rate, t_bin, thresh_count,
         eps = bright_rate * t_bin / rb_tau
 
         x_n = np.exp(-eps) * np.power(rb_tau / (rb_tau - 1), n) / (rb_tau - 1)
-        x_n *= (gammainc(n + 1, eps * (rb_tau - 1))
-                - gammainc(n + 1, dark_rate * t_bin / rb_tau * (rb_tau - 1)))
+        x_n *= (gammainc(n + 1, eps * (rb_tau - 1)) -
+                gammainc(n + 1, dark_rate * t_bin / rb_tau * (rb_tau - 1)))
 
         d_n = poisson.pmf(n, mu=dark_rate * t_bin) * np.exp(
             -t_bin * dark_to_bright_rate) + x_n
