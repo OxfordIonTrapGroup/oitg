@@ -160,4 +160,4 @@ if __name__ == '__main__':
     print("Generated {} 2-qubit sequences in {} s".format(
         len(lengths) * num_randomisations, t.elapsed))
 
-    save_circuit_pdf("rbm.pdf", result[1])
+    save_circuit_pdf("rbm.pdf", result[1][1])
