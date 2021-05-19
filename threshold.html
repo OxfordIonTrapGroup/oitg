@@ -165,42 +165,86 @@
   <div class="section" id="module-oitg.threshold">
 <span id="oitg-threshold-api"></span><h1>oitg.threshold API<a class="headerlink" href="#module-oitg.threshold" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="oitg.threshold.calc_target_bin_time">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_target_bin_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">p_error_target</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_target_bin_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_target_bin_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate optimal threshold bin time for target error chance</p>
+<dt id="oitg.threshold.optimise_readout">
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">optimise_readout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.8561643835616439</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.optimise_readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate optimal threshold bin time &amp; threshold count</p>
 <p>The calculation assumes both bright and dark counts are
 Poisson distributed and gives a threshold minimising the error probability</p>
-<p>The calculation neglects de-shelving and accidental shelving during the
-readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.
+<p>The calculation accounts for de-shelving during the readout bin time.
 See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
 <li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
-<li><p><strong>p_error_target</strong> – target error probability</p></li>
+<li><p><strong>dark_to_bright_rate</strong> – dark state decay to become bright in $s^-1$.
+As this function seeks the global minimum error, the rate must not be
+zero. Default of 1/1.168 is the Calcium D5/2 shelf decay rate.</p></li>
 <li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(target_t_bin [s], threshold_rate [$s^-1$])</p>
+<dd class="field-even"><p>(target_t_bin [s], threshold_count, p_error)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="oitg.threshold.optimise_treshold">
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">optimise_treshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">t_bin</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_treshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.optimise_treshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate optimal threshold threshold count for a given bin time</p>
+<p>The calculation accounts for de-shelving during the readout bin time.
+See thesis: Alice Burrell, 2010</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
+<li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
+<li><p><strong>dark_to_bright_rate</strong> – dark state decay to become bright in $s^-1$</p></li>
+<li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(target_t_bin [s], threshold_count, p_error)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="oitg.threshold.optimise_t_bin">
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">optimise_t_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">thresh_count</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_t_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.optimise_t_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate optimal threshold bin time for a given threshold count</p>
+<p>The calculation accounts for de-shelving during the readout bin time.
+See thesis: Alice Burrell, 2010</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
+<li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
+<li><p><strong>dark_to_bright_rate</strong> – dark state decay to become bright in $s^-1$</p></li>
+<li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(target_t_bin [s], threshold_count, p_error)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="oitg.threshold.calc_p_error">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_p_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">t_bin</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_p_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_p_error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assumes exact threshold count is evaluated as dark</p>
-<p>The calculation neglects de-shelving and accidental shelving during the
-readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.
-See thesis: Alice Burrell, 2010</p>
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_p_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">t_bin</span></em>, <em class="sig-param"><span class="n">thresh_count</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_p_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_p_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate error probability for Poisson statistics with de-shelving</p>
+<p>See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
-<li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
+<li><p><strong>dark_rate</strong> – expected dark count rate in $s^-1$</p></li>
 <li><p><strong>t_bin</strong> – integration time in s.</p></li>
+<li><p><strong>thresh_count</strong> – threshold count for discriminating bright/dark state
+(Assumes the exact threshold count is evaluated as dark)</p></li>
+<li><p><strong>dark_to_bright_rate</strong> – dark state decay to become bright in $s^-1$</p></li>
 <li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
 </ul>
 </dd>
@@ -208,27 +252,25 @@ See thesis: Alice Burrell, 2010</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.threshold.calc_thresh_rate">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_thresh_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">t_bin</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_thresh_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_thresh_rate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optimal threshold rate for distinguishing bright and dark states</p>
-<p>The calculation assumes both bright and dark counts are
-Poisson distributed and gives a threshold minimising the error probability.</p>
+<dt id="oitg.threshold.poisson_optimal_thresh_count">
+<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">poisson_optimal_thresh_count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mean_bright</span></em>, <em class="sig-param"><span class="n">mean_dark</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#poisson_optimal_thresh_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.poisson_optimal_thresh_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimal threshold rate in the absence of de-shelving</p>
+<p>The calculation assumes both bright and dark counts are Poisson distributed
+and gives a threshold minimising the error probability.</p>
 <p>The calculation neglects de-shelving and accidental shelving during the
 readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.
 See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
-<li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
-<li><p><strong>t_bin</strong> – integration time in s. Only relevant for p_bright!=0.5
-(default=1e-3)</p></li>
+<li><p><strong>mean_bright</strong> – expected counts if the ion started in a bright state</p></li>
+<li><p><strong>mean_dark</strong> – expected counts if the ion started in a dark state</p></li>
 <li><p><strong>p_bright</strong> – probability of encountering a bright state
 (default=0.5)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>threshold_rate /$s^-1$</p>
+<dd class="field-even"><p>threshold_count</p>
 </dd>
 </dl>
 </dd></dl>
