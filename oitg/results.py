@@ -121,7 +121,8 @@ def find_results(day: Union[None, str, List[str]] = None,
     :param experiment: The experiment name, used for determining the results path if
         ``root_path`` is not given. See :func:`oitg.paths.artiq_results_path`.
     :param root_path: The ARTIQ results directory to search. If not given, defaults to
-        the :func:`oitg.paths.artiq_results_path`.
+        the :func:`oitg.paths.artiq_results_path`. An IOError is raised if the path does
+        not exist.
 
     :return: A dictionary of results, indexed by rid. The values are named tuples
         ``(path, day, hour, cls)``.
@@ -129,6 +130,10 @@ def find_results(day: Union[None, str, List[str]] = None,
 
     if root_path is None:
         root_path = artiq_results_path(experiment=experiment)
+
+    if not os.path.exists(root_path):
+        raise IOError(f"Result path '{root_path}' does not exist. Shared drive not " +
+                      "mounted? Wrong experiment name?")
 
     # Form list of day strings to search over
     if day is None:
