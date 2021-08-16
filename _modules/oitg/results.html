@@ -281,7 +281,8 @@
 <span class="sd">    :param experiment: The experiment name, used for determining the results path if</span>
 <span class="sd">        ``root_path`` is not given. See :func:`oitg.paths.artiq_results_path`.</span>
 <span class="sd">    :param root_path: The ARTIQ results directory to search. If not given, defaults to</span>
-<span class="sd">        the :func:`oitg.paths.artiq_results_path`.</span>
+<span class="sd">        the :func:`oitg.paths.artiq_results_path`. An IOError is raised if the path does</span>
+<span class="sd">        not exist.</span>
 
 <span class="sd">    :return: A dictionary of results, indexed by rid. The values are named tuples</span>
 <span class="sd">        ``(path, day, hour, cls)``.</span>
@@ -289,6 +290,10 @@
 
     <span class="k">if</span> <span class="n">root_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">root_path</span> <span class="o">=</span> <span class="n">artiq_results_path</span><span class="p">(</span><span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">root_path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result path &#39;</span><span class="si">{</span><span class="n">root_path</span><span class="si">}</span><span class="s2">&#39; does not exist. Shared drive not &quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;mounted? Wrong experiment name?&quot;</span><span class="p">)</span>
 
     <span class="c1"># Form list of day strings to search over</span>
     <span class="k">if</span> <span class="n">day</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

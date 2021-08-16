@@ -247,7 +247,8 @@ all rids.</p></li>
 <li><p><strong>experiment</strong> – The experiment name, used for determining the results path if
 <code class="docutils literal notranslate"><span class="pre">root_path</span></code> is not given. See <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">oitg.paths.artiq_results_path()</span></code></a>.</p></li>
 <li><p><strong>root_path</strong> – The ARTIQ results directory to search. If not given, defaults to
-the <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">oitg.paths.artiq_results_path()</span></code></a>.</p></li>
+the <a class="reference internal" href="paths.html#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">oitg.paths.artiq_results_path()</span></code></a>. An IOError is raised if the path does
+not exist.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
