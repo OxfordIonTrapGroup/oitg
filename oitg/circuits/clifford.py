@@ -18,6 +18,7 @@ gate set.
 """
 
 from enum import Enum, unique
+from itertools import product
 from typing import Callable, Dict, List
 import numpy as np
 from .gate import Gate, GateGenerator, GateSequence, remap_operands
@@ -65,6 +66,19 @@ class GateGroup:
         """Look up the index of the element that is the inverse of the given unitary
         matrix."""
         return self._inverse_idxs[to_canonical_matrix_key(matrix)]
+
+    def pauli_idxs(self) -> List[int]:
+        """Return the indices corresponding to the (generalised) Pauli group (which is
+        always a subgroup of the Clifford group).
+        """
+        # The n-qubit Pauli group elements are tensor products of single-qubit Pauli
+        # group elements. By convention, they are all kept at the beginning of the
+        # index lists.
+        SQ_PAULI_IDXS = [0, 2, 4, 6]
+        return [
+            sum(v * 24**i for (i, v) in enumerate(a))
+            for a in product(SQ_PAULI_IDXS, repeat=self.num_qubits)
+        ]
 
 
 def to_canonical_matrix(gate_matrix: np.ndarray) -> np.ndarray:

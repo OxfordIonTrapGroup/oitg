@@ -9,7 +9,7 @@ from typing import List, Iterable, Tuple
 import numpy as np
 from ...clifford import GateGroup
 from ...gate import Gate, GateSequence
-from ...to_matrix import gate_sequence_matrix, PAULI_OPERATORS
+from ...to_matrix import gate_sequence_matrix
 
 
 def generate_rbm_experiment(group: GateGroup,
@@ -66,6 +66,9 @@ def generate_rbm_experiment(group: GateGroup,
                 truncated_sequences.append(seq[:(length - 1)])
         unfinished_sequences += truncated_sequences
 
+    # Use a special marker index for the interleaved gates (if any), as we want to
+    # preserve the user-specified implementation, rather than using the selected
+    # Clifford group implementation.
     INTERLEAVE_IDX = -1
     if interleave_gates is not None:
         # Make sure we can accept arbitrary GateSequence generators – we need to append
@@ -75,11 +78,14 @@ def generate_rbm_experiment(group: GateGroup,
         interleaved_sequences = []
         for seq in unfinished_sequences:
             interleaved_seq = []
-            for gates in seq:
-                interleaved_seq.append(gates)
+            for idxs in seq:
+                interleaved_seq.append(idxs)
                 interleaved_seq.append(INTERLEAVE_IDX)
             interleaved_sequences.append(interleaved_seq)
         unfinished_sequences += interleaved_sequences
+
+        interleaved_matrix = gate_sequence_matrix(interleave_gates,
+                                                  num_qubits=group.num_qubits)
 
     finished_sequences_descs = []
     for clifford_idxs in unfinished_sequences:
@@ -93,33 +99,38 @@ def generate_rbm_experiment(group: GateGroup,
 
         gates = sum(map(to_gates, clifford_idxs), [])
 
-        # TODO: Use cached matrices for performance.
-        matrix_up_to_last = gate_sequence_matrix(gates, num_qubits=group.num_qubits)
+        matrix_up_to_last = group.matrix_for_idx(clifford_idxs[0])
+        for idx in clifford_idxs[1:]:
+            if idx == INTERLEAVE_IDX:
+                matrix_up_to_last = interleaved_matrix @ matrix_up_to_last
+            else:
+                matrix_up_to_last = group.matrix_for_idx(idx) @ matrix_up_to_last
+
         if pauli_randomize_last:
             # "Mess up" the state tracking by appending a random Pauli per qubit, so
-            # that the expected result is random.
-            paulis = [
-                PAULI_OPERATORS[rng.randint(len(PAULI_OPERATORS))]
-                for _ in range(group.num_qubits)
-            ]
-            a = paulis[0]
-            for b in paulis[1:]:
-                a = np.kron(a, b)
+            # that the expected result is random. This works, as the extra "fake" Pauli
+            # commutes through the last inverse element leaving at most a Pauli, as the
+            # Clifford group stabilizes the Pauli group.
+            pauli_idx = rng.choice(group.pauli_idxs())
+            matrix_for_inverse = group.matrix_for_idx(pauli_idx) @ matrix_up_to_last
         else:
-            a = np.identity(matrix_up_to_last.shape[0])
+            matrix_for_inverse = matrix_up_to_last
 
-        last_idx = group.find_inverse_idx(a @ matrix_up_to_last)
+        last_idx = group.find_inverse_idx(matrix_for_inverse)
         clifford_idxs.append(last_idx)
-        last_gates = to_gates(last_idx)
-        gates += last_gates
+        gates += to_gates(last_idx)
 
         # Calculate final state and convert expected measurement result to binary
         # string.
-        final_matrix = (gate_sequence_matrix(last_gates, num_qubits=group.num_qubits)
-                        @ matrix_up_to_last)
+        final_matrix = group.matrix_for_idx(last_idx) @ matrix_up_to_last
         final_state = final_matrix[:, 0]
         result_idx = np.argmax(np.abs(final_state))
-        assert np.isclose(abs(final_state[result_idx]), 1)
+
+        # This doesn't work for the qutrit symmetric subspace case, where one of the
+        # intended outcomes is |01> + |10>. The ambiguity is taken care of by the
+        # runner.
+        #
+        # assert np.isclose(abs(final_state[result_idx]), 1)
 
         finished_sequences_descs.append((clifford_idxs, tuple(gates), result_idx))
 
