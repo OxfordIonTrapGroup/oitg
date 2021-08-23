@@ -178,6 +178,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">unique</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">.gate</span> <span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="n">remap_operands</span>
@@ -224,7 +225,20 @@
 <div class="viewcode-block" id="GateGroup.find_inverse_idx"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.find_inverse_idx">[docs]</a>    <span class="k">def</span> <span class="nf">find_inverse_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Look up the index of the element that is the inverse of the given unitary</span>
 <span class="sd">        matrix.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_idxs</span><span class="p">[</span><span class="n">to_canonical_matrix_key</span><span class="p">(</span><span class="n">matrix</span><span class="p">)]</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_idxs</span><span class="p">[</span><span class="n">to_canonical_matrix_key</span><span class="p">(</span><span class="n">matrix</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="GateGroup.pauli_idxs"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.pauli_idxs">[docs]</a>    <span class="k">def</span> <span class="nf">pauli_idxs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return the indices corresponding to the (generalised) Pauli group (which is</span>
+<span class="sd">        always a subgroup of the Clifford group).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The n-qubit Pauli group elements are tensor products of single-qubit Pauli</span>
+        <span class="c1"># group elements. By convention, they are all kept at the beginning of the</span>
+        <span class="c1"># index lists.</span>
+        <span class="n">SQ_PAULI_IDXS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="mi">24</span><span class="o">**</span><span class="n">i</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="n">SQ_PAULI_IDXS</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
+        <span class="p">]</span></div></div>
 
 
 <div class="viewcode-block" id="to_canonical_matrix"><a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.to_canonical_matrix">[docs]</a><span class="k">def</span> <span class="nf">to_canonical_matrix</span><span class="p">(</span><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>

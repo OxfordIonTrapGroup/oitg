@@ -169,7 +169,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">...clifford</span> <span class="kn">import</span> <span class="n">GateGroup</span>
 <span class="kn">from</span> <span class="nn">...gate</span> <span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateSequence</span>
-<span class="kn">from</span> <span class="nn">...to_matrix</span> <span class="kn">import</span> <span class="n">gate_sequence_matrix</span><span class="p">,</span> <span class="n">PAULI_OPERATORS</span>
+<span class="kn">from</span> <span class="nn">...to_matrix</span> <span class="kn">import</span> <span class="n">gate_sequence_matrix</span>
 
 
 <div class="viewcode-block" id="generate_rbm_experiment"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.rbm.generate.generate_rbm_experiment">[docs]</a><span class="k">def</span> <span class="nf">generate_rbm_experiment</span><span class="p">(</span><span class="n">group</span><span class="p">:</span> <span class="n">GateGroup</span><span class="p">,</span>
@@ -226,6 +226,9 @@
                 <span class="n">truncated_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">[:(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
         <span class="n">unfinished_sequences</span> <span class="o">+=</span> <span class="n">truncated_sequences</span>
 
+    <span class="c1"># Use a special marker index for the interleaved gates (if any), as we want to</span>
+    <span class="c1"># preserve the user-specified implementation, rather than using the selected</span>
+    <span class="c1"># Clifford group implementation.</span>
     <span class="n">INTERLEAVE_IDX</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="k">if</span> <span class="n">interleave_gates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Make sure we can accept arbitrary GateSequence generators – we need to append</span>
@@ -235,11 +238,14 @@
         <span class="n">interleaved_sequences</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">unfinished_sequences</span><span class="p">:</span>
             <span class="n">interleaved_seq</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">gates</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span>
-                <span class="n">interleaved_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gates</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">idxs</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span>
+                <span class="n">interleaved_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
                 <span class="n">interleaved_seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">INTERLEAVE_IDX</span><span class="p">)</span>
             <span class="n">interleaved_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interleaved_seq</span><span class="p">)</span>
         <span class="n">unfinished_sequences</span> <span class="o">+=</span> <span class="n">interleaved_sequences</span>
+
+        <span class="n">interleaved_matrix</span> <span class="o">=</span> <span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">interleave_gates</span><span class="p">,</span>
+                                                  <span class="n">num_qubits</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
 
     <span class="n">finished_sequences_descs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">clifford_idxs</span> <span class="ow">in</span> <span class="n">unfinished_sequences</span><span class="p">:</span>
@@ -253,33 +259,38 @@
 
         <span class="n">gates</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">to_gates</span><span class="p">,</span> <span class="n">clifford_idxs</span><span class="p">),</span> <span class="p">[])</span>
 
-        <span class="c1"># TODO: Use cached matrices for performance.</span>
-        <span class="n">matrix_up_to_last</span> <span class="o">=</span> <span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">gates</span><span class="p">,</span> <span class="n">num_qubits</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
+        <span class="n">matrix_up_to_last</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">matrix_for_idx</span><span class="p">(</span><span class="n">clifford_idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">clifford_idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="n">INTERLEAVE_IDX</span><span class="p">:</span>
+                <span class="n">matrix_up_to_last</span> <span class="o">=</span> <span class="n">interleaved_matrix</span> <span class="o">@</span> <span class="n">matrix_up_to_last</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">matrix_up_to_last</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">matrix_for_idx</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">@</span> <span class="n">matrix_up_to_last</span>
+
         <span class="k">if</span> <span class="n">pauli_randomize_last</span><span class="p">:</span>
             <span class="c1"># &quot;Mess up&quot; the state tracking by appending a random Pauli per qubit, so</span>
-            <span class="c1"># that the expected result is random.</span>
-            <span class="n">paulis</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">PAULI_OPERATORS</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">PAULI_OPERATORS</span><span class="p">))]</span>
-                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
-            <span class="p">]</span>
-            <span class="n">a</span> <span class="o">=</span> <span class="n">paulis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">paulis</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-                <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+            <span class="c1"># that the expected result is random. This works, as the extra &quot;fake&quot; Pauli</span>
+            <span class="c1"># commutes through the last inverse element leaving at most a Pauli, as the</span>
+            <span class="c1"># Clifford group stabilizes the Pauli group.</span>
+            <span class="n">pauli_idx</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">pauli_idxs</span><span class="p">())</span>
+            <span class="n">matrix_for_inverse</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">matrix_for_idx</span><span class="p">(</span><span class="n">pauli_idx</span><span class="p">)</span> <span class="o">@</span> <span class="n">matrix_up_to_last</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">matrix_up_to_last</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">matrix_for_inverse</span> <span class="o">=</span> <span class="n">matrix_up_to_last</span>
 
-        <span class="n">last_idx</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">find_inverse_idx</span><span class="p">(</span><span class="n">a</span> <span class="o">@</span> <span class="n">matrix_up_to_last</span><span class="p">)</span>
+        <span class="n">last_idx</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">find_inverse_idx</span><span class="p">(</span><span class="n">matrix_for_inverse</span><span class="p">)</span>
         <span class="n">clifford_idxs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last_idx</span><span class="p">)</span>
-        <span class="n">last_gates</span> <span class="o">=</span> <span class="n">to_gates</span><span class="p">(</span><span class="n">last_idx</span><span class="p">)</span>
-        <span class="n">gates</span> <span class="o">+=</span> <span class="n">last_gates</span>
+        <span class="n">gates</span> <span class="o">+=</span> <span class="n">to_gates</span><span class="p">(</span><span class="n">last_idx</span><span class="p">)</span>
 
         <span class="c1"># Calculate final state and convert expected measurement result to binary</span>
         <span class="c1"># string.</span>
-        <span class="n">final_matrix</span> <span class="o">=</span> <span class="p">(</span><span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">last_gates</span><span class="p">,</span> <span class="n">num_qubits</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
-                        <span class="o">@</span> <span class="n">matrix_up_to_last</span><span class="p">)</span>
+        <span class="n">final_matrix</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">matrix_for_idx</span><span class="p">(</span><span class="n">last_idx</span><span class="p">)</span> <span class="o">@</span> <span class="n">matrix_up_to_last</span>
         <span class="n">final_state</span> <span class="o">=</span> <span class="n">final_matrix</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">result_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">final_state</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">final_state</span><span class="p">[</span><span class="n">result_idx</span><span class="p">]),</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># This doesn&#39;t work for the qutrit symmetric subspace case, where one of the</span>
+        <span class="c1"># intended outcomes is |01&gt; + |10&gt;. The ambiguity is taken care of by the</span>
+        <span class="c1"># runner.</span>
+        <span class="c1">#</span>
+        <span class="c1"># assert np.isclose(abs(final_state[result_idx]), 1)</span>
 
         <span class="n">finished_sequences_descs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">clifford_idxs</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">gates</span><span class="p">),</span> <span class="n">result_idx</span><span class="p">))</span>
 
