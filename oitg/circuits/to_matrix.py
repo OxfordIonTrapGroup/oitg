@@ -16,20 +16,44 @@ def rxy(phase, amount):
 
 
 LOCAL_MATRICES = {
+    #: Rotation around x axis of the bloch sphere.
     "rx": (lambda amount: [[np.cos(amount / 2), -1j * np.sin(amount / 2)],
                            [-1j * np.sin(amount / 2),
                             np.cos(amount / 2)]]),
+
+    #: Rotation around y axis of the bloch sphere.
     "ry": (lambda amount: [[np.cos(amount / 2), -np.sin(amount / 2)],
                            [np.sin(amount / 2), np.cos(amount / 2)]]),
+
+    #: Rotation around z axis of the bloch sphere.
     "rz":
     (lambda amount: [[np.exp(-1j * amount / 2), 0], [0, np.exp(1j * amount / 2)]]),
+
+    #: Arbitrary single-qubit rotation around axis in the xy plane.
     "rxy": (rxy),
+
+    #: Hadamard gate.
     "h": (lambda: np.array([[1, 1], [1, -1]]) / np.sqrt(2)),
+
+    #: Conditional X gate.
     "cx": (lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]),
+
+    #: Conditional Z gate.
     "cz": (lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, -1]]),
+
+    #: XX entangling gate (e.g. MS gate), i.e. exp(-i / 2 * π / 2 * X⊗X).
     "xx": (lambda: np.array([[1, 0, 0, -1j], [0, 1, -1j, 0], [0, -1j, 1, 0],
                              [-1j, 0, 0, 1]]) / np.sqrt(2)),
+
+    #: Minus-XX entangling gate, i.e. exp(i / 2 * π / 2 * X⊗X).
+    "mxx": (lambda: np.array([[1, 0, 0, 1j], [0, 1, 1j, 0], [0, 1j, 1, 0],
+                              [1j, 0, 0, 1]]) / np.sqrt(2)),
+
+    #: Two-loop Z⊗Z wobble gate with spin-echo π pulse in the middle, but no surrounding
+    #: gates to fix up the inversion.
     "zzw": (lambda: [[0, 0, 0, 1], [0, 0, -1j, 0], [0, -1j, 0, 0], [1, 0, 0, 0]]),
+
+    #: Scheduling barrier; no action on quantum state.
     "barrier": (None),
 }
 
