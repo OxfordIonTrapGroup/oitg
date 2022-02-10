@@ -57,6 +57,36 @@ def make_sym_qutrit_clifford_group(implementation: CliffordImpl) -> GateGroup:
     return SymQutritGateGroup(gate_sequences, matrices, inverse_idxs)
 
 
+def _get_impl(data: list, entangling_gate: Gate, idx: int) -> GateGenerator:
+    """Return gate sequence for the Clifford group element with the given index using
+    the specified single-qubit angle data tables and entangling gate.
+
+    The decompositions aren't feasible to determine in real time (at least not without a
+    whole lot more math than went into DPN's exhaustive search script for coming up with
+    these), so we just store the necessary single-qubit rotation angles.
+
+    More precisely, the data table stores, for each Clifford element, a sequence of
+    blocks of arbitrary single-qubit rotations, which are join()ed by the specified
+    entangling gate. The single-qubit rotations are specified in terms of Euler angles,
+    which have a straightforward implementation in terms of the fixed X/Z rotation
+    sequence. This always uses two physical π / 2 pulses, which might not be quite
+    optimal, but should be close enough given that the entangling gates will
+    realistically have a much larger error.
+    """
+    first = True
+    for run_phases in data[idx][::-1]:
+        if first:
+            first = False
+        else:
+            yield entangling_gate
+        for qubit in (0, 1):
+            yield Gate("rz", (run_phases[2], ), (qubit, ))
+            yield Gate("rx", (np.pi / 2, ), (qubit, ))
+            yield Gate("rz", (run_phases[0], ), (qubit, ))
+            yield Gate("rx", (-np.pi / 2, ), (qubit, ))
+            yield Gate("rz", (run_phases[1], ), (qubit, ))
+
+
 _XX_DATA = [
     [],
     [[0.5235987755982988, 5.235987755982989, 1.5707963267948966],
@@ -815,21 +845,6 @@ _XX_DATA = [
      [4.291854645100724, 3.141592653589793, 3.1415926535897936],
      [5.840146745283279, 8.881784197001252e-16, 2.617993877991494]],
 ]
-
-
-def _get_impl(data: list, entangling_gate: Gate, idx: int) -> GateGenerator:
-    first = True
-    for run_phases in data[idx][::-1]:
-        if first:
-            first = False
-        else:
-            yield entangling_gate
-        for qubit in (0, 1):
-            yield Gate("rz", (run_phases[2], ), (qubit, ))
-            yield Gate("rx", (np.pi / 2, ), (qubit, ))
-            yield Gate("rz", (run_phases[0], ), (qubit, ))
-            yield Gate("rx", (-np.pi / 2, ), (qubit, ))
-            yield Gate("rz", (run_phases[1], ), (qubit, ))
 
 
 def get_sym_qutrit_clifford_xx_implementation(idx: int) -> GateGenerator:
