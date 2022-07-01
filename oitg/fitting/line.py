@@ -4,8 +4,8 @@ import numpy.fft
 from . import FitBase
 
 def parameter_initialiser(x, y, p):
-    k = (y[-1] - y[1]) / (x[-1] - x[1])
-    p['a'] = y[1] - x[1] * k
+    k = (y[-1] - y[0]) / (x[-1] - x[0])
+    p['a'] = y[0] - x[0] * k
     p['b'] = k
 
 def fitting_function(x, p):
