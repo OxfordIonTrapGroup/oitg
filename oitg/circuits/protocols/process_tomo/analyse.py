@@ -239,7 +239,7 @@ def linear_inversion_tomography(prep_projectors: List[np.ndarray],
         see :func:`invert_choi_predictor`.
     """
     predictor = build_choi_predictor(prep_projectors, meas_operators)
-    return invert_choi_predictor(predictor, outcomes)
+    return invert_choi_predictor(predictor, observations)
 
 
 def negative_log_likelihood(choi_predictor: np.ndarray, observation_vec: np.ndarray,
