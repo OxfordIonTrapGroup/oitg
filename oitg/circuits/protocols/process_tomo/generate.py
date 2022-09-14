@@ -11,7 +11,7 @@ def generate_process_tomography_sequences(target: GateSequence,
 
     The system is prepared in a tensor product of single-qubit Pauli-operator
     eigenstates before applying the target sequence and measuring the expectation value
-    of a tensor product of Pauli operators. 
+    of a tensor product of Pauli operators.
     See ``generate_process_tomography_fiducial_pairs()``.
 
     :param target: The gate sequence to perform tomography on.
@@ -29,7 +29,7 @@ def wrap_target_in_process_tomography_fiducials(
 
     The system is prepared in a tensor product of single-qubit Pauli-operator
     eigenstates before applying the target sequence and measuring the expectation value
-    of a tensor product of Pauli operators. 
+    of a tensor product of Pauli operators.
 
     :param target: The gate sequence to perform tomography on.
     :param fiducial_pairs: See ``generate_process_tomography_fiducial_pairs()``
@@ -39,7 +39,7 @@ def wrap_target_in_process_tomography_fiducials(
 
 def generate_process_tomography_fiducial_pairs(
         num_qubits: int) -> List[Tuple[GateSequence, GateSequence]]:
-    """Return a list of tuples of gate sequences implementing the preparation and 
+    """Return a list of tuples of gate sequences implementing the preparation and
     measurement for process tomography.
 
     For state preparation, all six Pauli eigenstates are created (i.e. ±x, ±y, ±z). Even
