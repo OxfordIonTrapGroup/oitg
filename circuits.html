@@ -879,7 +879,41 @@ process tomography for its robustness and favourable error scaling properties.</
 sequence.</p>
 <p>The system is prepared in a tensor product of single-qubit Pauli-operator
 eigenstates before applying the target sequence and measuring the expectation value
+of a tensor product of Pauli operators.
+See <code class="docutils literal notranslate"><span class="pre">generate_process_tomography_fiducial_pairs()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – The gate sequence to perform tomography on.</p></li>
+<li><p><strong>num_qubits</strong> – The number of qubits making up the Hilbert space of interest.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="oitg.circuits.protocols.process_tomo.generate.wrap_target_in_process_tomography_fiducials">
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.generate.</code><code class="sig-name descname">wrap_target_in_process_tomography_fiducials</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fiducial_pairs</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Tuple<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/generate.html#wrap_target_in_process_tomography_fiducials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.generate.wrap_target_in_process_tomography_fiducials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of gate sequences to perform process tomography on the given target
+sequence.</p>
+<p>The system is prepared in a tensor product of single-qubit Pauli-operator
+eigenstates before applying the target sequence and measuring the expectation value
 of a tensor product of Pauli operators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – The gate sequence to perform tomography on.</p></li>
+<li><p><strong>fiducial_pairs</strong> – See <code class="docutils literal notranslate"><span class="pre">generate_process_tomography_fiducial_pairs()</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="oitg.circuits.protocols.process_tomo.generate.generate_process_tomography_fiducial_pairs">
+<code class="sig-prename descclassname">oitg.circuits.protocols.process_tomo.generate.</code><code class="sig-name descname">generate_process_tomography_fiducial_pairs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_qubits</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Tuple<span class="p">[</span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">, </span>Tuple<span class="p">[</span><a class="reference internal" href="#oitg.circuits.gate.Gate" title="oitg.circuits.gate.Gate">oitg.circuits.gate.Gate</a><span class="p">, </span><span class="p">…</span><span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/oitg/circuits/protocols/process_tomo/generate.html#generate_process_tomography_fiducial_pairs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.process_tomo.generate.generate_process_tomography_fiducial_pairs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of tuples of gate sequences implementing the preparation and
+measurement for process tomography.</p>
 <p>For state preparation, all six Pauli eigenstates are created (i.e. ±x, ±y, ±z). Even
 though this yields an over-complete set of input states (<span class="math notranslate nohighlight">\(6^n\)</span> instead of the
 <span class="math notranslate nohighlight">\(4^n\)</span> required ones), this is a small price to pay for the resulting
@@ -888,10 +922,7 @@ the number of sequences, so we can always just take fewer shots per sequence to
 compensate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> – The gate sequence to perform tomography on.</p></li>
-<li><p><strong>num_qubits</strong> – The number of qubits making up the Hilbert space of interest.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>num_qubits</strong> – The number of qubits making up the Hilbert space of interest.</p>
 </dd>
 </dl>
 </dd></dl>

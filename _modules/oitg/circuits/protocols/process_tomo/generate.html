@@ -159,7 +159,7 @@
             
   <h1>Source code for oitg.circuits.protocols.process_tomo.generate</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">...gate</span> <span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="n">remap_operands</span>
 
@@ -172,6 +172,35 @@
 <span class="sd">    The system is prepared in a tensor product of single-qubit Pauli-operator</span>
 <span class="sd">    eigenstates before applying the target sequence and measuring the expectation value</span>
 <span class="sd">    of a tensor product of Pauli operators.</span>
+<span class="sd">    See ``generate_process_tomography_fiducial_pairs()``.</span>
+
+<span class="sd">    :param target: The gate sequence to perform tomography on.</span>
+<span class="sd">    :param num_qubits: The number of qubits making up the Hilbert space of interest.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fiducial_pairs</span> <span class="o">=</span> <span class="n">generate_process_tomography_fiducial_pairs</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrap_target_in_process_tomography_fiducials</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">fiducial_pairs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wrap_target_in_process_tomography_fiducials"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.generate.wrap_target_in_process_tomography_fiducials">[docs]</a><span class="k">def</span> <span class="nf">wrap_target_in_process_tomography_fiducials</span><span class="p">(</span>
+        <span class="n">target</span><span class="p">:</span> <span class="n">GateSequence</span><span class="p">,</span>
+        <span class="n">fiducial_pairs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of gate sequences to perform process tomography on the given target</span>
+<span class="sd">    sequence.</span>
+
+<span class="sd">    The system is prepared in a tensor product of single-qubit Pauli-operator</span>
+<span class="sd">    eigenstates before applying the target sequence and measuring the expectation value</span>
+<span class="sd">    of a tensor product of Pauli operators.</span>
+
+<span class="sd">    :param target: The gate sequence to perform tomography on.</span>
+<span class="sd">    :param fiducial_pairs: See ``generate_process_tomography_fiducial_pairs()``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">measure</span><span class="p">))</span> <span class="k">for</span> <span class="n">prep</span><span class="p">,</span> <span class="n">measure</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="generate_process_tomography_fiducial_pairs"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.generate.generate_process_tomography_fiducial_pairs">[docs]</a><span class="k">def</span> <span class="nf">generate_process_tomography_fiducial_pairs</span><span class="p">(</span>
+        <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of tuples of gate sequences implementing the preparation and</span>
+<span class="sd">    measurement for process tomography.</span>
 
 <span class="sd">    For state preparation, all six Pauli eigenstates are created (i.e. ±x, ±y, ±z). Even</span>
 <span class="sd">    though this yields an over-complete set of input states (:math:`6^n` instead of the</span>
@@ -180,10 +209,8 @@
 <span class="sd">    the number of sequences, so we can always just take fewer shots per sequence to</span>
 <span class="sd">    compensate.</span>
 
-<span class="sd">    :param target: The gate sequence to perform tomography on.</span>
 <span class="sd">    :param num_qubits: The number of qubits making up the Hilbert space of interest.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">fiducials</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)),</span> <span class="p">),</span>  <span class="c1"># +x</span>
         <span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)),</span> <span class="p">),</span>  <span class="c1"># +y</span>
@@ -193,7 +220,7 @@
         <span class="p">(</span><span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">)),</span> <span class="p">),</span>  <span class="c1"># -z</span>
     <span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">product_fiducials</span><span class="p">(</span><span class="nb">locals</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fiducial_pairs</span><span class="p">(</span><span class="nb">locals</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="nb">tuple</span><span class="p">(</span>
                 <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
@@ -201,11 +228,8 @@
             <span class="k">for</span> <span class="n">seqs</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">locals</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">num_qubits</span><span class="p">)</span>
         <span class="p">]</span>
 
-    <span class="k">return</span> <span class="p">[</span>
-        <span class="nb">tuple</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">measure</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">product_fiducials</span><span class="p">(</span><span class="n">fiducials</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">measure</span> <span class="ow">in</span> <span class="n">product_fiducials</span><span class="p">(</span><span class="n">fiducials</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
-    <span class="p">]</span></div>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">prep</span><span class="p">,</span> <span class="n">measure</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">(</span><span class="n">fiducials</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">measure</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">(</span><span class="n">fiducials</span><span class="p">[:</span><span class="mi">3</span><span class="p">])]</span></div>
 </pre></div>
 
            </div>

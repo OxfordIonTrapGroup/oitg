@@ -399,7 +399,7 @@
 <span class="sd">        see :func:`invert_choi_predictor`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">predictor</span> <span class="o">=</span> <span class="n">build_choi_predictor</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">,</span> <span class="n">meas_operators</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">invert_choi_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">outcomes</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">invert_choi_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">observations</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="negative_log_likelihood"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood">[docs]</a><span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
