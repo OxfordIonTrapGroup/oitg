@@ -48,6 +48,11 @@ def load_hdf5_file(filename: str) -> Dict[str, Any]:
         for k in f["datasets"]:
             ds[k] = f["datasets"][k][()]
 
+        ar = {}
+        r["archive"] = ar
+        for k in f["archive"]:
+            ar[k] = f["archive"][k][()]
+
         return r
 
 
