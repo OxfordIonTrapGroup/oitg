@@ -3,6 +3,7 @@ from datetime import date
 from glob import glob
 import h5py
 import json
+import shutil
 import os
 import re
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
@@ -61,25 +62,46 @@ def load_result(day: Union[None, str, List[str]] = None,
                 rid: Union[None, int, List[int]] = None,
                 class_name: Union[None, str, List[str]] = None,
                 experiment: Optional[str] = None,
-                root_path: Optional[str] = None) -> Dict[str, Any]:
+                root_path: Optional[str] = None,
+                local_path: Optional[str] = None) -> Dict[str, Any]:
     """Find and load an HDF5 results file from an ARTIQ master results directory.
 
     The results file is described by a rid and a day (provided date string, defaults to
     today). See :func:`find_results` for a full description of the arguments.
 
+    :param local_path: If specified, searches first in this directory before falling
+        back to ``root_path``, and copying the files from there.
+        This automatically creates a copy of the accessed files in ``local_path``.
+        If ``local_path`` is on the local drive, using this will speed up future calls
+        to ``load_result`` as it circumvents the shared drive, which does not even have to
+        be mounted then.
+
     :return: A dictionary containing the contents of the file; see
         :func:`load_hdf5_file`.
     """
-    rs = find_results(day=day,
-                      rid=rid,
-                      hour=hour,
-                      class_name=class_name,
-                      experiment=experiment,
-                      root_path=root_path)
-    if len(rs) == 0:
-        raise IOError("No results file found")
-    if len(rs) > 1:
-        raise IOError("More than one matching results file found")
+    def _find_results(path):
+        rs = find_results(day, hour, rid, class_name, experiment, path)
+        if len(rs) == 0:
+            raise IOError("No results file found")
+        if len(rs) > 1:
+            raise IOError("More than one matching results file found")
+        return rs
+
+    if local_path is None:
+        rs = _find_results(root_path)
+    else:
+        # Try to locate the file in ``local_path``.
+        try:
+            rs = _find_results(local_path)
+        except IOError:
+            # If the file cannot be found, fall back to ``root_path`` and copy
+            # it for future use.
+            rs = _find_results(root_path)
+            og_file_path = next(iter(rs.values())).path
+            relpath = os.path.relpath(og_file_path, start=root_path)
+            local_file_path = os.path.join(local_path, relpath)
+            os.makedirs(os.path.dirname(local_file_path), exist_ok=True)
+            shutil.copy2(og_file_path, local_file_path)
 
     try:
         return load_hdf5_file(next(iter(rs.values())).path)
