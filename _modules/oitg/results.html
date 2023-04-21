@@ -163,6 +163,7 @@
 <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
 <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
@@ -221,25 +222,46 @@
                 <span class="n">rid</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">class_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">experiment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="n">root_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+                <span class="n">root_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">local_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Find and load an HDF5 results file from an ARTIQ master results directory.</span>
 
 <span class="sd">    The results file is described by a rid and a day (provided date string, defaults to</span>
 <span class="sd">    today). See :func:`find_results` for a full description of the arguments.</span>
 
+<span class="sd">    :param local_path: If specified, searches first in this directory before falling</span>
+<span class="sd">        back to ``root_path``, and copying the files from there.</span>
+<span class="sd">        This automatically creates a copy of the accessed files in ``local_path``.</span>
+<span class="sd">        If ``local_path`` is on the local drive, using this will speed up future calls</span>
+<span class="sd">        to ``load_result`` as it circumvents the shared drive, which does not even have</span>
+<span class="sd">        to be mounted then.</span>
+
 <span class="sd">    :return: A dictionary containing the contents of the file; see</span>
 <span class="sd">        :func:`load_hdf5_file`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rs</span> <span class="o">=</span> <span class="n">find_results</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">,</span>
-                      <span class="n">rid</span><span class="o">=</span><span class="n">rid</span><span class="p">,</span>
-                      <span class="n">hour</span><span class="o">=</span><span class="n">hour</span><span class="p">,</span>
-                      <span class="n">class_name</span><span class="o">=</span><span class="n">class_name</span><span class="p">,</span>
-                      <span class="n">experiment</span><span class="o">=</span><span class="n">experiment</span><span class="p">,</span>
-                      <span class="n">root_path</span><span class="o">=</span><span class="n">root_path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;No results file found&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;More than one matching results file found&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_find_results</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">find_results</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;No results file found&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;More than one matching results file found&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rs</span>
+
+    <span class="k">if</span> <span class="n">local_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">_find_results</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Try to locate the file in ``local_path``.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">_find_results</span><span class="p">(</span><span class="n">local_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="c1"># If the file cannot be found, fall back to ``root_path`` and copy</span>
+            <span class="c1"># it for future use.</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">_find_results</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span>
+            <span class="n">og_file_path</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">path</span>
+            <span class="n">relpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">og_file_path</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">root_path</span><span class="p">)</span>
+            <span class="n">local_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">local_path</span><span class="p">,</span> <span class="n">relpath</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">local_file_path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">og_file_path</span><span class="p">,</span> <span class="n">local_file_path</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">load_hdf5_file</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">rs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>

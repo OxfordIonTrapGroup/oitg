@@ -1401,6 +1401,26 @@ as returned by <code class="xref py py-meth docutils literal notranslate"><span 
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="oitg.circuits.protocols.rpe.analyse.estimate_phase">
+<code class="sig-prename descclassname">oitg.circuits.protocols.rpe.analyse.</code><code class="sig-name descname">estimate_phase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pauli_xy_estimates</span><span class="p">:</span> <span class="n">Iterable<span class="p">[</span>Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/oitg/circuits/protocols/rpe/analyse.html#estimate_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.circuits.protocols.rpe.analyse.estimate_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain Robust Phase Estimation gate rotation angle estimate from Pauli
+expectation values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pauli_xy_estimates</strong> – For each of the exponentially lengthening sequence of
+gates (2^k, k=0, …, n), the projection onto the initial state on the Bloch
+sphere (cosine in total angle), and that on the state rotated by -π / 2 (sine in
+total angle). Assuming we start in the <a href="#id20"><span class="problematic" id="id21">|</span></a>+&gt; eigenstate and the gate applied is a
+Z rotation, the first element would be the Pauli X expectation value, the second
+the Pauli Y expectation value.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The gate angle estimate, in <span class="math notranslate nohighlight">\([0, 2\pi)\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 </div>
