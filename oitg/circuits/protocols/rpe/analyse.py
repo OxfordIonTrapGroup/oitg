@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Dict
+from typing import Dict, Iterable, Tuple
 from ...gate import GateSequence
 
 
@@ -40,22 +40,39 @@ def analyse(outcomes: Dict[GateSequence, np.ndarray]) -> float:
 
     max_power_of_two = np.log2(max_repeats).astype(np.int64)
 
-    estimate = 0.0
+    pauli_xy_estimates = []
     for i in range(max_power_of_two + 1):
         current_len = 2**i
-
         cos_outcomes = outcomes[target_seq * current_len]
-        xhat = cos_outcomes[0] / sum(cos_outcomes) - 1 / 2
-
         sin_outcomes = outcomes[target_seq * current_len + pi_2_seq]
-        yhat = sin_outcomes[0] / sum(sin_outcomes) - 1 / 2
+        pauli_xy_estimates.append(((2 * cos_outcomes[0] / sum(cos_outcomes) - 1),
+                                   -(2 * sin_outcomes[0] / sum(sin_outcomes) - 1)))
+    return estimate_phase(pauli_xy_estimates)
 
-        next_estimate = -np.arctan2(yhat, xhat) / current_len
+
+def estimate_phase(pauli_xy_estimates: Iterable[Tuple[float, float]]) -> float:
+    r"""Obtain Robust Phase Estimation gate rotation angle estimate from Pauli
+    expectation values.
+
+    :param pauli_xy_estimates: For each of the exponentially lengthening sequence of
+        gates (2^k, k=0, ..., n), the projection onto the initial state on the Bloch
+        sphere (cosine in total angle), and that on the state rotated by -π / 2 (sine in
+        total angle). Assuming we start in the |+> eigenstate and the gate applied is a
+        Z rotation, the first element would be the Pauli X expectation value, the second
+        the Pauli Y expectation value.
+
+    :return: The gate angle estimate, in :math:`[0, 2\pi)`.
+    """
+    estimate = 0.0
+    for i, (xhat, yhat) in enumerate(pauli_xy_estimates):
+        current_len = 2**i
+        next_estimate = np.arctan2(yhat, xhat) / current_len
 
         # Shift estimated angle into permissible region.
-        while next_estimate < estimate - np.pi / current_len:
-            next_estimate += 2 * np.pi / current_len
-        while next_estimate > estimate + np.pi / current_len:
-            next_estimate -= 2 * np.pi / current_len
+        allowed_shift = np.pi / current_len
+        while next_estimate < estimate - allowed_shift:
+            next_estimate += 2 * allowed_shift
+        while next_estimate > estimate + allowed_shift:
+            next_estimate -= 2 * allowed_shift
         estimate = next_estimate
     return estimate % (2 * np.pi)
