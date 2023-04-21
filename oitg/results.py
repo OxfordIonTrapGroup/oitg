@@ -73,8 +73,8 @@ def load_result(day: Union[None, str, List[str]] = None,
         back to ``root_path``, and copying the files from there.
         This automatically creates a copy of the accessed files in ``local_path``.
         If ``local_path`` is on the local drive, using this will speed up future calls
-        to ``load_result`` as it circumvents the shared drive, which does not even have to
-        be mounted then.
+        to ``load_result`` as it circumvents the shared drive, which does not even have
+        to be mounted then.
 
     :return: A dictionary containing the contents of the file; see
         :func:`load_hdf5_file`.
