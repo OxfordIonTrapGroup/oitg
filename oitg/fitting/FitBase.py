@@ -1,7 +1,7 @@
 
 
 import numpy as np
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, minimize
 
 
 class FitError(Exception):
@@ -143,7 +143,8 @@ class FitBase:
             calculate_residuals=False,
             evaluate_function=False,
             evaluate_x_limit=[None, None],
-            evaluate_n=1000):
+            evaluate_n=1000,
+            method="lsq"):
         """Perform a fit of this object's function to the given data.
 
         - x and y are the arrays of data to fit to.
@@ -246,11 +247,9 @@ class FitBase:
         # Execute the fitting algorithm
         # If an exception occurs, raise it as a FitError
         try:
-            p_list, p_list_covariance = curve_fit(
-                LocalFitFunction, x, y, p_init_list,
-                sigma=y_err, absolute_sigma=True,
-                bounds=(lower_bounds, upper_bounds),
-                x_scale=p_scale_list, method='trf')
+            fitter = getattr(self, method)
+            p_list, p_list_covariance = fitter(LocalFitFunction, x, y, y_err, p_init_list,
+                            lower_bounds, upper_bounds, p_scale_list)
         except Exception as e:
             raise FitError(e)
 
@@ -314,3 +313,29 @@ class FitBase:
             return p_dict, p_error_dict, residuals, x_fit, y_fit
         else:
             return p_dict, p_error_dict, x_fit, y_fit
+
+    def lsq(self, model_fn, x, y, y_err, init, lower, upper, scale):
+        return curve_fit(model_fn, x, y, init, sigma=y_err, absolute_sigma=True,
+            bounds=(lower, upper), x_scale=scale, method='trf')
+
+    def mle_binomial(self, model_fn, x, y, _y_err, init, lower, upper, _scale):
+        HUGE_NUMBER = 100000.
+
+        def _nll(params):
+            nll = 0.0
+            for X, Y in zip(x, y):
+                q = model_fn(X, *params)
+                if q < 0 or q > 1:
+                    return HUGE_NUMBER
+                l = q**Y * (1 - q)**(1 - Y)
+                if l > 0.0:
+                    nll -= np.log(l)
+                else:
+                    return HUGE_NUMBER
+            return nll
+
+        bounds = list(map(tuple, zip(lower, upper)))
+        output = minimize(_nll, init, method='L-BFGS-B', bounds=bounds)
+        popt = output['x']
+        pcov = output["hess_inv"].todense()
+        return popt, pcov
