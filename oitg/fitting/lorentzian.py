@@ -1,4 +1,3 @@
-
 import numpy as np
 from . import FitBase
 
@@ -23,17 +22,18 @@ def parameter_initialiser(x, y, p):
     # Estimate the FWHM
     # In most cases the this initial parameter is a good guess
     # since most data-sets are sampled so that this is the case
-    p['fwhm'] = (1/5)*(np.max(x)-np.min(x))
+    p['fwhm'] = (1 / 5) * (np.max(x) - np.min(x))
 
 
 def fitting_function(x, p):
 
-    y = p['a']*(0.5*p['fwhm'])**2
-    y /= (x-p['x0'])**2 + (0.5*p['fwhm'])**2
+    y = p['a'] * (0.5 * p['fwhm'])**2
+    y /= (x - p['x0'])**2 + (0.5 * p['fwhm'])**2
     y += p['y0']
 
     return y
 
 
-lorentzian = FitBase.FitBase(['x0', 'y0', 'a', 'fwhm'], fitting_function,
-                       parameter_initialiser=parameter_initialiser)
+lorentzian = FitBase.FitBase(['x0', 'y0', 'a', 'fwhm'],
+                             fitting_function,
+                             parameter_initialiser=parameter_initialiser)

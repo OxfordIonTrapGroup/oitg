@@ -56,8 +56,7 @@ def sim_rabi(t_vec, omega_vec, delta, n_bar):
     omega_eff = np.sqrt(delta * delta + omega_vec * omega_vec)[np.newaxis, :]
     # transition fraction of each transition
     pop_vec = np.where(omega_eff != 0,
-                       (omega_vec / omega_eff * np.sin(omega_eff / 2 * t))**2,
-                       0)
+                       (omega_vec / omega_eff * np.sin(omega_eff / 2 * t))**2, 0)
     # weight according to thermal dist (derive through partition function)
     weights = (n_bar / (n_bar + 1))**(np.arange(len(omega_vec))) / (n_bar + 1)
     weights = weights / sum(weights)  # re-normalise due to truncation
@@ -113,8 +112,13 @@ def mk_const_param(dn=0, eta=0.248309):
 # pre-configured fitting object (specify constant params in fit call)
 dipole_bsb_car_rsb_fit = FitBase(
     ['omega_factor_vec', 'net_det', 'omega', 'n_bar'],
-    fitting_function, parameter_initialiser,
-    parameter_bounds={'eta': (0, np.inf), 'n_bar': (0, np.inf)})
+    fitting_function,
+    parameter_initialiser,
+    parameter_bounds={
+        'eta': (0, np.inf),
+        'n_bar': (0, np.inf)
+    },
+)
 
 if __name__ == "__main__":  # example & debug code
     from oitg.uncertainty_to_string import uncertainty_to_string
@@ -126,22 +130,23 @@ if __name__ == "__main__":  # example & debug code
     t = 2 * np.pi / omega_eff * np.linspace(0, 2.5, 500)
 
     # simulate data for fitting
-    omega_eff_vec = mk_omega_vec(nmax, delta_n=delta_n,
-                                 omega0=omega_eff, eta=eta)
+    omega_eff_vec = mk_omega_vec(nmax, delta_n=delta_n, omega0=omega_eff, eta=eta)
     y = sim_rabi(t, omega_eff_vec, net_det, n_bar) \
         + np.random.random(t.shape) * 0.05
 
     plt.figure()
     plt.plot(t * omega_eff / (2 * np.pi), y)
     plt.ylim([0, 1])
-    plt.xlim([min(t * omega_eff / (2 * np.pi)),
-              max(t * omega_eff / (2 * np.pi))])
+    plt.xlim([min(t * omega_eff / (2 * np.pi)), max(t * omega_eff / (2 * np.pi))])
     plt.ylabel("population")
     plt.xlabel("time*omega_eff/2pi")
 
     # fit to data
-    p_fit, p_err, fit_x, fit_y = dipole_bsb_car_rsb_fit.fit(
-        t, y, constants=mk_const_param(delta_n, eta), evaluate_function=True)
+    p_fit, p_err, fit_x, fit_y = dipole_bsb_car_rsb_fit.fit(t,
+                                                            y,
+                                                            constants=mk_const_param(
+                                                                delta_n, eta),
+                                                            evaluate_function=True)
 
     plt.plot(fit_x * omega_eff / (2 * np.pi), fit_y)
     plt.show()
@@ -153,6 +158,7 @@ if __name__ == "__main__":  # example & debug code
         f = np.linspace(1e-1, 5, 10000)
         plt.plot(f, lombscargle(t, y, f, precenter=True))
         from numpy.fft import rfftfreq, rfft
-        plt.plot(rfftfreq(len(t), t[1] - t[0]) * 2 * np.pi,
-                 np.abs(rfft(y - np.mean(y), norm="ortho")))
+        plt.plot(
+            rfftfreq(len(t), t[1] - t[0]) * 2 * np.pi,
+            np.abs(rfft(y - np.mean(y), norm="ortho")))
         plt.show()

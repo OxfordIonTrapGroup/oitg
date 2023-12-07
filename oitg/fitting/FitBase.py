@@ -1,5 +1,3 @@
-
-
 import numpy as np
 from scipy.optimize import curve_fit, minimize
 
@@ -10,8 +8,7 @@ class FitError(Exception):
 
 class FitParameters:
     """An object used to pass parameters to the fit function"""
-    def __init__(self, names=[], constant_parameters=[],
-                 initialised_parameters=[]):
+    def __init__(self, names=[], constant_parameters=[], initialised_parameters=[]):
         """Initialises a parameter object.
 
          - names: a sequence of all parameter names used
@@ -97,8 +94,8 @@ class FitParameters:
 
 class FitBase:
     """An object associated with a fitting function."""
-
-    def __init__(self, parameter_names,
+    def __init__(self,
+                 parameter_names,
                  fitting_function,
                  parameter_initialiser=None,
                  derived_parameter_function=None,
@@ -137,9 +134,14 @@ class FitBase:
         self.derived_parameter_function = derived_parameter_function
         self.parameter_bounds = parameter_bounds
 
-    def fit(self, x, y, y_err=None,
-            x_limit=[-np.inf, np.inf], y_limit=[-np.inf, np.inf],
-            constants={}, initialise={},
+    def fit(self,
+            x,
+            y,
+            y_err=None,
+            x_limit=[-np.inf, np.inf],
+            y_limit=[-np.inf, np.inf],
+            constants={},
+            initialise={},
             calculate_residuals=False,
             evaluate_function=False,
             evaluate_x_limit=[None, None],
@@ -248,8 +250,9 @@ class FitBase:
         # If an exception occurs, raise it as a FitError
         try:
             fitter = getattr(self, method)
-            p_list, p_list_covariance = fitter(LocalFitFunction, x, y, y_err, p_init_list,
-                            lower_bounds, upper_bounds, p_scale_list)
+            p_list, p_list_covariance = fitter(LocalFitFunction, x, y, y_err,
+                                               p_init_list, lower_bounds, upper_bounds,
+                                               p_scale_list)
         except Exception as e:
             raise FitError(e)
 
@@ -315,8 +318,15 @@ class FitBase:
             return p_dict, p_error_dict, x_fit, y_fit
 
     def lsq(self, model_fn, x, y, y_err, init, lower, upper, scale):
-        return curve_fit(model_fn, x, y, init, sigma=y_err, absolute_sigma=True,
-            bounds=(lower, upper), x_scale=scale, method='trf')
+        return curve_fit(model_fn,
+                         x,
+                         y,
+                         init,
+                         sigma=y_err,
+                         absolute_sigma=True,
+                         bounds=(lower, upper),
+                         x_scale=scale,
+                         method='trf')
 
     def mle_binomial(self, model_fn, x, y, _y_err, init, lower, upper, _scale):
         HUGE_NUMBER = 100000.
@@ -327,9 +337,9 @@ class FitBase:
                 q = model_fn(X, *params)
                 if q < 0 or q > 1:
                     return HUGE_NUMBER
-                l = q**Y * (1 - q)**(1 - Y)
-                if l > 0.0:
-                    nll -= np.log(l)
+                likeli = q**Y * (1 - q)**(1 - Y)
+                if likeli > 0.0:
+                    nll -= np.log(likeli)
                 else:
                     return HUGE_NUMBER
             return nll

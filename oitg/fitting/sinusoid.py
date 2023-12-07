@@ -114,12 +114,13 @@ sinusoid = FitBase(
     fitting_function=fitting_function,
     parameter_initialiser=parameter_initialiser,
     derived_parameter_function=derived_params,
-    parameter_bounds={"omega": (0, np.inf),
-                      "t_dead": (0, np.inf),
-                      "a": (0, np.inf),
-                      "c": (-np.inf, np.inf),
-                      "phi": (-np.inf, np.inf),  # allows fit to wrap phase
-                      })
+    parameter_bounds={
+        "omega": (0, np.inf),
+        "t_dead": (0, np.inf),
+        "a": (0, np.inf),
+        "c": (-np.inf, np.inf),
+        "phi": (-np.inf, np.inf),  # allows fit to wrap phase
+    })
 
 if __name__ == "__main__":
     # example and debugging
@@ -141,11 +142,13 @@ if __name__ == "__main__":
         # 'phi': phi,
         # 'c': offset
     }
-    p, p_err, x_fit, y_fit = sinusoid.fit(
-        t, y,
-        y_err=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
-        evaluate_function=True, evaluate_x_limit=[0, t_max],
-        constants=const_dict)
+    p, p_err, x_fit, y_fit = sinusoid.fit(t,
+                                          y,
+                                          y_err=np.ones(y.shape) *
+                                          np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
+                                          evaluate_function=True,
+                                          evaluate_x_limit=[0, t_max],
+                                          constants=const_dict)
 
     print("done")
     if True:
@@ -158,9 +161,9 @@ if __name__ == "__main__":
         y = y[mask]
 
         plt.figure()
-        plt.errorbar(t, y,
-                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4)
-                     * amp * rel_noise,
+        plt.errorbar(t,
+                     y,
+                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
                      ecolor='k',
                      label="input")
         plt.plot(x_fit, y_fit, color="y", label="fit")

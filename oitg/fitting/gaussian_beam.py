@@ -1,4 +1,3 @@
-
 import numpy as np
 from . import FitBase
 
@@ -23,18 +22,17 @@ def parameter_initialiser(x, y, p):
     # Estimate the sigma
     # In most cases the this initial parameter is a good guess
     # since most data-sets are sampled so that this is the case
-    p['w0'] = (1/5)*(np.max(x)-np.min(x))
+    p['w0'] = (1 / 5) * (np.max(x) - np.min(x))
 
 
 def fitting_function(x, p):
 
-    y = p['a']*np.exp(-2*((x-p['x0'])/p['w0'])**2)
+    y = p['a'] * np.exp(-2 * ((x - p['x0']) / p['w0'])**2)
     y += p['y0']
 
     return y
 
 
-
-
-gaussian_beam = FitBase.FitBase(['x0', 'y0', 'a', 'w0'], fitting_function,
-                parameter_initialiser=parameter_initialiser)
+gaussian_beam = FitBase.FitBase(['x0', 'y0', 'a', 'w0'],
+                                fitting_function,
+                                parameter_initialiser=parameter_initialiser)
