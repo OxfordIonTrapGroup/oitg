@@ -19,7 +19,7 @@ nuclear_spin = 7 / 2
 
 # g-factors taken from Tom's thesis
 g_j = 2.00225664
-g_i = - 1.315348 * 2 / 7
+g_i = -1.315348 * 2 / 7
 
 # Magnetic field strength of 146G clock qubit
 b0 = 146.0942e-4
@@ -36,22 +36,18 @@ def _breit_rabi(b, m_f, f_sign):
     From Woodgate, p.193
     sign = +1 for F=4, sign = -1 for F=3
     """
-    frequency_shift = (
-        - units.h * hyperfine_splitting / (2 * (2 * nuclear_spin + 1)) -
-        b * g_i * units.mu_N * m_f +
-        ((f_sign * units.h * hyperfine_splitting / 2) *
-            math.sqrt(
-                1 + 2 * m_f * (b * mu) /
-                (nuclear_spin + (1 / 2)) +
-                (b * mu)**2)))
+    frequency_shift = (-units.h * hyperfine_splitting / (2 * (2 * nuclear_spin + 1)) -
+                       b * g_i * units.mu_N * m_f +
+                       ((f_sign * units.h * hyperfine_splitting / 2) *
+                        math.sqrt(1 + 2 * m_f * (b * mu) / (nuclear_spin + (1 / 2)) +
+                                  (b * mu)**2)))
 
     frequency_shift /= units.h
 
     return frequency_shift
 
 
-def transition_frequency(m_f4, m_f3, b=None,
-                         relative=False):
+def transition_frequency(m_f4, m_f3, b=None, relative=False):
     """
     Calculate the transition frequency between two hyperfine states.
 
@@ -83,9 +79,6 @@ def calculate_b_from_frequency(m_f4, m_f3, frequency):
         value -= frequency
         return value
 
-    b = scipy.optimize.fsolve(
-        function_to_minimise,
-        b0,
-        args=(m_f4, m_f3, frequency))
+    b = scipy.optimize.fsolve(function_to_minimise, b0, args=(m_f4, m_f3, frequency))
 
     return b[0]

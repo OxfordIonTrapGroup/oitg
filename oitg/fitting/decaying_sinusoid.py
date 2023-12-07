@@ -20,10 +20,9 @@ def fitting_function(t, p_dict):
                               + p_dict['phi'])
          + p_dict['c_offset']) + p_dict['c_equ']
     # hold constant during dead time
-    return np.where(t > p_dict['t_dead'], y,
-                    p_dict['c_offset'] + p_dict['c_equ'] +
-                    p_dict['a'] * np.sin(p_dict['phi'])
-                    )
+    return np.where(
+        t > p_dict['t_dead'], y,
+        p_dict['c_offset'] + p_dict['c_equ'] + p_dict['a'] * np.sin(p_dict['phi']))
 
 
 def init_all(t, y, p_dict):
@@ -57,8 +56,8 @@ def init_all(t, y, p_dict):
     # Lomb-Scargle does not deal well with exponential decays where c_offset > a
     # if an initial c_equ and decay rate are provided, we can remove the
     # exponential decay for estimating the frequency.
-    if ('c_equ' in p_dict.constant_parameter_names or
-        'c_equ' in p_dict.initialised_parameter_names):
+    if ('c_equ' in p_dict.constant_parameter_names
+            or 'c_equ' in p_dict.initialised_parameter_names):
         temp = (y - p_dict['c_equ']) * np.exp(p_dict['rate'] * t)
         pgram = lombscargle(t, temp, omega_list, precenter=True)
     else:
@@ -107,18 +106,13 @@ def derived_params(p_dict, p_error_dict):
     # replace n*pi with pi/2 + (corrections + pi/2)%pi
     # This gives the pi pulse equivalent time
     p_dict['t_max_transfer'] = (
-        p_dict['t_dead'] +
-        1 / p_dict['omega'] *
+        p_dict['t_dead'] + 1 / p_dict['omega'] *
         (np.pi / 2 +
-         (- p_dict['phi']
-          - np.arcsin(1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2))
-          + np.arcsin(
-              p_dict['c_offset'] * p_dict['rate'] /
-              (p_dict['a'] * p_dict['omega'] *
-               np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
-               ))
-          + np.pi / 2) % np.pi)
-    )
+         (-p_dict['phi'] - np.arcsin(1 / np.sqrt(1 +
+                                                 (p_dict['rate'] / p_dict['omega'])**2))
+          + np.arcsin(p_dict['c_offset'] * p_dict['rate'] /
+                      (p_dict['a'] * p_dict['omega'] * np.sqrt(1 + (
+                          p_dict['rate'] / p_dict['omega'])**2))) + np.pi / 2) % np.pi))
     p_dict['period'] = 2 * np.pi / p_dict['omega']
     p_dict['tau_decay'] = 1 / p_dict['rate']
 
@@ -128,11 +122,12 @@ def derived_params(p_dict, p_error_dict):
     # calculate error for t_max_transfer
     # df = sqrt(sum_i( df/dx_i * dx_i))
     dtdt_dead = 1
-    dtdphi = - 1 / p_dict['omega']
+    dtdphi = -1 / p_dict['omega']
 
     # derivative of arcsin wrt it's argument
     def darcsindx(x):
         return 1 / np.sqrt(1 - x * x)
+
     # common term
     temp0 = 1 / np.sqrt(1 + (p_dict['rate'] / p_dict['omega'])**2)
     # derivative of second arcsin argument wrt c_offset
@@ -142,47 +137,40 @@ def derived_params(p_dict, p_error_dict):
     dtdc_offset = 1 / p_dict['omega'] * temp1 * darcsindx(temp2)
 
     # derivative of second arcsin argument wrt a
-    temp3 = - temp2 / p_dict['a']
+    temp3 = -temp2 / p_dict['a']
     dtda = 1 / p_dict['omega'] * temp3 * darcsindx(temp2)
 
     # 1/omega * derivative of second arcsin argument wrt rate
-    temp4 = p_dict['c_offset'] * temp0 / (
-        p_dict['a'] * (p_dict['omega']**2 + p_dict['rate']**2)
-    )
-    dtdrate = (1 / p_dict['omega'] * p_dict['rate'] / p_dict['omega']**2 *
-               temp0**3 * darcsindx(temp0) + temp4 * darcsindx(temp2)
-               )
+    temp4 = p_dict['c_offset'] * temp0 / (p_dict['a'] *
+                                          (p_dict['omega']**2 + p_dict['rate']**2))
+    dtdrate = (1 / p_dict['omega'] * p_dict['rate'] / p_dict['omega']**2 * temp0**3 *
+               darcsindx(temp0) + temp4 * darcsindx(temp2))
 
     # derivative of first arcsin argument wrt omega
     temp5 = p_dict['rate']**2 * (temp0 / p_dict['omega'])**3
     # derivative of second arcsin argument wrt omega
     temp6 = (p_dict['c_offset'] * p_dict['rate'] * temp0 /
              (p_dict['a'] * p_dict['omega']**2) *
-             ((p_dict['rate'] * temp0 / p_dict['omega'])**2 - 1)
-             )
+             ((p_dict['rate'] * temp0 / p_dict['omega'])**2 - 1))
     dtdomega = 1 / p_dict['omega'] * (-temp5 * darcsindx(temp0) +
                                       temp6 * darcsindx(temp2))
 
     dtdc_equ = 0.0
 
-    covar_mat = np.diag([p_error_dict['t_dead']**2,
-                         p_error_dict['phi']**2,
-                         p_error_dict['c_offset']**2,
-                         p_error_dict['a']**2,
-                         p_error_dict['rate']**2,
-                         p_error_dict['omega']**2,
-                         p_error_dict['c_equ']**2, ])
-    deriv_vect = np.array([dtdt_dead,
-                           dtdphi,
-                           dtdc_offset,
-                           dtda,
-                           dtdrate,
-                           dtdomega,
-                           dtdc_equ])
+    covar_mat = np.diag([
+        p_error_dict['t_dead']**2,
+        p_error_dict['phi']**2,
+        p_error_dict['c_offset']**2,
+        p_error_dict['a']**2,
+        p_error_dict['rate']**2,
+        p_error_dict['omega']**2,
+        p_error_dict['c_equ']**2,
+    ])
+    deriv_vect = np.array(
+        [dtdt_dead, dtdphi, dtdc_offset, dtda, dtdrate, dtdomega, dtdc_equ])
 
     p_error_dict['t_max_transfer'] = np.sqrt(
-        np.einsum('i,ij,j', deriv_vect, covar_mat, deriv_vect)
-    )
+        np.einsum('i,ij,j', deriv_vect, covar_mat, deriv_vect))
     p_error_dict['period'] = p_dict['period'] * \
         (p_error_dict['omega'] / p_dict['omega'])
     p_error_dict['tau_decay'] = p_dict['tau_decay'] * \
@@ -193,17 +181,18 @@ def derived_params(p_dict, p_error_dict):
 
 decaying_sinusoid = FitBase(
     ["omega", "t_dead", "a", "c_offset", "c_equ", "rate", "phi"],
-    fitting_function=fitting_function, parameter_initialiser=init_all,
+    fitting_function=fitting_function,
+    parameter_initialiser=init_all,
     derived_parameter_function=derived_params,
-    parameter_bounds={"omega": (0, np.inf),
-                      "t_dead": (0, np.inf),
-                      "a": (0, np.inf),
-                      "c_offset": (-np.inf, np.inf),
-                      "c_equ": (-np.inf, np.inf),
-                      "rate": (0, np.inf),
-                      "phi": (-np.inf, np.inf),  # allows fit to wrap phase
-                      })
-
+    parameter_bounds={
+        "omega": (0, np.inf),
+        "t_dead": (0, np.inf),
+        "a": (0, np.inf),
+        "c_offset": (-np.inf, np.inf),
+        "c_equ": (-np.inf, np.inf),
+        "rate": (0, np.inf),
+        "phi": (-np.inf, np.inf),  # allows fit to wrap phase
+    })
 
 if __name__ == "__main__":
     # example and debugging
@@ -245,10 +234,12 @@ if __name__ == "__main__":
         # 'rate': rate,
     }
     p, p_err, x_fit, y_fit = decaying_sinusoid.fit(
-        t, y,
+        t,
+        y,
         y_err=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
         initialise=init_dict,
-        evaluate_function=True, evaluate_x_limit=[0, t_end + t_delay],
+        evaluate_function=True,
+        evaluate_x_limit=[0, t_end + t_delay],
         constants=const_dict)
 
     print("done")
@@ -262,9 +253,9 @@ if __name__ == "__main__":
         y = y[mask]
 
         plt.figure()
-        plt.errorbar(t, y,
-                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) *
-                     amp * rel_noise,
+        plt.errorbar(t,
+                     y,
+                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
                      ecolor='k',
                      label="input")
         plt.plot(x_fit, y_fit, color="y", label="fit")

@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.ndimage import measurements
 from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 import math
 
 
@@ -27,7 +28,7 @@ def find_ion_centers(im_line, min_width=2, threshold=None, fit=False):
 
     for i in range(num_features):
         xs = x[np.nonzero(labels == i + 1)]
-        if max(xs)-min(xs) < min_width:
+        if max(xs) - min(xs) < min_width:
             continue
         x_cen = np.mean(xs)
         x_cens.append(x_cen)
@@ -39,19 +40,22 @@ def find_ion_centers(im_line, min_width=2, threshold=None, fit=False):
     N = len(x_cens)
 
     if N == 0:
-        return [], [0]*len(im_line)
+        return [], [0] * len(im_line)
 
     # Fit a Gaussian to each peak
     def fit_func(x, *params):
         y = np.zeros(x.shape)
         for i in range(N):
             x0 = params[i]
-            sigma = params[N+i]
-            amp = params[2*N+i]
-            y += amp * np.exp(-(x-x0)**2/sigma**2/2)
+            sigma = params[N + i]
+            amp = params[2 * N + i]
+            y += amp * np.exp(-(x - x0)**2 / sigma**2 / 2)
         return y
 
-    popt, _ = curve_fit(fit_func, x, im_line, p0=x_cens + [min_width]*N + [np.amax(im_line)]*N)
+    popt, _ = curve_fit(fit_func,
+                        x,
+                        im_line,
+                        p0=x_cens + [min_width] * N + [np.amax(im_line)] * N)
 
     x_cens_fit = popt[:N]
     y_fit = fit_func(x, *popt)

@@ -22,7 +22,6 @@ class GateStringParseError(Exception):
 class GateStringParser:
     """Parses a simple single qubit gate sequence specification in string form
     into an expanded list of gates."""
-
     def __init__(self, default_transition, alternate_transition):
         self.default_transition = default_transition
         self.alternate_transition = alternate_transition
@@ -31,7 +30,6 @@ class GateStringParser:
         gates = []
         self._parse(None, iter(gate_string), False, False, gates)
         return gates
-
 
     def _parse(self, char, it, one_only, in_parens, gates):
         try:

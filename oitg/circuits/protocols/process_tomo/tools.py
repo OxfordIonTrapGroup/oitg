@@ -26,8 +26,8 @@ def vec2mat(vector):
 
 
 def projector(ket):
-    r"""Return the projector :math:`\left|\psi\right>\left<\psi\right|` for the given ket
-    :math:`\left|\psi\right>` as a dense matrix.
+    r"""Return the projector :math:`\left|\psi\right>\left<\psi\right|` for the given
+    ket :math:`\left|\psi\right>` as a dense matrix.
     """
     return np.outer(ket, np.conjugate(ket))
 
