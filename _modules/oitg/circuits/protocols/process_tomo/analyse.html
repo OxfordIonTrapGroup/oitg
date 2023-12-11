@@ -1,91 +1,46 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>oitg.circuits.protocols.process_tomo.analyse &mdash; oitg  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/protocols/process_tomo/analyse.html"/>
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
-        <script src="../../../../../_static/jquery.js"></script>
-        <script src="../../../../../_static/underscore.js"></script>
-        <script src="../../../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
-
-    
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../../../index.html" class="icon icon-home"> oitg
           
-
-          
+          <a href="../../../../../index.html" class="icon icon-home">
+            oitg
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../circuits.html">oitg.circuits API</a></li>
@@ -94,69 +49,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../threshold.html">oitg.threshold API</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../../index.html">oitg</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
-        
-      <li>oitg.circuits.protocols.process_tomo.analyse</li>
-    
-    
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">oitg.circuits.protocols.process_tomo.analyse</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for oitg.circuits.protocols.process_tomo.analyse</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Implements different methods for reconstructing an estimate for a quantum channel</span>
 <span class="sd">(process) from tomography measurements.</span>
@@ -198,10 +114,12 @@
     <span class="k">raise</span> <span class="ne">ValueError</span>
 
 
-<div class="viewcode-block" id="guess_prepare_target_measure_split"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split">[docs]</a><span class="k">def</span> <span class="nf">guess_prepare_target_measure_split</span><span class="p">(</span>
+<div class="viewcode-block" id="guess_prepare_target_measure_split">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split">[docs]</a>
+<span class="k">def</span> <span class="nf">guess_prepare_target_measure_split</span><span class="p">(</span>
     <span class="n">all_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">]]]:</span>
-    <span class="sd">&quot;&quot;&quot;For a given list of gate sequences making up a tomography experiment, guesses</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For a given list of gate sequences making up a tomography experiment, guesses</span>
 <span class="sd">    which is the target sequence to be analysed, and the preparation/measuemrent</span>
 <span class="sd">    fiducial sequences used.</span>
 
@@ -225,10 +143,13 @@
                         <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target_start_idxs</span><span class="p">,</span> <span class="n">all_sequences</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="auto_prepare_data"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data">[docs]</a><span class="k">def</span> <span class="nf">auto_prepare_data</span><span class="p">(</span>
+
+<div class="viewcode-block" id="auto_prepare_data">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data">[docs]</a>
+<span class="k">def</span> <span class="nf">auto_prepare_data</span><span class="p">(</span>
     <span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Given a results dictionary, guess the target and fiducial sequences and extract</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a results dictionary, guess the target and fiducial sequences and extract</span>
 <span class="sd">    the tomography input data.</span>
 
 <span class="sd">    See :func:`prepare_data` for details.</span>
@@ -243,12 +164,15 @@
     <span class="k">return</span> <span class="n">prepare_data</span><span class="p">({</span><span class="n">f</span><span class="p">:</span> <span class="n">outcomes</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fiducial_pairs</span><span class="p">,</span> <span class="n">seqs</span><span class="p">)})</span></div>
 
 
-<div class="viewcode-block" id="prepare_data"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">[docs]</a><span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span>
+
+<div class="viewcode-block" id="prepare_data">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.prepare_data">[docs]</a>
+<span class="k">def</span> <span class="nf">prepare_data</span><span class="p">(</span>
     <span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">initial_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">readout_projectors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a dictionary of observed measurement outcomes indexed by pairs of the</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a dictionary of observed measurement outcomes indexed by pairs of the</span>
 <span class="sd">    state preparation and measurement gate sequences used, compute the prepared/measured</span>
 <span class="sd">    states and respective number of operations.</span>
 
@@ -315,9 +239,12 @@
     <span class="k">return</span> <span class="n">prep_projectors</span><span class="p">,</span> <span class="n">meas_projectors</span><span class="p">,</span> <span class="n">observations</span></div>
 
 
-<div class="viewcode-block" id="build_choi_predictor"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">[docs]</a><span class="k">def</span> <span class="nf">build_choi_predictor</span><span class="p">(</span><span class="n">prep_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+
+<div class="viewcode-block" id="build_choi_predictor">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">[docs]</a>
+<span class="k">def</span> <span class="nf">build_choi_predictor</span><span class="p">(</span><span class="n">prep_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
                          <span class="n">meas_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a list of prepared and measured states as state vectors, return a matrix</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a list of prepared and measured states as state vectors, return a matrix</span>
 <span class="sd">    that predicts observed probabilities when applied to the Choi matrix of a process.</span>
 
 <span class="sd">    In other words, for given prepared states :math:`\rho_i` and measurement operators</span>
@@ -341,9 +268,12 @@
     <span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="invert_choi_predictor"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor">[docs]</a><span class="k">def</span> <span class="nf">invert_choi_predictor</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+
+<div class="viewcode-block" id="invert_choi_predictor">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor">[docs]</a>
+<span class="k">def</span> <span class="nf">invert_choi_predictor</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                           <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Obtain an estimate for the process :math:`\mathcal{E}` by applying the inverse</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Obtain an estimate for the process :math:`\mathcal{E}` by applying the inverse</span>
 <span class="sd">    of the given Choi predictor to a matrix of experimentally measured outcomes.</span>
 
 <span class="sd">    If the set of measurements is over-complete, the least-squares estimate will be</span>
@@ -383,10 +313,13 @@
     <span class="k">return</span> <span class="n">vec2mat</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="o">/</span> <span class="n">pure_state_dimension</span></div>
 
 
-<div class="viewcode-block" id="linear_inversion_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">[docs]</a><span class="k">def</span> <span class="nf">linear_inversion_tomography</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+
+<div class="viewcode-block" id="linear_inversion_tomography">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">[docs]</a>
+<span class="k">def</span> <span class="nf">linear_inversion_tomography</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
                                 <span class="n">meas_operators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
                                 <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Calculate the linear inversion estimate of the quantum process that has produced</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the linear inversion estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations.</span>
 
 <span class="sd">    :param prep_projectors: A list of the states prepared in the tomography experiment.</span>
@@ -402,9 +335,12 @@
     <span class="k">return</span> <span class="n">invert_choi_predictor</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">observations</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="negative_log_likelihood"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood">[docs]</a><span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+
+<div class="viewcode-block" id="negative_log_likelihood">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood">[docs]</a>
+<span class="k">def</span> <span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                             <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Return the negative log-likelihood for the given outcomes to be observed (with</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the negative log-likelihood for the given outcomes to be observed (with</span>
 <span class="sd">    experiments as described by the Choi predictor) as a function of the given</span>
 <span class="sd">    superoperator in Choi representation.</span>
 
@@ -425,10 +361,13 @@
     <span class="k">return</span> <span class="o">-</span><span class="n">observation_vec</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">probability_vec</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="negative_log_likelihood_gradient"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient">[docs]</a><span class="k">def</span> <span class="nf">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+
+<div class="viewcode-block" id="negative_log_likelihood_gradient">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                                      <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                                      <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the derivative of the log-likelihood</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the derivative of the log-likelihood</span>
 <span class="sd">    :math:`\mathcal{L}(C_\mathcal{E})` around the given Choi matrix</span>
 <span class="sd">    :math:`C_\mathcal{E}`.</span>
 
@@ -456,6 +395,7 @@
     <span class="k">return</span> <span class="o">-</span><span class="n">vec2mat</span><span class="p">(</span><span class="n">choi_predictor</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">observation_vec</span> <span class="o">/</span> <span class="n">probability_vec</span><span class="p">))</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_ptrace</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
     <span class="c1"># Calculates partial trace keeping the first of two systems of dimension d. This is</span>
     <span class="c1"># unoptimised, horrible, not to be imitated, etc.</span>
@@ -468,11 +408,13 @@
     <span class="k">return</span> <span class="n">result</span>
 
 
-<div class="viewcode-block" id="diluted_mle_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">[docs]</a><span class="k">def</span> <span class="nf">diluted_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<div class="viewcode-block" id="diluted_mle_tomography">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">[docs]</a>
+<span class="k">def</span> <span class="nf">diluted_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                            <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                            <span class="n">rel_tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
                            <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations using a diluted fixed-point iteration method.</span>
 
 <span class="sd">    By definition, the maximum-likelihood estimate for the superoperator maximises the</span>
@@ -554,8 +496,11 @@
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not converge (iteration limit reached)&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="project_into_cp"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cp">[docs]</a><span class="k">def</span> <span class="nf">project_into_cp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;For the given superoperator (in Choi representation), return the nearest</span>
+
+<div class="viewcode-block" id="project_into_cp">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cp">[docs]</a>
+<span class="k">def</span> <span class="nf">project_into_cp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For the given superoperator (in Choi representation), return the nearest</span>
 <span class="sd">    completely-positive one.</span>
 
 <span class="sd">    See [KBLG18]_ eq. 8.</span>
@@ -565,8 +510,11 @@
     <span class="k">return</span> <span class="n">eigvecs</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)</span> <span class="o">@</span> <span class="n">eigvecs</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span></div>
 
 
-<div class="viewcode-block" id="TPProjector"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector">[docs]</a><span class="k">class</span> <span class="nc">TPProjector</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Projects superoperators into the trace-preserving subspace.</span>
+
+<div class="viewcode-block" id="TPProjector">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector">[docs]</a>
+<span class="k">class</span> <span class="nc">TPProjector</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Projects superoperators into the trace-preserving subspace.</span>
 
 <span class="sd">    (This is a class to allow some ancillary matrices to be re-used across different</span>
 <span class="sd">    :meth:`project` invocations.)</span>
@@ -588,21 +536,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">m</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_id</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">))</span>
 
-<div class="viewcode-block" id="TPProjector.project"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Return the result of orthogonally projecting the given Choi operator into the</span>
+<div class="viewcode-block" id="TPProjector.project">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.TPProjector.project">[docs]</a>
+    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the result of orthogonally projecting the given Choi operator into the</span>
 <span class="sd">        trace-preserving subspace.</span>
 
 <span class="sd">        See [KBLG18]_ eq. 12.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">choi</span> <span class="o">+</span> <span class="n">vec2mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdagger_id</span> <span class="o">-</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span></div></div>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span></div>
+</div>
 
 
-<div class="viewcode-block" id="project_into_cptp"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cptp">[docs]</a><span class="k">def</span> <span class="nf">project_into_cptp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+
+<div class="viewcode-block" id="project_into_cptp">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cptp">[docs]</a>
+<span class="k">def</span> <span class="nf">project_into_cptp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                       <span class="n">tp_projector</span><span class="p">:</span> <span class="n">TPProjector</span><span class="p">,</span>
                       <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
                       <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Project the given Choi matrix onto the closest superoperator that is both</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Project the given Choi matrix onto the closest superoperator that is both</span>
 <span class="sd">    completely positive and trace-preserving.</span>
 
 <span class="sd">    This implements Algorithm 1 from [KBLG18]_.</span>
@@ -638,9 +592,12 @@
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not converge&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pgdb_mle_tomography"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">[docs]</a><span class="k">def</span> <span class="nf">pgdb_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+
+<div class="viewcode-block" id="pgdb_mle_tomography">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">[docs]</a>
+<span class="k">def</span> <span class="nf">pgdb_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                         <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations using a projected gradient descent algorithm with</span>
 <span class="sd">    backtracking, as proposed by [KBLG18]_.</span>
 
@@ -697,49 +654,34 @@
 
     <span class="c1"># Convert back to our usual normalisation convention.</span>
     <span class="k">return</span> <span class="n">choi</span> <span class="o">/</span> <span class="n">pure_state_dimension</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, Ion Trap Quantum Computing group.
-
-    </p>
+    <p>&#169; Copyright 2019, Ion Trap Quantum Computing group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

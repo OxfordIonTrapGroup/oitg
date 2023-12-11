@@ -1,179 +1,99 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>oitg.threshold API &mdash; oitg  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/threshold.html"/>
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="oitg.results API" href="results.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> oitg
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            oitg
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="circuits.html">oitg.circuits API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paths.html">oitg.paths API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="results.html">oitg.results API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.threshold API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.threshold API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.threshold.optimise_readout"><code class="docutils literal notranslate"><span class="pre">optimise_readout()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.threshold.optimise_treshold"><code class="docutils literal notranslate"><span class="pre">optimise_treshold()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.threshold.optimise_t_bin"><code class="docutils literal notranslate"><span class="pre">optimise_t_bin()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.threshold.calc_p_error"><code class="docutils literal notranslate"><span class="pre">calc_p_error()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.threshold.poisson_optimal_thresh_count"><code class="docutils literal notranslate"><span class="pre">poisson_optimal_thresh_count()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">oitg</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>oitg.threshold API</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">oitg.threshold API</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com/OxfordIonTrapGroup/oitg/blob/master/docs/threshold.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-oitg.threshold">
-<span id="oitg-threshold-api"></span><h1>oitg.threshold API<a class="headerlink" href="#module-oitg.threshold" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-oitg.threshold">
+<span id="oitg-threshold-api"></span><h1>oitg.threshold API<a class="headerlink" href="#module-oitg.threshold" title="Link to this heading"></a></h1>
 <dl class="py function">
-<dt id="oitg.threshold.optimise_readout">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">optimise_readout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.8561643835616439</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.optimise_readout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.threshold.optimise_readout">
+<span class="sig-prename descclassname"><span class="pre">oitg.threshold.</span></span><span class="sig-name descname"><span class="pre">optimise_readout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bright_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_to_bright_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8561643835616439</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_bright</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_readout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.threshold.optimise_readout" title="Link to this definition"></a></dt>
 <dd><p>Calculate optimal threshold bin time &amp; threshold count</p>
 <p>The calculation assumes both bright and dark counts are
 Poisson distributed and gives a threshold minimising the error probability</p>
 <p>The calculation accounts for de-shelving during the readout bin time.
 See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
 <li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
@@ -183,20 +103,20 @@ zero. Default of 1/1.168 is the Calcium D5/2 shelf decay rate.</p></li>
 <li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(target_t_bin [s], threshold_count, p_error)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.threshold.optimise_treshold">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">optimise_treshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">t_bin</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_treshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.optimise_treshold" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.threshold.optimise_treshold">
+<span class="sig-prename descclassname"><span class="pre">oitg.threshold.</span></span><span class="sig-name descname"><span class="pre">optimise_treshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bright_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_bin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_to_bright_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_bright</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_treshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.threshold.optimise_treshold" title="Link to this definition"></a></dt>
 <dd><p>Calculate optimal threshold threshold count for a given bin time</p>
 <p>The calculation accounts for de-shelving during the readout bin time.
 See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
 <li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
@@ -204,20 +124,20 @@ See thesis: Alice Burrell, 2010</p>
 <li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(target_t_bin [s], threshold_count, p_error)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.threshold.optimise_t_bin">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">optimise_t_bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">thresh_count</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_t_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.optimise_t_bin" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.threshold.optimise_t_bin">
+<span class="sig-prename descclassname"><span class="pre">oitg.threshold.</span></span><span class="sig-name descname"><span class="pre">optimise_t_bin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bright_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh_count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_to_bright_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_bright</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#optimise_t_bin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.threshold.optimise_t_bin" title="Link to this definition"></a></dt>
 <dd><p>Calculate optimal threshold bin time for a given threshold count</p>
 <p>The calculation accounts for de-shelving during the readout bin time.
 See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
 <li><p><strong>dark_rate</strong> – expected dark count ratein $s^-1$</p></li>
@@ -225,19 +145,19 @@ See thesis: Alice Burrell, 2010</p>
 <li><p><strong>p_bright</strong> – probability of encountering a bright state (default=0.5)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(target_t_bin [s], threshold_count, p_error)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.threshold.calc_p_error">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">calc_p_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bright_rate</span></em>, <em class="sig-param"><span class="n">dark_rate</span></em>, <em class="sig-param"><span class="n">t_bin</span></em>, <em class="sig-param"><span class="n">thresh_count</span></em>, <em class="sig-param"><span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_p_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.calc_p_error" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.threshold.calc_p_error">
+<span class="sig-prename descclassname"><span class="pre">oitg.threshold.</span></span><span class="sig-name descname"><span class="pre">calc_p_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bright_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_bin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh_count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_to_bright_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_bright</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#calc_p_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.threshold.calc_p_error" title="Link to this definition"></a></dt>
 <dd><p>Calculate error probability for Poisson statistics with de-shelving</p>
 <p>See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bright_rate</strong> – expected bright count rate in $s^-1$</p></li>
 <li><p><strong>dark_rate</strong> – expected dark count rate in $s^-1$</p></li>
@@ -252,8 +172,8 @@ See thesis: Alice Burrell, 2010</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.threshold.poisson_optimal_thresh_count">
-<code class="sig-prename descclassname">oitg.threshold.</code><code class="sig-name descname">poisson_optimal_thresh_count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mean_bright</span></em>, <em class="sig-param"><span class="n">mean_dark</span></em>, <em class="sig-param"><span class="n">p_bright</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#poisson_optimal_thresh_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.threshold.poisson_optimal_thresh_count" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.threshold.poisson_optimal_thresh_count">
+<span class="sig-prename descclassname"><span class="pre">oitg.threshold.</span></span><span class="sig-name descname"><span class="pre">poisson_optimal_thresh_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean_bright</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_dark</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_bright</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/oitg/threshold.html#poisson_optimal_thresh_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.threshold.poisson_optimal_thresh_count" title="Link to this definition"></a></dt>
 <dd><p>Optimal threshold rate in the absence of de-shelving</p>
 <p>The calculation assumes both bright and dark counts are Poisson distributed
 and gives a threshold minimising the error probability.</p>
@@ -261,7 +181,7 @@ and gives a threshold minimising the error probability.</p>
 readout bin time. It is therefore not suitable for P(error) &lt; 2e-4.
 See thesis: Alice Burrell, 2010</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mean_bright</strong> – expected counts if the ion started in a bright state</p></li>
 <li><p><strong>mean_dark</strong> – expected counts if the ion started in a dark state</p></li>
@@ -269,59 +189,42 @@ See thesis: Alice Burrell, 2010</p>
 (default=0.5)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>threshold_count</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="results.html" class="btn btn-neutral float-left" title="oitg.results API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, Ion Trap Quantum Computing group.
-
-    </p>
+    <p>&#169; Copyright 2019, Ion Trap Quantum Computing group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

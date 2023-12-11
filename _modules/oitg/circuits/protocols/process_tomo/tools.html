@@ -1,91 +1,46 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>oitg.circuits.protocols.process_tomo.tools &mdash; oitg  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/protocols/process_tomo/tools.html"/>
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
-        <script src="../../../../../_static/jquery.js"></script>
-        <script src="../../../../../_static/underscore.js"></script>
-        <script src="../../../../../_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
-
-    
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../../../index.html" class="icon icon-home"> oitg
           
-
-          
+          <a href="../../../../../index.html" class="icon icon-home">
+            oitg
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../circuits.html">oitg.circuits API</a></li>
@@ -94,77 +49,40 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../threshold.html">oitg.threshold API</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../../index.html">oitg</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
-        
-      <li>oitg.circuits.protocols.process_tomo.tools</li>
-    
-    
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">oitg.circuits.protocols.process_tomo.tools</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for oitg.circuits.protocols.process_tomo.tools</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;A few helpers for manipulating quantum states/channels as NumPy arrays.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="mat2vec"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.mat2vec">[docs]</a><span class="k">def</span> <span class="nf">mat2vec</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Return the given matrix in vector form.</span>
+<div class="viewcode-block" id="mat2vec">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.mat2vec">[docs]</a>
+<span class="k">def</span> <span class="nf">mat2vec</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the given matrix in vector form.</span>
 
 <span class="sd">    As per NumPy shape conventions, this is done by stacking rows one after another. The</span>
 <span class="sd">    convention chosen is irrelevant, though, as long as it is used consistently.</span>
@@ -174,8 +92,11 @@
     <span class="k">return</span> <span class="n">matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vec2mat"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.vec2mat">[docs]</a><span class="k">def</span> <span class="nf">vec2mat</span><span class="p">(</span><span class="n">vector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Transforms a matrix-as-vector back into a matrix.</span>
+
+<div class="viewcode-block" id="vec2mat">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.vec2mat">[docs]</a>
+<span class="k">def</span> <span class="nf">vec2mat</span><span class="p">(</span><span class="n">vector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transforms a matrix-as-vector back into a matrix.</span>
 
 <span class="sd">    See :func:`mat2vec`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -185,11 +106,15 @@
     <span class="k">return</span> <span class="n">vector</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="projector"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.projector">[docs]</a><span class="k">def</span> <span class="nf">projector</span><span class="p">(</span><span class="n">ket</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the projector :math:`\left|\psi\right&gt;\left&lt;\psi\right|` for the given ket</span>
-<span class="sd">    :math:`\left|\psi\right&gt;` as a dense matrix.</span>
+
+<div class="viewcode-block" id="projector">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.projector">[docs]</a>
+<span class="k">def</span> <span class="nf">projector</span><span class="p">(</span><span class="n">ket</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the projector :math:`\left|\psi\right&gt;\left&lt;\psi\right|` for the given</span>
+<span class="sd">    ket :math:`\left|\psi\right&gt;` as a dense matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">ket</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">ket</span><span class="p">))</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_sqrt_dim</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -199,8 +124,10 @@
     <span class="k">return</span> <span class="n">dim</span>
 
 
-<div class="viewcode-block" id="choi2liou"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.choi2liou">[docs]</a><span class="k">def</span> <span class="nf">choi2liou</span><span class="p">(</span><span class="n">choi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a superoperator in Choi representation to Liouville representation.</span>
+<div class="viewcode-block" id="choi2liou">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.choi2liou">[docs]</a>
+<span class="k">def</span> <span class="nf">choi2liou</span><span class="p">(</span><span class="n">choi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a superoperator in Choi representation to Liouville representation.</span>
 
 <span class="sd">    With our normalisation convention, this is *almost* an involution up to the</span>
 <span class="sd">    different normalisation factors.</span>
@@ -212,16 +139,22 @@
         <span class="p">(</span><span class="n">dim</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="liou2choi"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.liou2choi">[docs]</a><span class="k">def</span> <span class="nf">liou2choi</span><span class="p">(</span><span class="n">liou</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert a superoperator in Liouville representation to Choi representation.</span>
+
+<div class="viewcode-block" id="liou2choi">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.liou2choi">[docs]</a>
+<span class="k">def</span> <span class="nf">liou2choi</span><span class="p">(</span><span class="n">liou</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a superoperator in Liouville representation to Choi representation.</span>
 
 <span class="sd">    See :func:`choi2liou`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">choi2liou</span><span class="p">(</span><span class="n">liou</span><span class="p">)</span> <span class="o">/</span> <span class="n">liou</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="avg_gate_fidelity"><a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity">[docs]</a><span class="k">def</span> <span class="nf">avg_gate_fidelity</span><span class="p">(</span><span class="n">liou</span><span class="p">,</span> <span class="n">target_unitary</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the average gate fidelity of the given superoperator to the target</span>
+
+<div class="viewcode-block" id="avg_gate_fidelity">
+<a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity">[docs]</a>
+<span class="k">def</span> <span class="nf">avg_gate_fidelity</span><span class="p">(</span><span class="n">liou</span><span class="p">,</span> <span class="n">target_unitary</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the average gate fidelity of the given superoperator to the target</span>
 <span class="sd">    unitary.</span>
 
 <span class="sd">    :param liou: The superoperator, in Liouville form (i.e</span>
@@ -234,49 +167,34 @@
     <span class="n">dim</span> <span class="o">=</span> <span class="n">_sqrt_dim</span><span class="p">(</span><span class="n">liou</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">liou</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">target_liou</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> <span class="n">dim</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">dim</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
                                                                             <span class="n">dim</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, Ion Trap Quantum Computing group.
-
-    </p>
+    <p>&#169; Copyright 2019, Ion Trap Quantum Computing group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

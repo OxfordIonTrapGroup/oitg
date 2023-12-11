@@ -1,175 +1,94 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>oitg.paths API &mdash; oitg  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
-  
-
-  
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/paths.html"/>
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="oitg.results API" href="results.html" />
     <link rel="prev" title="oitg.circuits API" href="circuits.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> oitg
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            oitg
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="circuits.html">oitg.circuits API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.paths API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.paths API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.paths.shared_area_path"><code class="docutils literal notranslate"><span class="pre">shared_area_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.paths.analysis_root_path"><code class="docutils literal notranslate"><span class="pre">analysis_root_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.paths.todays_analysis_path"><code class="docutils literal notranslate"><span class="pre">todays_analysis_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.paths.artiq_results_path"><code class="docutils literal notranslate"><span class="pre">artiq_results_path()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="results.html">oitg.results API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="threshold.html">oitg.threshold API</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">oitg</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>oitg.paths API</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">oitg.paths API</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com/OxfordIonTrapGroup/oitg/blob/master/docs/paths.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-oitg.paths">
-<span id="oitg-paths-api"></span><h1>oitg.paths API<a class="headerlink" href="#module-oitg.paths" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-oitg.paths">
+<span id="oitg-paths-api"></span><h1>oitg.paths API<a class="headerlink" href="#module-oitg.paths" title="Link to this heading"></a></h1>
 <p>Well-known file system paths within the Oxford Ion Trap Quantum Computing group’s
 computer/network setup.</p>
 <dl class="py function">
-<dt id="oitg.paths.shared_area_path">
-<code class="sig-prename descclassname">oitg.paths.</code><code class="sig-name descname">shared_area_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/paths.html#shared_area_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.paths.shared_area_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.paths.shared_area_path">
+<span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">shared_area_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/oitg/paths.html#shared_area_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.shared_area_path" title="Link to this definition"></a></dt>
 <dd><p>Return the standard path to the shared area on the current platform.</p>
 <p>For Windows, the standard mount point is <code class="docutils literal notranslate"><span class="pre">Z:\</span></code>, and for Unix-like systems
 (Linux/macOS) it is <code class="docutils literal notranslate"><span class="pre">~/steaneShared</span></code>; this can be overwritten using the
@@ -177,12 +96,12 @@ computer/network setup.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.paths.analysis_root_path">
-<code class="sig-prename descclassname">oitg.paths.</code><code class="sig-name descname">analysis_root_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/paths.html#analysis_root_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.paths.analysis_root_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.paths.analysis_root_path">
+<span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">analysis_root_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/oitg/paths.html#analysis_root_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.analysis_root_path" title="Link to this definition"></a></dt>
 <dd><p>Return the path to the given users analysis directory on the shared area
 (<code class="docutils literal notranslate"><span class="pre">&lt;shared_area&gt;/Users/&lt;user&gt;/analysis</span></code>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>user</strong> – The name of the shared-area user directory to target. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
 defaults to the environment variable <code class="docutils literal notranslate"><span class="pre">OITG_USER</span></code>.</p>
 </dd>
@@ -190,15 +109,15 @@ defaults to the environment variable <code class="docutils literal notranslate">
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.paths.todays_analysis_path">
-<code class="sig-prename descclassname">oitg.paths.</code><code class="sig-name descname">todays_analysis_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">day</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">user</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/paths.html#todays_analysis_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.paths.todays_analysis_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.paths.todays_analysis_path">
+<span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">todays_analysis_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/oitg/paths.html#todays_analysis_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.todays_analysis_path" title="Link to this definition"></a></dt>
 <dd><p>Return the path to the analysis directory for the given day, defaulting to today.</p>
 <p>The analysis directory is intended to be used as working space for analysing data
 while it is taken, so that the code can easily be found again later if the data or
 conclusions reached are reexamined.</p>
 <p>If the directory does not exist, it is created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>day</strong> – The date to use, in ISO format (<code class="docutils literal notranslate"><span class="pre">yyyy-mm-dd</span></code>), or <code class="docutils literal notranslate"><span class="pre">None</span></code> for today.</p></li>
 <li><p><strong>user</strong> – The name of the shared-area user directory to target; see
@@ -209,12 +128,12 @@ conclusions reached are reexamined.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="oitg.paths.artiq_results_path">
-<code class="sig-prename descclassname">oitg.paths.</code><code class="sig-name descname">artiq_results_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">experiment</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/oitg/paths.html#artiq_results_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#oitg.paths.artiq_results_path" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="oitg.paths.artiq_results_path">
+<span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">artiq_results_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experiment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/oitg/paths.html#artiq_results_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.artiq_results_path" title="Link to this definition"></a></dt>
 <dd><p>Return the path to an experiment’s ARTIQ results directory.</p>
 <p>The standard results path is <code class="docutils literal notranslate"><span class="pre">&lt;shared_area&gt;/artiqResults/&lt;experiment&gt;</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>experiment</strong> – The name of the experimental setup, as per the corresponding
 subdirectory of the shared area results directory. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the environment
 variable <code class="docutils literal notranslate"><span class="pre">OITG_EXPERIMENT</span></code> is used.</p>
@@ -222,54 +141,37 @@ variable <code class="docutils literal notranslate"><span class="pre">OITG_EXPER
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="results.html" class="btn btn-neutral float-right" title="oitg.results API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="circuits.html" class="btn btn-neutral float-left" title="oitg.circuits API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="results.html" class="btn btn-neutral float-right" title="oitg.results API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2019, Ion Trap Quantum Computing group.
-
-    </p>
+    <p>&#169; Copyright 2019, Ion Trap Quantum Computing group.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
