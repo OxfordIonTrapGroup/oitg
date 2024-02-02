@@ -60,13 +60,13 @@ def generate_process_tomography_fiducial_pairs(
         (Gate("rx", (np.pi, ), (0, )), ),  # -z
     ]
 
-    def fiducial_pairs(locals):
+    def make_combinations(qubit_seqs):
         return [
             tuple(
                 chain.from_iterable(
                     remap_operands(seq, {0: i}) for (i, seq) in enumerate(seqs)))
-            for seqs in product(locals, repeat=num_qubits)
+            for seqs in product(qubit_seqs, repeat=num_qubits)
         ]
 
-    return [(prep, measure[::-1]) for prep in fiducial_pairs(fiducials)
-            for measure in fiducial_pairs(fiducials[:3])]
+    return [(prep, measure[::-1]) for prep in make_combinations(fiducials)
+            for measure in make_combinations(fiducials[:3])]
