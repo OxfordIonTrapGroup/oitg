@@ -371,7 +371,8 @@ def diluted_mle_tomography(choi_predictor: np.ndarray,
             # For large systems, we would probably want to write the multiplications
             # with the inverse in terms of linalg.solve instead, but just calculating
             # the inverse avoids tensor product index gymnastics for now.
-            lambda_inv = np.kron(np.linalg.inv(np.complex128(lambda_)), np.eye(pure_state_dimension))
+            lambda_inv = np.kron(np.linalg.inv(np.complex128(lambda_)),
+                                 np.eye(pure_state_dimension))
 
             new_choi = lambda_inv @ diluted_grad @ choi @ diluted_grad @ lambda_inv
             if negative_log_likelihood(choi_predictor, observation_vec,
