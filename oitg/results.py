@@ -218,7 +218,7 @@ def normalise_experiment_magic(exp):
 
 
 def parse_magic(rid):
-    match = re.match("^([a-zA-Z]+_)?([0-9]{1,9})$", rid)
+    match = re.match("^([a-zA-Z0-9_]+_)?([0-9]{1,9})$", rid)
     if not match:
         return None
     exp, rid = match.groups()
