@@ -9,6 +9,14 @@ A :class:`Gate` is a named tuple
 list of float values parametrising the chosen gate (e.g. rotation angles). ``operands``
 is a list of integer indices denoting the target qubits.
 
+The convention used for the indexing of the ``operand`` parameter is left-to-right
+in a bit-string. In other words, if a register is in state `|00...0>`, applying a
+`π` pulse on `operand = 0` results in the state `|10...0>`. The representation of
+an n-qubit state vector as a `numpy` array follows the convention 
+`[c_{00...0}, c_{00...1}, ..., c_{11...0}, c_{11...1}]`. The effect of the `π` pulse
+above in the 2-qubit case is to transform the array `[1.0, 0.0, 0.0, 0.0]` to 
+`[0.0, 0.0, -1.0j, 0.0]`
+
 This is deliberately just a plain piece of data to make gates directly representable in
 ARTIQ kernels as well (with the tuples expressed as ``TList``\ s). Even apart from that,
 coming up with an extensible design for representing both values and operations isn't
