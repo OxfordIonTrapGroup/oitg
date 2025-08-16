@@ -76,15 +76,15 @@
   <h1>Source code for oitg.circuits.to_matrix</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Tools for converting common gates to unitary matrices.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">.gate</span> <span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">collect_operands</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">collect_operands</span>
 
 <span class="n">PAULI_OPERATORS</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
                    <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]]</span>
 
 
-<span class="k">def</span> <span class="nf">rxy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rxy</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">PAULI_OPERATORS</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">PAULI_OPERATORS</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">amount</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">amount</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span>
@@ -136,7 +136,7 @@
 
 <div class="viewcode-block" id="local_matrix">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.to_matrix.local_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">local_matrix</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">local_matrix</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the unitary matrix that describes ``gate`` on its operands only.</span>
 
 <span class="sd">    The resulting matrix is the same no matter which target qubit(s) the gate operates</span>
@@ -156,13 +156,13 @@
 
 
 
-<span class="k">def</span> <span class="nf">_num_qubits_from_state_dimension</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_num_qubits_from_state_dimension</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">dim</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
 
 
 <div class="viewcode-block" id="single_gate_matrix">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.to_matrix.single_gate_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">single_gate_matrix</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">single_gate_matrix</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the unitary matrix that describes the action of the given gate.</span>
 
 <span class="sd">    :param num_qubits: The number of qubits of the target Hilbert space.</span>
@@ -201,7 +201,7 @@
 
 <div class="viewcode-block" id="gate_sequence_matrix">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.to_matrix.gate_sequence_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">gate_sequence_matrix</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gate_sequence_matrix</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span>
                          <span class="n">num_qubits</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the unitary matrix that describes the action of the given gate sequence.</span>
 
@@ -222,7 +222,7 @@
 
 <div class="viewcode-block" id="apply_gate_sequence">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.to_matrix.apply_gate_sequence">[docs]</a>
-<span class="k">def</span> <span class="nf">apply_gate_sequence</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_gate_sequence</span><span class="p">(</span><span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a gate sequence to the given initial state and return the resulting state</span>
 <span class="sd">    vector.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

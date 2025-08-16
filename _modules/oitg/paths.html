@@ -79,12 +79,12 @@
 <span class="sd">computer/network setup.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 
-<span class="k">def</span> <span class="nf">_get_user</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_user</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OITG_USER&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -93,7 +93,7 @@
 
 <div class="viewcode-block" id="shared_area_path">
 <a class="viewcode-back" href="../../paths.html#oitg.paths.shared_area_path">[docs]</a>
-<span class="k">def</span> <span class="nf">shared_area_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">shared_area_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the standard path to the shared area on the current platform.</span>
 
 <span class="sd">    For Windows, the standard mount point is ``Z:\``, and for Unix-like systems</span>
@@ -116,7 +116,7 @@
 
 <div class="viewcode-block" id="analysis_root_path">
 <a class="viewcode-back" href="../../paths.html#oitg.paths.analysis_root_path">[docs]</a>
-<span class="k">def</span> <span class="nf">analysis_root_path</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">analysis_root_path</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to the given users analysis directory on the shared area</span>
 <span class="sd">    (``&lt;shared_area&gt;/Users/&lt;user&gt;/analysis``).</span>
 
@@ -131,7 +131,7 @@
 
 <div class="viewcode-block" id="todays_analysis_path">
 <a class="viewcode-back" href="../../paths.html#oitg.paths.todays_analysis_path">[docs]</a>
-<span class="k">def</span> <span class="nf">todays_analysis_path</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">todays_analysis_path</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to the analysis directory for the given day, defaulting to today.</span>
 
 <span class="sd">    The analysis directory is intended to be used as working space for analysing data</span>
@@ -160,7 +160,7 @@
 
 <div class="viewcode-block" id="artiq_results_path">
 <a class="viewcode-back" href="../../paths.html#oitg.paths.artiq_results_path">[docs]</a>
-<span class="k">def</span> <span class="nf">artiq_results_path</span><span class="p">(</span><span class="n">experiment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">artiq_results_path</span><span class="p">(</span><span class="n">experiment</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to an experiment&#39;s ARTIQ results directory.</span>
 
 <span class="sd">    The standard results path is ``&lt;shared_area&gt;/artiqResults/&lt;experiment&gt;``.</span>

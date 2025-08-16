@@ -76,12 +76,12 @@
   <h1>Source code for oitg.circuits.protocols.process_tomo.tools</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;A few helpers for manipulating quantum states/channels as NumPy arrays.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
 <div class="viewcode-block" id="mat2vec">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.mat2vec">[docs]</a>
-<span class="k">def</span> <span class="nf">mat2vec</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mat2vec</span><span class="p">(</span><span class="n">matrix</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the given matrix in vector form.</span>
 
 <span class="sd">    As per NumPy shape conventions, this is done by stacking rows one after another. The</span>
@@ -95,7 +95,7 @@
 
 <div class="viewcode-block" id="vec2mat">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.vec2mat">[docs]</a>
-<span class="k">def</span> <span class="nf">vec2mat</span><span class="p">(</span><span class="n">vector</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vec2mat</span><span class="p">(</span><span class="n">vector</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Transforms a matrix-as-vector back into a matrix.</span>
 
 <span class="sd">    See :func:`mat2vec`.</span>
@@ -109,7 +109,7 @@
 
 <div class="viewcode-block" id="projector">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.projector">[docs]</a>
-<span class="k">def</span> <span class="nf">projector</span><span class="p">(</span><span class="n">ket</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">projector</span><span class="p">(</span><span class="n">ket</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Return the projector :math:`\left|\psi\right&gt;\left&lt;\psi\right|` for the given</span>
 <span class="sd">    ket :math:`\left|\psi\right&gt;` as a dense matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -117,7 +117,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_sqrt_dim</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sqrt_dim</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
     <span class="n">float_dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">float_dim</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">dim</span> <span class="o">==</span> <span class="n">float_dim</span>
@@ -126,7 +126,7 @@
 
 <div class="viewcode-block" id="choi2liou">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.choi2liou">[docs]</a>
-<span class="k">def</span> <span class="nf">choi2liou</span><span class="p">(</span><span class="n">choi</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">choi2liou</span><span class="p">(</span><span class="n">choi</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a superoperator in Choi representation to Liouville representation.</span>
 
 <span class="sd">    With our normalisation convention, this is *almost* an involution up to the</span>
@@ -142,7 +142,7 @@
 
 <div class="viewcode-block" id="liou2choi">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.liou2choi">[docs]</a>
-<span class="k">def</span> <span class="nf">liou2choi</span><span class="p">(</span><span class="n">liou</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">liou2choi</span><span class="p">(</span><span class="n">liou</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a superoperator in Liouville representation to Choi representation.</span>
 
 <span class="sd">    See :func:`choi2liou`.</span>
@@ -153,7 +153,7 @@
 
 <div class="viewcode-block" id="avg_gate_fidelity">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.tools.avg_gate_fidelity">[docs]</a>
-<span class="k">def</span> <span class="nf">avg_gate_fidelity</span><span class="p">(</span><span class="n">liou</span><span class="p">,</span> <span class="n">target_unitary</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">avg_gate_fidelity</span><span class="p">(</span><span class="n">liou</span><span class="p">,</span> <span class="n">target_unitary</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the average gate fidelity of the given superoperator to the target</span>
 <span class="sd">    unitary.</span>
 

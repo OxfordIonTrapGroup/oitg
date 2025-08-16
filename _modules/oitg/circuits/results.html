@@ -79,15 +79,15 @@
 <span class="sd">Also see :mod:`oitg.results` for finding and loading HDF5 files.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.gate</span> <span class="kn">import</span> <span class="n">GateSequence</span>
-<span class="kn">from</span> <span class="nn">.qasm</span> <span class="kn">import</span> <span class="n">parse_gate_sequence_string</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateSequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qasm</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_gate_sequence_string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="collect_outcomes">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.results.collect_outcomes">[docs]</a>
-<span class="k">def</span> <span class="nf">collect_outcomes</span><span class="p">(</span><span class="n">sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span> <span class="n">run_order</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">collect_outcomes</span><span class="p">(</span><span class="n">sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span> <span class="n">run_order</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
                      <span class="n">outcomes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Total up the number of observations per outcome for gate sequence runner</span>
 <span class="sd">    experiments.</span>
@@ -116,7 +116,7 @@
 
 <div class="viewcode-block" id="collect_outcomes_from_datasets">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.results.collect_outcomes_from_datasets">[docs]</a>
-<span class="k">def</span> <span class="nf">collect_outcomes_from_datasets</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">collect_outcomes_from_datasets</span><span class="p">(</span>
         <span class="n">datasets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;data.circuits.&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Total up the number of observations per outcome for gate sequence runner</span>
@@ -134,7 +134,7 @@
 <span class="sd">        each measurement outcome was observed after running them; see</span>
 <span class="sd">        :meth:`collect_outcomes`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">d</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">d</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">datasets</span><span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">collect_outcomes</span><span class="p">([</span><span class="n">parse_gate_sequence_string</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">d</span><span class="p">(</span><span class="s2">&quot;sequences&quot;</span><span class="p">)],</span>

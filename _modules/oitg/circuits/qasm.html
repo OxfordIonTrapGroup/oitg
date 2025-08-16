@@ -84,17 +84,17 @@
 <span class="sd">For more complex QASM support, we should integrate an external library.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">.gate</span> <span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">collect_operands</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">collect_operands</span>
 
 <span class="n">Statements</span> <span class="o">=</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="stringify_param">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.stringify_param">[docs]</a>
-<span class="k">def</span> <span class="nf">stringify_param</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">stringify_param</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the string form of a parameter p; with fractions of π pretty-printed for</span>
 <span class="sd">    readability.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
@@ -116,7 +116,7 @@
 
 <div class="viewcode-block" id="gate_to_qasm">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.gate_to_qasm">[docs]</a>
-<span class="k">def</span> <span class="nf">gate_to_qasm</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gate_to_qasm</span><span class="p">(</span><span class="n">gate</span><span class="p">:</span> <span class="n">Gate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a QASM statement corresponding to the given :class:`.Gate`.&quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">kind</span>
     <span class="k">if</span> <span class="n">gate</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
@@ -129,7 +129,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">default_prologue</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_prologue</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
     <span class="c1"># TODO: We currently use the Quantum Experience standard library for the gate</span>
     <span class="c1"># definitions; should replace with a taylor-made one.</span>
     <span class="k">yield</span> <span class="s2">&quot;OPENQASM 2.0&quot;</span>
@@ -139,11 +139,11 @@
     <span class="k">yield</span> <span class="s2">&quot;creg r[</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">default_epilogue</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_epilogue</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
     <span class="k">yield</span> <span class="s2">&quot;measure q -&gt; r&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">gate_experiment_to_qasm</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gate_experiment_to_qasm</span><span class="p">(</span>
         <span class="n">gates</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">,</span>
         <span class="n">prologue_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Statements</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_prologue</span><span class="p">,</span>
         <span class="n">epilogue_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Statements</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_epilogue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Statements</span><span class="p">:</span>
@@ -157,7 +157,7 @@
 
 <div class="viewcode-block" id="stringify_qasm">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.stringify_qasm">[docs]</a>
-<span class="k">def</span> <span class="nf">stringify_qasm</span><span class="p">(</span><span class="n">stmts</span><span class="p">:</span> <span class="n">Statements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">stringify_qasm</span><span class="p">(</span><span class="n">stmts</span><span class="p">:</span> <span class="n">Statements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate/format a list of QASM statements into a single string.&quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">stmt</span> <span class="ow">in</span> <span class="n">stmts</span><span class="p">:</span>
@@ -168,7 +168,7 @@
 
 <div class="viewcode-block" id="parse_gate_sequence_string">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.qasm.parse_gate_sequence_string">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_gate_sequence_string</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_gate_sequence_string</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a simple gate sequence in ;-delimited string form into its constituent</span>
 <span class="sd">    gates.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

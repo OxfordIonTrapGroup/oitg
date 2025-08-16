@@ -80,13 +80,13 @@
 <span class="sd">reading them back when they are next used.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -96,7 +96,7 @@
 
 <div class="viewcode-block" id="get_cache_dir">
 <a class="viewcode-back" href="../../cache.html#oitg.cache.get_cache_dir">[docs]</a>
-<span class="k">def</span> <span class="nf">get_cache_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cache_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the OITG-wide directory to use for cache files.</span>
 
 <span class="sd">    The default path can be overwritten by setting the :data:`DIR_ENV_VAR` environment</span>
@@ -108,13 +108,13 @@
 
 
 
-<span class="k">def</span> <span class="nf">_get_cache_path</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_cache_path</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">get_cache_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_cache.dat&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="read_or_create_pickle_cache">
 <a class="viewcode-back" href="../../cache.html#oitg.cache.read_or_create_pickle_cache">[docs]</a>
-<span class="k">def</span> <span class="nf">read_or_create_pickle_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compute_value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_or_create_pickle_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">compute_value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Attempt to read the cached value for the given key; if it does not exist,</span>
 <span class="sd">    compute it and save it for future calls.</span>
 
@@ -150,7 +150,7 @@
 
 <div class="viewcode-block" id="clear_pickle_cache">
 <a class="viewcode-back" href="../../cache.html#oitg.cache.clear_pickle_cache">[docs]</a>
-<span class="k">def</span> <span class="nf">clear_pickle_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clear_pickle_cache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove the cache file for the given key, if it exists.&quot;&quot;&quot;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">_get_cache_path</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -162,15 +162,15 @@
 
 <div class="viewcode-block" id="cache_to_pickle_file">
 <a class="viewcode-back" href="../../cache.html#oitg.cache.cache_to_pickle_file">[docs]</a>
-<span class="k">def</span> <span class="nf">cache_to_pickle_file</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cache_to_pickle_file</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap a parameterless function to cache its results to a pickle file and reload it</span>
 <span class="sd">    from there on subsequent invocations.</span>
 
 <span class="sd">    See :meth:`read_or_create_pickle_cache`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">read_or_create_pickle_cache</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">function</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">wrapper</span>

@@ -74,13 +74,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for oitg.circuits.visualisation</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.gate</span> <span class="kn">import</span> <span class="n">GateSequence</span>
-<span class="kn">from</span> <span class="nn">.qasm</span> <span class="kn">import</span> <span class="n">gate_experiment_to_qasm</span><span class="p">,</span> <span class="n">stringify_qasm</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateSequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qasm</span><span class="w"> </span><span class="kn">import</span> <span class="n">gate_experiment_to_qasm</span><span class="p">,</span> <span class="n">stringify_qasm</span>
 
 
 <div class="viewcode-block" id="save_circuit_pdf">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.visualisation.save_circuit_pdf">[docs]</a>
-<span class="k">def</span> <span class="nf">save_circuit_pdf</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gates</span><span class="p">:</span> <span class="n">GateSequence</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_circuit_pdf</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gates</span><span class="p">:</span> <span class="n">GateSequence</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Render a gate sequence as a circuit diagram and save it to PDF.</span>
 
 <span class="sd">    This requires Matplotlib and Qiskit Terra to be installed.</span>
@@ -90,7 +90,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: This should be made more configurable, but at the time of writing, the</span>
     <span class="c1"># Qiskit drawing code only seems to work when writing to PDF.</span>
-    <span class="kn">import</span> <span class="nn">qiskit</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">qiskit</span>
     <span class="n">qasm</span> <span class="o">=</span> <span class="n">stringify_qasm</span><span class="p">(</span><span class="n">gate_experiment_to_qasm</span><span class="p">(</span><span class="n">gates</span><span class="p">))</span>
     <span class="n">qcircuit</span> <span class="o">=</span> <span class="n">qiskit</span><span class="o">.</span><span class="n">converters</span><span class="o">.</span><span class="n">dag_to_circuit</span><span class="p">(</span>
         <span class="n">qiskit</span><span class="o">.</span><span class="n">converters</span><span class="o">.</span><span class="n">ast_to_dag</span><span class="p">(</span><span class="n">qiskit</span><span class="o">.</span><span class="n">qasm</span><span class="o">.</span><span class="n">Qasm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">qasm</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()))</span>

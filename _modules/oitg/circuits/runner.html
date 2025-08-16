@@ -130,17 +130,17 @@
 <span class="sd">ARTIQ.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">..gate</span> <span class="kn">import</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">GateSequence</span>
-<span class="kn">from</span> <span class="nn">..qasm</span> <span class="kn">import</span> <span class="n">gate_to_qasm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndarray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">GateSequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..qasm</span><span class="w"> </span><span class="kn">import</span> <span class="n">gate_to_qasm</span>
 
 
 <span class="c1"># TODO (Python 3.7+): Convert this into a data class.</span>
 <div class="viewcode-block" id="SequenceRunnerOptions">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.runner.SequenceRunnerOptions">[docs]</a>
-<span class="k">class</span> <span class="nc">SequenceRunnerOptions</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SequenceRunnerOptions</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Specifies common :class:`SequenceRunner` options.</span>
 
 <span class="sd">    See the :mod:`module &lt;oitg.circuits.runner&gt;`\ -level docstring for background on</span>
@@ -164,7 +164,7 @@
 <span class="sd">    :param randomise_per_repeat: Whether to randomise the order of sequences within each</span>
 <span class="sd">        repeat.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">num_global_repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                  <span class="n">randomise_globally</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -182,14 +182,14 @@
 
 <div class="viewcode-block" id="SequenceRunner">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.runner.SequenceRunner">[docs]</a>
-<span class="k">class</span> <span class="nc">SequenceRunner</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SequenceRunner</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Executes a number of gate sequences to gather outcome statistics.</span>
 
 <span class="sd">    See the :mod:`module &lt;oitg.circuits.runner&gt;`\ -level docstring for details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="SequenceRunner.run_sequences">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.runner.SequenceRunner.run_sequences">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_sequences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_sequences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                       <span class="n">sequences</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
                       <span class="n">num_qubits</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                       <span class="n">progress_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -229,7 +229,7 @@
 
 <div class="viewcode-block" id="stringify_gate_sequence">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.runner.stringify_gate_sequence">[docs]</a>
-<span class="k">def</span> <span class="nf">stringify_gate_sequence</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">stringify_gate_sequence</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">GateGenerator</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the string used to represent ``seq`` in the result datasets.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">gate_to_qasm</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">))</span></div>
 

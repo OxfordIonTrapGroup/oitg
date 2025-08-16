@@ -93,17 +93,17 @@
 <span class="sd">gate set.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">unique</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.gate</span> <span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="n">remap_operands</span>
-<span class="kn">from</span> <span class="nn">.to_matrix</span> <span class="kn">import</span> <span class="n">gate_sequence_matrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">unique</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="n">remap_operands</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.to_matrix</span><span class="w"> </span><span class="kn">import</span> <span class="n">gate_sequence_matrix</span>
 
 
 <div class="viewcode-block" id="GateGroup">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup">[docs]</a>
-<span class="k">class</span> <span class="nc">GateGroup</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GateGroup</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A group (in the mathematical sense) of gates, where each element is represented</span>
 <span class="sd">    by its index in some canonical order.</span>
 
@@ -115,7 +115,7 @@
 <span class="sd">        as a map of canonical matrix key (see :meth:`to_canonical_matrix_key`) to</span>
 <span class="sd">        element index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">gate_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">gate_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
                  <span class="n">matrices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">inverse_idxs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span> <span class="o">=</span> <span class="n">num_qubits</span>
 
@@ -130,28 +130,28 @@
 
 <div class="viewcode-block" id="GateGroup.num_elements">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.num_elements">[docs]</a>
-    <span class="k">def</span> <span class="nf">num_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the total number of elements in the group.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_sequences</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GateGroup.gates_for_idx">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.gates_for_idx">[docs]</a>
-    <span class="k">def</span> <span class="nf">gates_for_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateSequence</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gates_for_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateSequence</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the gate sequence for the given element index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gate_sequences</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="GateGroup.matrix_for_idx">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.matrix_for_idx">[docs]</a>
-    <span class="k">def</span> <span class="nf">matrix_for_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">matrix_for_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the unitary matrix for the given element index.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrices</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="GateGroup.find_inverse_idx">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.find_inverse_idx">[docs]</a>
-    <span class="k">def</span> <span class="nf">find_inverse_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_inverse_idx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Look up the index of the element that is the inverse of the given unitary</span>
 <span class="sd">        matrix.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inverse_idxs</span><span class="p">[</span><span class="n">to_canonical_matrix_key</span><span class="p">(</span><span class="n">matrix</span><span class="p">)]</span></div>
@@ -159,7 +159,7 @@
 
 <div class="viewcode-block" id="GateGroup.pauli_idxs">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.GateGroup.pauli_idxs">[docs]</a>
-    <span class="k">def</span> <span class="nf">pauli_idxs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pauli_idxs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the indices corresponding to the (generalised) Pauli group (which is</span>
 <span class="sd">        always a subgroup of the Clifford group).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -177,7 +177,7 @@
 
 <div class="viewcode-block" id="to_canonical_matrix">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.to_canonical_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">to_canonical_matrix</span><span class="p">(</span><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_canonical_matrix</span><span class="p">(</span><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert the given gate matrix to a canonical form, which is exactly the same</span>
 <span class="sd">    no matter the global phase or rounding errors.</span>
 
@@ -198,7 +198,7 @@
 
 <div class="viewcode-block" id="to_canonical_matrix_key">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.to_canonical_matrix_key">[docs]</a>
-<span class="k">def</span> <span class="nf">to_canonical_matrix_key</span><span class="p">(</span><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_canonical_matrix_key</span><span class="p">(</span><span class="n">gate_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the canonical matrix corresponding to `gate_matrix` in a form suitable</span>
 <span class="sd">    for use as a dictionary key.&quot;&quot;&quot;</span>
     <span class="c1"># TODO: Could hash here directly for performance.</span>
@@ -212,7 +212,7 @@
 
 <div class="viewcode-block" id="make_clifford_group">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.make_clifford_group">[docs]</a>
-<span class="k">def</span> <span class="nf">make_clifford_group</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">implementation</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGroup</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_clifford_group</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">implementation</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGroup</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct a :class:`GateGroup` instance which enumerates all elements of the</span>
 <span class="sd">    ``num_qubit``-qubit Clifford group, with elements decomposed according to the given</span>
 <span class="sd">    ``implementation``.</span>
@@ -275,7 +275,7 @@
 
 <div class="viewcode-block" id="get_clifford_1q_xypm_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_1q_xypm_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_clifford_1q_xypm_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_1q_xypm_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return an implementation of the 1-qubit Clifford group element with the given</span>
 <span class="sd">    index as ±π/2 rotations about the x and y axes.</span>
 
@@ -325,7 +325,7 @@
 
 <div class="viewcode-block" id="get_clifford_1q_xzpm2_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_1q_xzpm2_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_clifford_1q_xzpm2_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_1q_xzpm2_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return an implementation of the 1-qubit Clifford group element with the given</span>
 <span class="sd">    index as ±π/2 and π rotations about the x and z axes.</span>
 
@@ -352,7 +352,7 @@
 <div class="viewcode-block" id="EntanglingGate">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.EntanglingGate">[docs]</a>
 <span class="nd">@unique</span>
-<span class="k">class</span> <span class="nc">EntanglingGate</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EntanglingGate</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Specifies the equivalence class (up to local single-qubit Cliffords) of a</span>
 <span class="sd">    non-trivial two-qubit Clifford operation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -370,7 +370,7 @@
 
 <div class="viewcode-block" id="get_clifford_2q_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_2q_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_clifford_2q_implementation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_2q_implementation</span><span class="p">(</span>
     <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">clifford_1q_impl</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">,</span>
     <span class="n">entangling_gates_impl</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">CliffordImpl</span><span class="p">],</span> <span class="n">GateGenerator</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
@@ -387,7 +387,7 @@
     <span class="c1"># any valid entangling_gates_impl, but the element indices aren&#39;t stable across</span>
     <span class="c1"># different choices of entangling gates.</span>
 
-    <span class="k">def</span> <span class="nf">local_idx_to_gates</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">local_idx_to_gates</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">24</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">c0</span><span class="p">,</span> <span class="n">c1</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
         <span class="k">yield from</span> <span class="n">clifford_1q_impl</span><span class="p">(</span><span class="n">c0</span><span class="p">)</span>
@@ -395,7 +395,7 @@
 
     <span class="n">axis_permute_clifford_1q_elems</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">22</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">perm_idx_to_gates</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">perm_idx_to_gates</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="k">yield from</span> <span class="n">clifford_1q_impl</span><span class="p">(</span><span class="n">axis_permute_clifford_1q_elems</span><span class="p">[</span><span class="n">p0</span><span class="p">])</span>
@@ -443,12 +443,12 @@
 
 <div class="viewcode-block" id="get_cz_entangling_gate_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_cz_entangling_gate_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_cz_entangling_gate_implementation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cz_entangling_gate_implementation</span><span class="p">(</span>
         <span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given entangling gate category using CZ gates</span>
 <span class="sd">    and the given single-qubit gate implementation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 
     <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">cz_like</span><span class="p">:</span>
@@ -473,12 +473,12 @@
 
 <div class="viewcode-block" id="get_zzw_entangling_gate_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_zzw_entangling_gate_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_zzw_entangling_gate_implementation</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_zzw_entangling_gate_implementation</span><span class="p">(</span>
         <span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given entangling gate category using symmetric</span>
 <span class="sd">    ZZ (wobble) gates and the given single-qubit gate implementation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 
     <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="n">EntanglingGate</span><span class="o">.</span><span class="n">cz_like</span><span class="p">:</span>
@@ -503,7 +503,7 @@
 
 <div class="viewcode-block" id="get_clifford_2q_xypm_cz_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_2q_xypm_cz_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_clifford_2q_xypm_cz_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_2q_xypm_cz_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given 2-qubit Clifford group element using CZ</span>
 <span class="sd">    gates and local single-qubit ±π/2 rotations about the x and y axes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -514,7 +514,7 @@
 
 <div class="viewcode-block" id="get_clifford_2q_xzpm2_cz_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_2q_xzpm2_cz_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_clifford_2q_xzpm2_cz_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_2q_xzpm2_cz_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given 2-qubit Clifford group element using CZ</span>
 <span class="sd">    gates and local single-qubit ±π/2 and π rotations about the x and z axes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -525,7 +525,7 @@
 
 <div class="viewcode-block" id="get_clifford_2q_xzpm2_zzw_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_2q_xzpm2_zzw_implementation">[docs]</a>
-<span class="k">def</span> <span class="nf">get_clifford_2q_xzpm2_zzw_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_2q_xzpm2_zzw_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given 2-qubit Clifford group element using a</span>
 <span class="sd">    symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local</span>
 <span class="sd">    single-qubit ±π/2 and π rotations about the x and z axes.</span>

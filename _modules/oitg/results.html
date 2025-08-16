@@ -74,20 +74,20 @@
            <div itemprop="articleBody">
              
   <h1>Source code for oitg.results</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">rid_index</span>
-<span class="kn">from</span> <span class="nn">.paths</span> <span class="kn">import</span> <span class="n">artiq_results_path</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">rid_index</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.paths</span><span class="w"> </span><span class="kn">import</span> <span class="n">artiq_results_path</span>
 
 
-<span class="k">def</span> <span class="nf">_iterify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_iterify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure the passed argument is iterable, that is, if it is a single element, wrap</span>
 <span class="sd">    it into a list.</span>
 
@@ -102,7 +102,7 @@
 
 <div class="viewcode-block" id="load_hdf5_file">
 <a class="viewcode-back" href="../../results.html#oitg.results.load_hdf5_file">[docs]</a>
-<span class="k">def</span> <span class="nf">load_hdf5_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_hdf5_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load an ARTIQ results file.</span>
 
 <span class="sd">    :returns: A dictionary containing the logical contents of the HDF5 file, including:</span>
@@ -138,7 +138,7 @@
 
 <div class="viewcode-block" id="load_result">
 <a class="viewcode-back" href="../../results.html#oitg.results.load_result">[docs]</a>
-<span class="k">def</span> <span class="nf">load_result</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_result</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">hour</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">rid</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">class_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -160,7 +160,7 @@
 <span class="sd">    :return: A dictionary containing the contents of the file; see</span>
 <span class="sd">        :func:`load_hdf5_file`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">_find_results</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_results</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="n">rs</span> <span class="o">=</span> <span class="n">find_results</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;No results file found&quot;</span><span class="p">)</span>
@@ -195,7 +195,7 @@
                                <span class="p">(</span><span class="s1">&#39;cls&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
 
 
-<span class="k">def</span> <span class="nf">parse_result_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Result</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_result_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Result</span><span class="p">]:</span>
     <span class="n">head</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">head</span><span class="p">,</span> <span class="n">hour_str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">this_day</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
@@ -208,7 +208,7 @@
 
 <div class="viewcode-block" id="find_results">
 <a class="viewcode-back" href="../../results.html#oitg.results.find_results">[docs]</a>
-<span class="k">def</span> <span class="nf">find_results</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_results</span><span class="p">(</span><span class="n">day</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">hour</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">rid</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">class_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -296,13 +296,13 @@
 
 
 
-<span class="k">def</span> <span class="nf">normalise_experiment_magic</span><span class="p">(</span><span class="n">exp</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalise_experiment_magic</span><span class="p">(</span><span class="n">exp</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">exp</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;alice&quot;</span><span class="p">,</span> <span class="s2">&quot;bob&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;lab1_&quot;</span> <span class="o">+</span> <span class="n">exp</span>
     <span class="k">return</span> <span class="n">exp</span>
 
 
-<span class="k">def</span> <span class="nf">parse_magic</span><span class="p">(</span><span class="n">rid</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_magic</span><span class="p">(</span><span class="n">rid</span><span class="p">):</span>
     <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^([a-zA-Z0-9_]+_)?([0-9]{1,9})$&quot;</span><span class="p">,</span> <span class="n">rid</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -318,7 +318,7 @@
     <span class="k">return</span> <span class="n">spec</span>
 
 
-<span class="k">def</span> <span class="nf">find_by_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_by_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">):</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">parse_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">find_results</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
@@ -329,7 +329,7 @@
     <span class="k">return</span> <span class="p">{</span><span class="n">rid</span><span class="p">:</span> <span class="n">info</span><span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">load_by_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_by_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">):</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">parse_magic</span><span class="p">(</span><span class="n">rid_or_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">load_result</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
