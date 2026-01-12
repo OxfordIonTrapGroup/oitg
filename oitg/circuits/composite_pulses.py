@@ -18,6 +18,7 @@ from .gate import Gate, GateGenerator
 
 class UnsupportedGate(ValueError):
     """Raised if a given gate cannot be expanded in the requested form."""
+
     pass
 
 
@@ -92,11 +93,13 @@ def reduced_c_in_sk(gate: Gate) -> GateGenerator:
     yield xy(phase + phi, 2 * np.pi)
 
 
-def expand_using(method: Callable,
-                 gates: GateGenerator,
-                 ignore_kinds: Iterable[str] = [],
-                 ignore_unsupported_gates: bool = True,
-                 insert_barriers: bool = True) -> GateGenerator:
+def expand_using(
+    method: Callable,
+    gates: GateGenerator,
+    ignore_kinds: Iterable[str] = [],
+    ignore_unsupported_gates: bool = True,
+    insert_barriers: bool = True,
+) -> GateGenerator:
     """Expand all gates in the given sequence using composite pulses.
 
     :param method: A callable implementing the chosen composite pulse type

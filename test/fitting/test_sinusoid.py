@@ -6,7 +6,6 @@ from oitg.fitting.sinusoid import sinusoid
 
 class SinusoidTest(unittest.TestCase):
     def test_random_data(self):
-
         n_sample = 30
         t_max = 1e-1
         amp = 1.5
@@ -29,24 +28,26 @@ class SinusoidTest(unittest.TestCase):
 
         # fix these fit parameters to a specific value
         const_dict = {
-            't_dead': t_dead,
+            "t_dead": t_dead,
             # 'phi': phi,
             # 'c': offset
         }
-        p, p_err = sinusoid.fit(t,
-                                y,
-                                y_err=np.ones(y.shape) * amp * rel_noise,
-                                evaluate_function=False,
-                                evaluate_x_limit=[0, t_max],
-                                constants=const_dict)
+        p, p_err = sinusoid.fit(
+            t,
+            y,
+            y_err=np.ones(y.shape) * amp * rel_noise,
+            evaluate_function=False,
+            evaluate_x_limit=[0, t_max],
+            constants=const_dict,
+        )
 
-        self.assertAlmostEqual(omega, p['omega'], delta=4 * p_err['omega'])
-        self.assertAlmostEqual(amp, p['a'], delta=4 * p_err['a'])
-        self.assertAlmostEqual(offset, p['c'], delta=4 * p_err['c'])
-        self.assertAlmostEqual(phi % (2 * np.pi),
-                               p['phi'] % (2 * np.pi),
-                               delta=4 * p_err['phi'])
-        self.assertGreaterEqual(t_dead, p['t_dead'] - 4 * p_err['t_dead'])
+        self.assertAlmostEqual(omega, p["omega"], delta=4 * p_err["omega"])
+        self.assertAlmostEqual(amp, p["a"], delta=4 * p_err["a"])
+        self.assertAlmostEqual(offset, p["c"], delta=4 * p_err["c"])
+        self.assertAlmostEqual(
+            phi % (2 * np.pi), p["phi"] % (2 * np.pi), delta=4 * p_err["phi"]
+        )
+        self.assertGreaterEqual(t_dead, p["t_dead"] - 4 * p_err["t_dead"])
 
     def test_random_data_fixed_phi(self):
         n_sample = 40
@@ -71,23 +72,25 @@ class SinusoidTest(unittest.TestCase):
         # fix these fit parameters to a specific value
         const_dict = {
             # 't_dead': t_dead,
-            'phi': phi,
+            "phi": phi,
             # 'c': offset
         }
-        p, p_err = sinusoid.fit(t,
-                                y,
-                                y_err=np.ones(y.shape) * amp * rel_noise,
-                                evaluate_function=False,
-                                evaluate_x_limit=[0, t_max],
-                                constants=const_dict)
+        p, p_err = sinusoid.fit(
+            t,
+            y,
+            y_err=np.ones(y.shape) * amp * rel_noise,
+            evaluate_function=False,
+            evaluate_x_limit=[0, t_max],
+            constants=const_dict,
+        )
 
-        self.assertAlmostEqual(omega, p['omega'], delta=4 * p_err['omega'])
-        self.assertAlmostEqual(amp, p['a'], delta=4 * p_err['a'])
-        self.assertAlmostEqual(offset, p['c'], delta=4 * p_err['c'])
-        self.assertAlmostEqual(phi % (2 * np.pi),
-                               p['phi'] % (2 * np.pi),
-                               delta=4 * p_err['phi'])
-        self.assertGreaterEqual(t_dead, p['t_dead'] - 4 * p_err['t_dead'])
+        self.assertAlmostEqual(omega, p["omega"], delta=4 * p_err["omega"])
+        self.assertAlmostEqual(amp, p["a"], delta=4 * p_err["a"])
+        self.assertAlmostEqual(offset, p["c"], delta=4 * p_err["c"])
+        self.assertAlmostEqual(
+            phi % (2 * np.pi), p["phi"] % (2 * np.pi), delta=4 * p_err["phi"]
+        )
+        self.assertGreaterEqual(t_dead, p["t_dead"] - 4 * p_err["t_dead"])
 
     def test_pi_pulse(self):
         n_sample = 21
@@ -111,24 +114,26 @@ class SinusoidTest(unittest.TestCase):
 
         # fix these fit parameters to a specific value
         const_dict = {
-            't_dead': t_dead,
+            "t_dead": t_dead,
             # 'phi': phi,
             # 'c': offset
         }
-        p, p_err = sinusoid.fit(t,
-                                y,
-                                y_err=np.ones(y.shape) * amp * rel_noise,
-                                evaluate_function=False,
-                                evaluate_x_limit=[0, t_max],
-                                constants=const_dict)
+        p, p_err = sinusoid.fit(
+            t,
+            y,
+            y_err=np.ones(y.shape) * amp * rel_noise,
+            evaluate_function=False,
+            evaluate_x_limit=[0, t_max],
+            constants=const_dict,
+        )
 
-        self.assertAlmostEqual(omega, p['omega'], delta=4 * p_err['omega'])
-        self.assertAlmostEqual(amp, p['a'], delta=4 * p_err['a'])
-        self.assertAlmostEqual(offset, p['c'], delta=4 * p_err['c'])
-        self.assertAlmostEqual(phi % (2 * np.pi),
-                               p['phi'] % (2 * np.pi),
-                               delta=4 * p_err['phi'])
-        self.assertGreaterEqual(t_dead, p['t_dead'] - 4 * p_err['t_dead'])
+        self.assertAlmostEqual(omega, p["omega"], delta=4 * p_err["omega"])
+        self.assertAlmostEqual(amp, p["a"], delta=4 * p_err["a"])
+        self.assertAlmostEqual(offset, p["c"], delta=4 * p_err["c"])
+        self.assertAlmostEqual(
+            phi % (2 * np.pi), p["phi"] % (2 * np.pi), delta=4 * p_err["phi"]
+        )
+        self.assertGreaterEqual(t_dead, p["t_dead"] - 4 * p_err["t_dead"])
 
     def test_pi_pulse_with_t_dead(self):
         n_sample = 21
@@ -153,23 +158,25 @@ class SinusoidTest(unittest.TestCase):
         # fix these fit parameters to a specific value
         const_dict = {
             # 't_dead': t_dead,
-            'phi': phi,
+            "phi": phi,
             # 'c': offset
         }
-        p, p_err = sinusoid.fit(t,
-                                y,
-                                y_err=np.ones(y.shape) * amp * rel_noise,
-                                evaluate_function=False,
-                                evaluate_x_limit=[0, t_max],
-                                constants=const_dict)
+        p, p_err = sinusoid.fit(
+            t,
+            y,
+            y_err=np.ones(y.shape) * amp * rel_noise,
+            evaluate_function=False,
+            evaluate_x_limit=[0, t_max],
+            constants=const_dict,
+        )
 
-        self.assertAlmostEqual(omega, p['omega'], delta=4 * p_err['omega'])
-        self.assertAlmostEqual(amp, p['a'], delta=4 * p_err['a'])
-        self.assertAlmostEqual(offset, p['c'], delta=4 * p_err['c'])
-        self.assertAlmostEqual(phi % (2 * np.pi),
-                               p['phi'] % (2 * np.pi),
-                               delta=4 * p_err['phi'])
-        self.assertAlmostEqual(t_dead, p['t_dead'], delta=4 * p_err['t_dead'])
+        self.assertAlmostEqual(omega, p["omega"], delta=4 * p_err["omega"])
+        self.assertAlmostEqual(amp, p["a"], delta=4 * p_err["a"])
+        self.assertAlmostEqual(offset, p["c"], delta=4 * p_err["c"])
+        self.assertAlmostEqual(
+            phi % (2 * np.pi), p["phi"] % (2 * np.pi), delta=4 * p_err["phi"]
+        )
+        self.assertAlmostEqual(t_dead, p["t_dead"], delta=4 * p_err["t_dead"])
 
     def test_delayed_split_data_with_t_dead(self):
         n0 = 40
@@ -199,24 +206,26 @@ class SinusoidTest(unittest.TestCase):
         # fix these fit parameters to a specific value
         const_dict = {
             # 't_dead': t_dead,
-            'phi': phi,
+            "phi": phi,
             # 'c': offset
         }
-        p, p_err = sinusoid.fit(t,
-                                y,
-                                y_err=np.ones(y.shape) * amp * rel_noise,
-                                evaluate_function=False,
-                                evaluate_x_limit=[0, t3],
-                                constants=const_dict)
+        p, p_err = sinusoid.fit(
+            t,
+            y,
+            y_err=np.ones(y.shape) * amp * rel_noise,
+            evaluate_function=False,
+            evaluate_x_limit=[0, t3],
+            constants=const_dict,
+        )
 
-        self.assertAlmostEqual(omega, p['omega'], delta=4 * p_err['omega'])
-        self.assertAlmostEqual(amp, p['a'], delta=4 * p_err['a'])
-        self.assertAlmostEqual(offset, p['c'], delta=4 * p_err['c'])
-        self.assertAlmostEqual(phi % (2 * np.pi),
-                               p['phi'] % (2 * np.pi),
-                               delta=4 * p_err['phi'])
-        self.assertAlmostEqual(t_dead, p['t_dead'], delta=4 * p_err['t_dead'])
+        self.assertAlmostEqual(omega, p["omega"], delta=4 * p_err["omega"])
+        self.assertAlmostEqual(amp, p["a"], delta=4 * p_err["a"])
+        self.assertAlmostEqual(offset, p["c"], delta=4 * p_err["c"])
+        self.assertAlmostEqual(
+            phi % (2 * np.pi), p["phi"] % (2 * np.pi), delta=4 * p_err["phi"]
+        )
+        self.assertAlmostEqual(t_dead, p["t_dead"], delta=4 * p_err["t_dead"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

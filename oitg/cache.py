@@ -62,7 +62,10 @@ def read_or_create_pickle_cache(key: str, compute_value: Callable[[], Any]) -> A
             warnings.warn(
                 "Failed to write cache path to '{}'. "
                 "Consider setting {} to a user-writable directory.".format(
-                    path, DIR_ENV_VAR), RuntimeWarning)
+                    path, DIR_ENV_VAR
+                ),
+                RuntimeWarning,
+            )
         return result
 
 
@@ -81,6 +84,7 @@ def cache_to_pickle_file(key):
 
     See :meth:`read_or_create_pickle_cache`.
     """
+
     def decorator(function):
         @functools.wraps(function)
         def wrapper():

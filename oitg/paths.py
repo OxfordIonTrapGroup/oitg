@@ -90,6 +90,7 @@ def artiq_results_path(experiment: Optional[str] = None) -> str:
             experiment = os.environ["OITG_EXPERIMENT"]
         except KeyError:
             raise Exception(
-                "No experiment supplied, and no OITG_EXPERIMENT environment key")
+                "No experiment supplied, and no OITG_EXPERIMENT environment key"
+            )
 
     return os.path.join(path, experiment)

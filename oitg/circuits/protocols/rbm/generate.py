@@ -12,13 +12,15 @@ from ...gate import Gate, GateSequence
 from ...to_matrix import gate_sequence_matrix
 
 
-def generate_rbm_experiment(group: GateGroup,
-                            sequence_lengths: Iterable[int],
-                            randomisations_per_length: int,
-                            pauli_randomize_last=True,
-                            interleave_gates=None,
-                            derive_shorter_by_truncation=False,
-                            seed=None) -> List[Tuple[List[int], GateSequence, int]]:
+def generate_rbm_experiment(
+    group: GateGroup,
+    sequence_lengths: Iterable[int],
+    randomisations_per_length: int,
+    pauli_randomize_last=True,
+    interleave_gates=None,
+    derive_shorter_by_truncation=False,
+    seed=None,
+) -> List[Tuple[List[int], GateSequence, int]]:
     """
     :param sequence_lengths: List of sequence lengths to generate. For each length k, a
         number of sequences will be generated with k Clifford group elements (or
@@ -56,14 +58,15 @@ def generate_rbm_experiment(group: GateGroup,
     for length in sequence_lengths:
         for _rand in range(randomisations_per_length):
             unfinished_sequences.append(
-                [rng.randint(group.num_elements()) for _ in range(length - 1)])
+                [rng.randint(group.num_elements()) for _ in range(length - 1)]
+            )
         if derive_shorter_by_truncation:
             break
     if derive_shorter_by_truncation:
         truncated_sequences = []
         for length in sequence_lengths[1:]:
             for seq in unfinished_sequences:
-                truncated_sequences.append(seq[:(length - 1)])
+                truncated_sequences.append(seq[: (length - 1)])
         unfinished_sequences += truncated_sequences
 
     # Use a special marker index for the interleaved gates (if any), as we want to
@@ -84,8 +87,9 @@ def generate_rbm_experiment(group: GateGroup,
             interleaved_sequences.append(interleaved_seq)
         unfinished_sequences += interleaved_sequences
 
-        interleaved_matrix = gate_sequence_matrix(interleave_gates,
-                                                  num_qubits=group.num_qubits)
+        interleaved_matrix = gate_sequence_matrix(
+            interleave_gates, num_qubits=group.num_qubits
+        )
 
     finished_sequences_descs = []
     for clifford_idxs in unfinished_sequences:
@@ -137,7 +141,7 @@ def generate_rbm_experiment(group: GateGroup,
     return finished_sequences_descs
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Demonstrate sequence generation.
     from contexttimer import Timer
     from ....cache import cache_to_pickle_file
@@ -160,15 +164,21 @@ if __name__ == '__main__':
     print("Generated 1-qubit Clifford group in {} s".format(t.elapsed))
     with Timer() as t:
         result = generate_rbm_experiment(c1, lengths, num_randomisations)
-    print("Generated {} 1-qubit sequences in {} s".format(
-        len(lengths) * num_randomisations, t.elapsed))
+    print(
+        "Generated {} 1-qubit sequences in {} s".format(
+            len(lengths) * num_randomisations, t.elapsed
+        )
+    )
 
     with Timer() as t:
         c2 = get_c2()
     print("Loaded 2-qubit Clifford group in {} s".format(t.elapsed))
     with Timer() as t:
         result = generate_rbm_experiment(c2, lengths, num_randomisations)
-    print("Generated {} 2-qubit sequences in {} s".format(
-        len(lengths) * num_randomisations, t.elapsed))
+    print(
+        "Generated {} 2-qubit sequences in {} s".format(
+            len(lengths) * num_randomisations, t.elapsed
+        )
+    )
 
     save_circuit_pdf("rbm.pdf", result[1][1])

@@ -13,12 +13,11 @@ def save_circuit_pdf(filename: str, gates: GateSequence):
     # TODO: This should be made more configurable, but at the time of writing, the
     # Qiskit drawing code only seems to work when writing to PDF.
     import qiskit
+
     qasm = stringify_qasm(gate_experiment_to_qasm(gates))
     qcircuit = qiskit.converters.dag_to_circuit(
-        qiskit.converters.ast_to_dag(qiskit.qasm.Qasm(data=qasm).parse()))
-    qcircuit.draw(output="mpl",
-                  filename=filename,
-                  style={
-                      "usepiformat": True,
-                      "cregbundle": True
-                  })
+        qiskit.converters.ast_to_dag(qiskit.qasm.Qasm(data=qasm).parse())
+    )
+    qcircuit.draw(
+        output="mpl", filename=filename, style={"usepiformat": True, "cregbundle": True}
+    )

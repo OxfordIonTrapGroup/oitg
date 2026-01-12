@@ -2,8 +2,9 @@ from typing import Iterable
 from ...gate import GateSequence
 
 
-def generate_rpe_sequences(target: GateSequence, pi_2: GateSequence,
-                           max_len_exponent: int) -> Iterable[GateSequence]:
+def generate_rpe_sequences(
+    target: GateSequence, pi_2: GateSequence, max_len_exponent: int
+) -> Iterable[GateSequence]:
     r"""Generate sequences for robust phase estimation, up to a total sequence length
     of :math:`2^{\mathrm{max\_len\_exponent}} + 1`.
 

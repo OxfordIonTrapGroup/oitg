@@ -8,12 +8,13 @@ All values are handled in SI units, so:
     Magnetic fields are in Tesla
     Frequencies are in Hz
 """
+
 from oitg import units
 import math
 import scipy.optimize
 
 # Hyperfine splitting for Ca43
-hyperfine_splitting = -3.2256082864E9
+hyperfine_splitting = -3.2256082864e9
 
 nuclear_spin = 7 / 2
 
@@ -25,7 +26,7 @@ g_i = -1.315348 * 2 / 7
 b0 = 146.0942e-4
 
 # Magnetron
-mu = (g_i * units.mu_N + g_j * units.mu_B)
+mu = g_i * units.mu_N + g_j * units.mu_B
 mu /= units.h * hyperfine_splitting
 
 
@@ -36,11 +37,16 @@ def _breit_rabi(b, m_f, f_sign):
     From Woodgate, p.193
     sign = +1 for F=4, sign = -1 for F=3
     """
-    frequency_shift = (-units.h * hyperfine_splitting / (2 * (2 * nuclear_spin + 1)) -
-                       b * g_i * units.mu_N * m_f +
-                       ((f_sign * units.h * hyperfine_splitting / 2) *
-                        math.sqrt(1 + 2 * m_f * (b * mu) / (nuclear_spin + (1 / 2)) +
-                                  (b * mu)**2)))
+    frequency_shift = (
+        -units.h * hyperfine_splitting / (2 * (2 * nuclear_spin + 1))
+        - b * g_i * units.mu_N * m_f
+        + (
+            (f_sign * units.h * hyperfine_splitting / 2)
+            * math.sqrt(
+                1 + 2 * m_f * (b * mu) / (nuclear_spin + (1 / 2)) + (b * mu) ** 2
+            )
+        )
+    )
 
     frequency_shift /= units.h
 
@@ -74,6 +80,7 @@ def calculate_b_from_frequency(m_f4, m_f3, frequency):
     Calculates the B-field necessary for the transition
     F=4,mF4 -> F=3,mF3 to have the given frequency
     """
+
     def function_to_minimise(b, m_f4, m_f3, frequency):
         value = transition_frequency(m_f4=m_f4, m_f3=m_f3, b=b)
         value -= frequency

@@ -11,7 +11,7 @@ def binom_twosided(k, N):
 
     # 'beta' is Clopper–Pearson method; chosen alpha corresponds to 1σ of a normal
     # distribution (68%).
-    confint = proportion_confint(k, N, alpha=0.3173, method='beta')
+    confint = proportion_confint(k, N, alpha=0.3173, method="beta")
 
     # Strip out NaNs for confidence intervals at the boundary
     if np.isnan(confint[0]):

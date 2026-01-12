@@ -14,10 +14,10 @@ jobs:
          name: Run unit tests
          command: poetry run poe test
       - run:
-          name: Verify that Flake8 passes
+          name: Verify that Ruff lint passes
           command: poetry run poe lint
       - run:
-          name: Check that YAPF doesn't change formatting
+          name: Check that Ruff doesn't change formatting
           command: poetry run poe fmt-test
   docs-build:
     executor:

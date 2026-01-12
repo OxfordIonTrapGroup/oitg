@@ -57,13 +57,15 @@ def load_hdf5_file(filename: str) -> Dict[str, Any]:
         return r
 
 
-def load_result(day: Union[None, str, List[str]] = None,
-                hour: Union[None, int, List[int]] = None,
-                rid: Union[None, int, List[int]] = None,
-                class_name: Union[None, str, List[str]] = None,
-                experiment: Optional[str] = None,
-                root_path: Optional[str] = None,
-                local_path: Optional[str] = None) -> Dict[str, Any]:
+def load_result(
+    day: Union[None, str, List[str]] = None,
+    hour: Union[None, int, List[int]] = None,
+    rid: Union[None, int, List[int]] = None,
+    class_name: Union[None, str, List[str]] = None,
+    experiment: Optional[str] = None,
+    root_path: Optional[str] = None,
+    local_path: Optional[str] = None,
+) -> Dict[str, Any]:
     """Find and load an HDF5 results file from an ARTIQ master results directory.
 
     The results file is described by a rid and a day (provided date string, defaults to
@@ -79,6 +81,7 @@ def load_result(day: Union[None, str, List[str]] = None,
     :return: A dictionary containing the contents of the file; see
         :func:`load_hdf5_file`.
     """
+
     def _find_results(path):
         rs = find_results(day, hour, rid, class_name, experiment, path)
         if len(rs) == 0:
@@ -109,27 +112,29 @@ def load_result(day: Union[None, str, List[str]] = None,
         raise IOError("Failure parsing results file")
 
 
-Result = NamedTuple('Result', [('path', str), ('day', str), ('hour', int),
-                               ('cls', str)])
+Result = NamedTuple(
+    "Result", [("path", str), ("day", str), ("hour", int), ("cls", str)]
+)
 
 
 def parse_result_path(path: str) -> Tuple[int, Result]:
     head, file_name = os.path.split(path)
     head, hour_str = os.path.split(head)
     _, this_day = os.path.split(head)
-    rid_part, class_part = file_name.split('-')
-    return int(rid_part), Result(path=path,
-                                 cls=class_part.split('.')[0],
-                                 day=this_day,
-                                 hour=int(hour_str))
+    rid_part, class_part = file_name.split("-")
+    return int(rid_part), Result(
+        path=path, cls=class_part.split(".")[0], day=this_day, hour=int(hour_str)
+    )
 
 
-def find_results(day: Union[None, str, List[str]] = None,
-                 hour: Union[None, int, List[int]] = None,
-                 rid: Union[None, int, List[int]] = None,
-                 class_name: Union[None, str, List[str]] = None,
-                 experiment: Optional[str] = None,
-                 root_path: Optional[str] = None) -> Dict[int, Result]:
+def find_results(
+    day: Union[None, str, List[str]] = None,
+    hour: Union[None, int, List[int]] = None,
+    rid: Union[None, int, List[int]] = None,
+    class_name: Union[None, str, List[str]] = None,
+    experiment: Optional[str] = None,
+    root_path: Optional[str] = None,
+) -> Dict[int, Result]:
     """Find all ARTIQ result files matching the given filters.
 
     To implement this, the file system in the given ``root_path`` (or the standard root
@@ -159,8 +164,10 @@ def find_results(day: Union[None, str, List[str]] = None,
         root_path = artiq_results_path(experiment=experiment)
 
     if not os.path.exists(root_path):
-        raise IOError(f"Result path '{root_path}' does not exist. Shared drive not " +
-                      "mounted? Wrong experiment name?")
+        raise IOError(
+            f"Result path '{root_path}' does not exist. Shared drive not "
+            + "mounted? Wrong experiment name?"
+        )
 
     # Form list of day strings to search over
     if day is None:
@@ -176,10 +183,11 @@ def find_results(day: Union[None, str, List[str]] = None,
             index = rid_index.read_index(root_path)
         except FileNotFoundError:
             raise IOError(
-                "To resolve results with only RID specified, the result path for " +
-                f"the target experiment ({experiment}) needs to be indexed. (Within " +
-                "the Oxford ion trap quantum computing group, this is done via " +
-                "nightly systemd jobs on 10.255.6.4.)")
+                "To resolve results with only RID specified, the result path for "
+                + f"the target experiment ({experiment}) needs to be indexed. (Within "
+                + "the Oxford ion trap quantum computing group, this is done via "
+                + "nightly systemd jobs on 10.255.6.4.)"
+            )
         for rid in rids:
             # Discover location
             paths.append(rid_index.resolve_rid(root_path, index, rid))
@@ -189,9 +197,9 @@ def find_results(day: Union[None, str, List[str]] = None,
             day_path = os.path.join(root_path, day)
             # To increase speed on a slow filesystem (such as an SMB mount) we could
             # only list directories with appropriate hours.
-            paths.extend([
-                y for x in os.walk(day_path) for y in glob(os.path.join(x[0], "*.h5"))
-            ])
+            paths.extend(
+                [y for x in os.walk(day_path) for y in glob(os.path.join(x[0], "*.h5"))]
+            )
 
     results = {}
     hours = _iterify(hour)
