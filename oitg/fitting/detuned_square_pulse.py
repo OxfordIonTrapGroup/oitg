@@ -77,7 +77,8 @@ detuned_square_pulse = FitBase.FitBase(
         "a": (-np.inf, np.inf),
         "offset": (-np.inf, np.inf),
         "y0": (-np.inf, np.inf),
-    })
+    },
+    derived_parameter_names=["t_error", "area_error"],)
 
 if __name__ == '__main__':
 

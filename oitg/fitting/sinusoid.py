@@ -122,7 +122,8 @@ sinusoid = FitBase(
         "a": (0, np.inf),
         "c": (-np.inf, np.inf),
         "phi": (-np.inf, np.inf),  # allows fit to wrap phase
-    })
+    },
+    derived_parameter_names=["t_pi", "t_pi/2", "period", "max", "min"],)
 
 if __name__ == "__main__":
     # example and debugging

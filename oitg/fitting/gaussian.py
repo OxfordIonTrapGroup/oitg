@@ -45,4 +45,5 @@ def derived_parameter_function(p, p_error):
 gaussian = FitBase.FitBase(['x0', 'y0', 'a', 'sigma'],
                            fitting_function,
                            parameter_initialiser=parameter_initialiser,
-                           derived_parameter_function=derived_parameter_function)
+                           derived_parameter_function=derived_parameter_function,
+                           derived_parameter_names=["fwhm"],)

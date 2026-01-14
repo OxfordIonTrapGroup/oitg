@@ -42,7 +42,8 @@ def derived_parameter_function(p, p_error):
 parabola = FitBase.FitBase(['a', 'b', 'c'],
                            fitting_function,
                            parameter_initialiser=parameter_initialiser,
-                           derived_parameter_function=derived_parameter_function)
+                           derived_parameter_function=derived_parameter_function,
+                           derived_parameter_names=["x_ext", "y_ext"],)
 
 
 def parameter_initialiser_shifted(x, y, p):

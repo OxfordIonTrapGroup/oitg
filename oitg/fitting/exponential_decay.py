@@ -39,4 +39,5 @@ exponential_decay = FitBase.FitBase(
     ['x0', 'y0', 'y_inf', 'tau'],
     fitting_function,
     parameter_initialiser=parameter_initialiser,
-    derived_parameter_function=derived_parameter_function)
+    derived_parameter_function=derived_parameter_function,
+    derived_parameter_names=["t_1_e"],)

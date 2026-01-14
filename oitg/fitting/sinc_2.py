@@ -53,7 +53,8 @@ def derived_params(p_dict, p_error_dict):
 sinc_2 = FitBase.FitBase(['x0', 'y0', 'a', 'width'],
                          fitting_function,
                          parameter_initialiser=parameter_initialiser,
-                         derived_parameter_function=derived_params)
+                         derived_parameter_function=derived_params,
+                         derived_parameter_names=["omega"],)
 
 if __name__ == '__main__':
     from matplotlib import pyplot as plt

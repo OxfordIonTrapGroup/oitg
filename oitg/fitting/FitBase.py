@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from scipy.optimize import curve_fit, minimize
 
@@ -99,7 +101,8 @@ class FitBase:
                  fitting_function,
                  parameter_initialiser=None,
                  derived_parameter_function=None,
-                 parameter_bounds={}):
+                 parameter_bounds={},
+                 derived_parameter_names: list[str]=[]):
         """Create an object for fitting a function.
 
         - parameter_names:
@@ -126,6 +129,9 @@ class FitBase:
             Allowed ranges for the parameters, as a dictionary of
             (lower_limit, upper_limit) tuples indexed by parameter name. Use
             +/- np.inf to disable either of the bounds.
+        - derived_parameter_names:
+            List of names of any derived parameters calculated by
+            derived_parameter_functions
         """
 
         self.parameter_names = parameter_names
@@ -133,6 +139,15 @@ class FitBase:
         self.parameter_initialiser = parameter_initialiser
         self.derived_parameter_function = derived_parameter_function
         self.parameter_bounds = parameter_bounds
+        self.derived_parameter_names = derived_parameter_names
+        self.all_parameter_names = parameter_names + derived_parameter_names
+
+        if derived_parameter_function and not derived_parameter_names:
+            warnings.warn(
+                "Derived parameter function provided without derived parameter names. "
+                "This will be an error in a future version.",
+                DeprecationWarning,
+            )
 
     def fit(self,
             x,

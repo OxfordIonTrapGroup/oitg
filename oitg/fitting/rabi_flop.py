@@ -80,4 +80,5 @@ rabi_flop = FitBase.FitBase(
         "t_dead": (0, np.inf),
         "y_lower": (0, 1),
         "tau_decay": (0, np.inf)
-    })
+    },
+    derived_parameter_names=["t_pi"],)

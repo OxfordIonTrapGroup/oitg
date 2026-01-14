@@ -192,7 +192,8 @@ decaying_sinusoid = FitBase(
         "c_equ": (-np.inf, np.inf),
         "rate": (0, np.inf),
         "phi": (-np.inf, np.inf),  # allows fit to wrap phase
-    })
+    },
+    derived_parameter_names=["t_max_transfer", "period", "tau_decay"],)
 
 if __name__ == "__main__":
     # example and debugging
