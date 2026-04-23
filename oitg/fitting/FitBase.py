@@ -338,7 +338,7 @@ class FitBase:
                          y,
                          init,
                          sigma=y_err,
-                         absolute_sigma=True,
+                         absolute_sigma=y_err is not None,
                          bounds=(lower, upper),
                          x_scale=scale,
                          method='trf')
