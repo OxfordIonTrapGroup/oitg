@@ -26,7 +26,8 @@ def parameter_initialiser(x, y, p):
     # distance between points -> aliasing.
     freq = np.pi / t_range
     freqs = np.linspace(0.1 * freq, 10 * freq, 2 * len(x))
-    pgram = lombscargle(x, y, freqs, precenter=True)
+    # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+    pgram = lombscargle(x, y - np.mean(y), freqs)
     freq_order = np.argsort(-pgram)
     for f in freqs[freq_order]:
         t = 2 * np.pi / f

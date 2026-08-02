@@ -93,7 +93,8 @@ def parameter_initialiser(t, y, p):
     f_min = 0.5 / duration
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
-    pgram = lombscargle(t, y, omega_list, precenter=True)
+    # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+    pgram = lombscargle(t, y - np.mean(y), omega_list)
 
     p['omega'] = omega_list[np.argmax(pgram)]
     p['n_bar'] = 1  # small enough to fit n_bar=0.1
@@ -156,7 +157,8 @@ if __name__ == "__main__":  # example & debug code
     if False:  # frequency initial guess introspection (fit debugging)
         plt.figure()
         f = np.linspace(1e-1, 5, 10000)
-        plt.plot(f, lombscargle(t, y, f, precenter=True))
+        # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+        plt.plot(f, lombscargle(t, y - np.mean(y), f))
         from numpy.fft import rfftfreq, rfft
         plt.plot(
             rfftfreq(len(t), t[1] - t[0]) * 2 * np.pi,

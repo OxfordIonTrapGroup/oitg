@@ -61,7 +61,8 @@ def init_all(t, y, p_dict):
         temp = (y - p_dict['c_equ']) * np.exp(p_dict['rate'] * t)
         pgram = lombscargle(t, temp, omega_list, precenter=True)
     else:
-        pgram = lombscargle(t, y, omega_list, precenter=True)
+        # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+        pgram = lombscargle(t, y - np.mean(y), omega_list)
     p_dict['omega'] = omega_list[np.argmax(pgram)]
 
     # this amplitude guess is aware of user initialised omega
@@ -273,7 +274,8 @@ if __name__ == "__main__":
         f_min = 0.5 / duration
 
         omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
-        periodigram = lombscargle(t, y, omega_list, precenter=True)
+        # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+        periodigram = lombscargle(t, y - np.mean(y), omega_list)
         plt.figure()
         plt.plot(omega_list, periodigram)
         plt.xlim(0, omega * 5)

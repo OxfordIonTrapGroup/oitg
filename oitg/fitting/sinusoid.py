@@ -53,9 +53,8 @@ def parameter_initialiser(t, y, p_dict):
     f_min = 0.25 / duration
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
-    # Manually subtract mean, as the new lombscargle() implementation in SciPy 1.15+
-    # breaks for our use case otherwise.
-    pgram = lombscargle(t, y - np.mean(y), omega_list, precenter=True)
+    # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+    pgram = lombscargle(t, y - np.mean(y), omega_list)
 
     p_dict["omega"] = omega_list[np.argmax(pgram)]
     p_dict["c"] = np.mean(y)

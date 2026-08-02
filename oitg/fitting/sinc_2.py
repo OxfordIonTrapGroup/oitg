@@ -19,7 +19,8 @@ def parameter_initialiser(x, y, p):
 
     omega_list = 2 * np.pi * np.linspace(f_min, f_max, int(f_max / f_min))
     # the periodogram should give the correct width up-to a factor of 2
-    pgram = lombscargle(x, y, omega_list, precenter=True)
+    # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
+    pgram = lombscargle(x, y - np.mean(y), omega_list)
     p["width"] = omega_list[np.argmax(pgram)] / np.pi
 
     p['y0'] = np.mean(y)
