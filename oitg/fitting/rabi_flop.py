@@ -7,41 +7,91 @@ initial dead time to account for AOM/... switching effects.
 
 Currently only supports positive-sign scans (starting at y=1, not y=0).
 
-For guessing the initial parameters, it is assumed that the scan range contains
-the first minimum (i.e., the pi time), and is about 1/10 to 10 times in length.
+For guessing the initial parameters, it is assumed that the scan covers at
+least about a quarter of an oscillation period, and that the sampling is dense
+enough to resolve the oscillation (more than two points per period).
 """
 
 
 def parameter_initialiser(x, y, p):
-    t_min = np.amin(x)
-    t_range = np.amax(x) - t_min
-    if t_range == 0.0:
-        t_range = 1.0
+    # Sort by time so sample spacings and early/late chunks are meaningful.
+    order = np.argsort(x)
+    x = np.asarray(x)[order]
+    y = np.asarray(y)[order]
 
-    # Estimate frequency. Starting with a Lomb-Scargle periodogram (which
-    # supports irregularly-spaced samples), we pick the strongest frequency
-    # component which leads to a pi time larger than t_min.
-    #
-    # TODO: Could use better heuristics for frequency range based on minimum
-    # distance between points -> aliasing.
-    freq = np.pi / t_range
-    freqs = np.linspace(0.1 * freq, 10 * freq, 2 * len(x))
-    # Explicit mean subtraction as precenter=True modifies input on SciPy v1.15+.
-    pgram = lombscargle(x, y - np.mean(y), freqs)
-    freq_order = np.argsort(-pgram)
-    for f in freqs[freq_order]:
-        t = 2 * np.pi / f
-        if t / 2 > t_min:
-            p["t_period"] = t
-            break
+    t_min = x[0]
+    t_range = x[-1] - x[0]
+    steps = np.diff(x)
+    steps = steps[steps > 0]
+    if t_range <= 0.0 or len(steps) == 0:
+        # Degenerate scan; avoid divisions by zero below (the fit cannot work
+        # on such data anyway).
+        t_range = 1.0
+        steps = np.array([1.0])
+    y_mean = np.mean(y)
+
+    # Estimate the decay time constant by comparing the RMS deviations from
+    # the global mean (~oscillation amplitudes) in the first and last thirds
+    # of the scan. Clamp the result to a sane range to keep the least-squares
+    # problem well-conditioned even for scans without visible decay.
+    k = max(len(x) // 3, 1)
+    a_early = np.sqrt(np.mean((y[:k] - y_mean)**2))
+    a_late = np.sqrt(np.mean((y[-k:] - y_mean)**2))
+    t_centre_diff = np.mean(x[-k:]) - np.mean(x[:k])
+    if a_early > a_late > 0.0 and t_centre_diff > 0.0:
+        tau_decay = t_centre_diff / np.log(a_early / a_late)
+    else:
+        tau_decay = np.inf
+    p["tau_decay"] = np.clip(tau_decay, t_range / 10, 10 * t_range)
+
+    # Estimate frequency using a Lomb-Scargle periodogram (which supports
+    # irregularly-spaced samples). Search between a quarter of an oscillation
+    # over the whole scan (relaxed Fourier limit, to also handle scans that
+    # do not quite reach the first minimum) and the Nyquist frequency
+    # corresponding to the median sample spacing, with the grid chosen fine
+    # enough to resolve the position of periodogram peaks (of width
+    # ~2 pi / t_range) well.
+    omega_min = 0.5 * np.pi / t_range
+    omega_max = max(np.pi / np.median(steps), 4 * omega_min)
+    num_omegas = int(np.ceil((omega_max - omega_min) / (np.pi / (4 * t_range))))
+    omegas = np.linspace(omega_min, omega_max, max(num_omegas, 32))
+    # Subtract the mean ourselves, as lombscargle(precenter=True) modifies y
+    # in place on SciPy 1.15+, corrupting the data used for the actual fit.
+    # To keep the strong low-frequency components introduced by the decaying
+    # envelope from overshadowing the oscillation, also divide out the decay
+    # estimated above (clamping the envelope to avoid blowing up the noise in
+    # the tail of strongly damped scans).
+    envelope = np.maximum(np.exp(-(x - t_min) / p["tau_decay"]), np.exp(-2.0))
+    z = (y - y_mean) / envelope
+    pgram = lombscargle(x, z - np.mean(z), omegas)
 
     p["t_dead"] = 0.0
 
-    p["y_lower"] = np.clip(2 * np.mean(y) - 1, 0, 1)
+    p["y_lower"] = np.clip(2 * y_mean - 1, 0, 1)
 
-    # TODO: Estimate decay time constant using RMS amplitude from global mean
-    # in first and last chunk.
-    p["tau_decay"] = 1
+    # Consider the strongest few periodogram peaks and their first harmonics
+    # (as noise and irregular sampling can cause a subharmonic to end up
+    # stronger than the true frequency) as candidates, preferring those which
+    # lead to a pi time larger than t_min (i.e. the first minimum not before
+    # the scanned range). Among those, pick the one that actually matches the
+    # data best when combined with the other initial parameter estimates.
+    peak_idxs = np.nonzero((pgram[1:-1] >= pgram[:-2])
+                           & (pgram[1:-1] >= pgram[2:]))[0] + 1
+    if len(peak_idxs) == 0:
+        peak_idxs = np.array([np.argmax(pgram)])
+    peaks = peak_idxs[np.argsort(-pgram[peak_idxs])][:3]
+    candidates = [c for omega in omegas[peaks] for c in (omega, 2 * omega)]
+    allowed = [omega for omega in candidates if np.pi / omega > t_min]
+    if allowed:
+        candidates = allowed
+
+    trial = {"t_dead": 0.0, "y_lower": p["y_lower"], "tau_decay": p["tau_decay"]}
+
+    def sum_squares(omega):
+        trial["t_period"] = 2 * np.pi / omega
+        return np.sum((y - fitting_function(x, trial))**2)
+
+    p["t_period"] = 2 * np.pi / min(candidates, key=sum_squares)
 
 
 def fitting_function(x, p):
