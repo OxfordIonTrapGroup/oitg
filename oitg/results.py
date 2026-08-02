@@ -32,6 +32,8 @@ def load_hdf5_file(filename: str) -> Dict[str, Any]:
      * ``"start_time"``: the Unix timestamp when the experiment was built
      * ``"expid"``: experiment description, including submission arguments
      * ``"datasets"``: dictionary containing all set datasets
+     * ``"archive"``: dictionary containing all archived (accessed) datasets
+     * ``"rid"``: the rid
     """
     with h5py.File(filename, "r") as f:
         r = {}
@@ -53,6 +55,8 @@ def load_hdf5_file(filename: str) -> Dict[str, Any]:
         r["archive"] = ar
         for k in f["archive"]:
             ar[k] = f["archive"][k][()]
+
+        r["rid"] = f["rid"][()]
 
         return r
 
