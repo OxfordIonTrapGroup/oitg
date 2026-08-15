@@ -1,21 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oitg.threshold &mdash; oitg  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/threshold.html"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/threshold.html"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -76,16 +76,15 @@
   <h1>Source code for oitg.threshold</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">poisson</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="kn">import</span> <span class="n">gammainc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">poisson</span>
 
 
 <div class="viewcode-block" id="optimise_readout">
 <a class="viewcode-back" href="../../threshold.html#oitg.threshold.optimise_readout">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">optimise_readout</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span>
-                     <span class="n">dark_rate</span><span class="p">,</span>
-                     <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">1.168</span><span class="p">),</span>
-                     <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimise_readout</span><span class="p">(</span>
+    <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mf">1.168</span><span class="p">),</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate optimal threshold bin time &amp; threshold count</span>
 
 <span class="sd">    The calculation assumes both bright and dark counts are</span>
@@ -103,15 +102,17 @@
 
 <span class="sd">    :returns: (target_t_bin [s], threshold_count, p_error)&quot;&quot;&quot;</span>
     <span class="n">thresh</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">error_last</span> <span class="o">=</span> <span class="mf">1.</span>
-    <span class="n">t_bin</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">optimise_t_bin</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="p">,</span>
-                                  <span class="n">p_bright</span><span class="p">)</span>
+    <span class="n">error_last</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">t_bin</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">optimise_t_bin</span><span class="p">(</span>
+        <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="p">,</span> <span class="n">p_bright</span>
+    <span class="p">)</span>
     <span class="k">while</span> <span class="n">error_last</span> <span class="o">&gt;</span> <span class="n">error</span><span class="p">:</span>
         <span class="n">error_last</span> <span class="o">=</span> <span class="n">error</span>
         <span class="n">t_bin_last</span> <span class="o">=</span> <span class="n">t_bin</span>
         <span class="n">thresh</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">t_bin</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">optimise_t_bin</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span>
-                                      <span class="n">dark_to_bright_rate</span><span class="p">,</span> <span class="n">p_bright</span><span class="p">)</span>
+        <span class="n">t_bin</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">optimise_t_bin</span><span class="p">(</span>
+            <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="p">,</span> <span class="n">p_bright</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">t_bin_last</span><span class="p">,</span> <span class="n">thresh</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">error_last</span><span class="p">)</span></div>
 
@@ -119,11 +120,9 @@
 
 <div class="viewcode-block" id="optimise_treshold">
 <a class="viewcode-back" href="../../threshold.html#oitg.threshold.optimise_treshold">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">optimise_treshold</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span>
-                      <span class="n">dark_rate</span><span class="p">,</span>
-                      <span class="n">t_bin</span><span class="p">,</span>
-                      <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                      <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimise_treshold</span><span class="p">(</span>
+    <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate optimal threshold threshold count for a given bin time</span>
 
 <span class="sd">    The calculation accounts for de-shelving during the readout bin time.</span>
@@ -137,21 +136,22 @@
 <span class="sd">    :returns: (target_t_bin [s], threshold_count, p_error)&quot;&quot;&quot;</span>
     <span class="c1"># de-shelving increases the count rate of dark states (non-poissonian)</span>
     <span class="c1"># The no-de-shelving threshold is therefore a lower bound</span>
-    <span class="n">thresh_min</span> <span class="o">=</span> <span class="n">poisson_optimal_thresh_count</span><span class="p">(</span><span class="n">bright_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">,</span>
-                                              <span class="n">p_bright</span><span class="p">)</span>
+    <span class="n">thresh_min</span> <span class="o">=</span> <span class="n">poisson_optimal_thresh_count</span><span class="p">(</span>
+        <span class="n">bright_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">p_bright</span>
+    <span class="p">)</span>
     <span class="n">thresh_max</span> <span class="o">=</span> <span class="n">bright_rate</span> <span class="o">*</span> <span class="n">t_bin</span>
 
     <span class="c1"># thresholds are discrete - could implement discreet optimisation, but the</span>
     <span class="c1"># range of values is small in practice. Therefore we can try all options</span>
     <span class="n">thresh_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">thresh_min</span><span class="p">,</span> <span class="n">thresh_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
-    <span class="n">err_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-        <span class="n">calc_p_error</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span>
-                     <span class="n">dark_rate</span><span class="p">,</span>
-                     <span class="n">t_bin</span><span class="p">,</span>
-                     <span class="n">i</span><span class="p">,</span>
-                     <span class="n">dark_to_bright_rate</span><span class="p">,</span>
-                     <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">thresh_vec</span>
-    <span class="p">])</span>
+    <span class="n">err_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">calc_p_error</span><span class="p">(</span>
+                <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">thresh_vec</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
 
     <span class="n">min_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">err_vec</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">thresh_vec</span><span class="p">[</span><span class="n">min_idx</span><span class="p">],</span> <span class="n">err_vec</span><span class="p">[</span><span class="n">min_idx</span><span class="p">]</span></div>
@@ -160,11 +160,9 @@
 
 <div class="viewcode-block" id="optimise_t_bin">
 <a class="viewcode-back" href="../../threshold.html#oitg.threshold.optimise_t_bin">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">optimise_t_bin</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span>
-                   <span class="n">dark_rate</span><span class="p">,</span>
-                   <span class="n">thresh_count</span><span class="p">,</span>
-                   <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                   <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimise_t_bin</span><span class="p">(</span>
+    <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">thresh_count</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate optimal threshold bin time for a given threshold count</span>
 
 <span class="sd">    The calculation accounts for de-shelving during the readout bin time.</span>
@@ -181,16 +179,23 @@
     <span class="n">err_scale</span> <span class="o">=</span> <span class="mf">1e-6</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">p_error</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">calc_p_error</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span>
-                            <span class="n">dark_rate</span><span class="p">,</span>
-                            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t_scale</span><span class="p">,</span>
-                            <span class="n">thresh_count</span><span class="p">,</span>
-                            <span class="n">dark_to_bright_rate</span><span class="p">,</span>
-                            <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">)</span> <span class="o">/</span> <span class="n">err_scale</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">calc_p_error</span><span class="p">(</span>
+                <span class="n">bright_rate</span><span class="p">,</span>
+                <span class="n">dark_rate</span><span class="p">,</span>
+                <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t_scale</span><span class="p">,</span>
+                <span class="n">thresh_count</span><span class="p">,</span>
+                <span class="n">dark_to_bright_rate</span><span class="p">,</span>
+                <span class="n">p_bright</span><span class="o">=</span><span class="n">p_bright</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">/</span> <span class="n">err_scale</span>
+        <span class="p">)</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">p_error</span><span class="p">,</span>
-                      <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t_bin_init</span> <span class="o">/</span> <span class="n">t_scale</span><span class="p">]),</span>
-                      <span class="n">bounds</span><span class="o">=</span><span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">bright_rate</span> <span class="o">/</span> <span class="n">t_scale</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span> <span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span>
+        <span class="n">p_error</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t_bin_init</span> <span class="o">/</span> <span class="n">t_scale</span><span class="p">]),</span>
+        <span class="n">bounds</span><span class="o">=</span><span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="n">bright_rate</span> <span class="o">/</span> <span class="n">t_scale</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),),</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">t_scale</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">fun</span> <span class="o">*</span> <span class="n">err_scale</span></div>
 
@@ -198,12 +203,9 @@
 
 <div class="viewcode-block" id="calc_p_error">
 <a class="viewcode-back" href="../../threshold.html#oitg.threshold.calc_p_error">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">calc_p_error</span><span class="p">(</span><span class="n">bright_rate</span><span class="p">,</span>
-                 <span class="n">dark_rate</span><span class="p">,</span>
-                 <span class="n">t_bin</span><span class="p">,</span>
-                 <span class="n">thresh_count</span><span class="p">,</span>
-                 <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                 <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calc_p_error</span><span class="p">(</span>
+    <span class="n">bright_rate</span><span class="p">,</span> <span class="n">dark_rate</span><span class="p">,</span> <span class="n">t_bin</span><span class="p">,</span> <span class="n">thresh_count</span><span class="p">,</span> <span class="n">dark_to_bright_rate</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">p_bright</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate error probability for Poisson statistics with de-shelving</span>
 
 <span class="sd">    See thesis: Alice Burrell, 2010</span>
@@ -216,20 +218,24 @@
 <span class="sd">    :param dark_to_bright_rate: dark state decay to become bright in $s^-1$</span>
 <span class="sd">    :param p_bright: probability of encountering a bright state (default=0.5)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">p_n_given_dark</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
         <span class="s2">&quot;Burrell Eqns 3.2 &amp; 3.6&quot;</span>
-        <span class="k">if</span> <span class="n">dark_to_bright_rate</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dark_to_bright_rate</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">)</span>
 
         <span class="n">rb_tau</span> <span class="o">=</span> <span class="p">(</span><span class="n">bright_rate</span> <span class="o">-</span> <span class="n">dark_rate</span><span class="p">)</span> <span class="o">/</span> <span class="n">dark_to_bright_rate</span>
         <span class="n">eps</span> <span class="o">=</span> <span class="n">bright_rate</span> <span class="o">*</span> <span class="n">t_bin</span> <span class="o">/</span> <span class="n">rb_tau</span>
 
         <span class="n">x_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">eps</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">rb_tau</span> <span class="o">/</span> <span class="p">(</span><span class="n">rb_tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rb_tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">x_n</span> <span class="o">*=</span> <span class="p">(</span><span class="n">gammainc</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">eps</span> <span class="o">*</span> <span class="p">(</span><span class="n">rb_tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span>
-                <span class="n">gammainc</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span> <span class="o">/</span> <span class="n">rb_tau</span> <span class="o">*</span> <span class="p">(</span><span class="n">rb_tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">x_n</span> <span class="o">*=</span> <span class="n">gammainc</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">eps</span> <span class="o">*</span> <span class="p">(</span><span class="n">rb_tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">-</span> <span class="n">gammainc</span><span class="p">(</span>
+            <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span> <span class="o">/</span> <span class="n">rb_tau</span> <span class="o">*</span> <span class="p">(</span><span class="n">rb_tau</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="n">d_n</span> <span class="o">=</span> <span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-            <span class="o">-</span><span class="n">t_bin</span> <span class="o">*</span> <span class="n">dark_to_bright_rate</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_n</span>
+        <span class="n">d_n</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">poisson</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">dark_rate</span> <span class="o">*</span> <span class="n">t_bin</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t_bin</span> <span class="o">*</span> <span class="n">dark_to_bright_rate</span><span class="p">)</span>
+            <span class="o">+</span> <span class="n">x_n</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">d_n</span>
 
     <span class="c1"># up-to &amp; including thresh_count</span>

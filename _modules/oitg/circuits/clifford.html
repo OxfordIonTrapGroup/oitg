@@ -1,21 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oitg.circuits.clifford &mdash; oitg  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/clifford.html"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/clifford.html"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -96,7 +96,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">unique</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">.gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateGenerator</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="n">remap_operands</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.to_matrix</span><span class="w"> </span><span class="kn">import</span> <span class="n">gate_sequence_matrix</span>
 
@@ -115,8 +117,14 @@
 <span class="sd">        as a map of canonical matrix key (see :meth:`to_canonical_matrix_key`) to</span>
 <span class="sd">        element index.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">gate_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
-                 <span class="n">matrices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">inverse_idxs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">gate_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
+        <span class="n">matrices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">inverse_idxs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_qubits</span> <span class="o">=</span> <span class="n">num_qubits</span>
 
         <span class="c1"># Exhaustive list of gate sequences for all elements and their unitary matrices.</span>
@@ -192,7 +200,7 @@
     <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-6</span><span class="p">:</span>
         <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">phase</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">u</span> <span class="o">/</span> <span class="n">phase</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;complex64&#39;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">u</span> <span class="o">/</span> <span class="n">phase</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;complex64&quot;</span><span class="p">)</span></div>
 
 
 
@@ -283,13 +291,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">_clifford_1q_xypm_implementations</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span></div>
 
@@ -333,17 +341,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">_clifford_1q_xzpm2_implementations</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">elif</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Gate</span><span class="p">(</span><span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="kc">False</span></div>
 
@@ -371,8 +379,9 @@
 <div class="viewcode-block" id="get_clifford_2q_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_clifford_2q_implementation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_clifford_2q_implementation</span><span class="p">(</span>
-    <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">clifford_1q_impl</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">,</span>
-    <span class="n">entangling_gates_impl</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">CliffordImpl</span><span class="p">],</span> <span class="n">GateGenerator</span><span class="p">]</span>
+    <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">clifford_1q_impl</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">,</span>
+    <span class="n">entangling_gates_impl</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">CliffordImpl</span><span class="p">],</span> <span class="n">GateGenerator</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the 2-qubit Clifford group element with the given</span>
 <span class="sd">    index.</span>
@@ -399,8 +408,9 @@
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="k">yield from</span> <span class="n">clifford_1q_impl</span><span class="p">(</span><span class="n">axis_permute_clifford_1q_elems</span><span class="p">[</span><span class="n">p0</span><span class="p">])</span>
-        <span class="k">yield from</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl</span><span class="p">(</span><span class="n">axis_permute_clifford_1q_elems</span><span class="p">[</span><span class="n">p1</span><span class="p">]),</span>
-                                  <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+        <span class="k">yield from</span> <span class="n">remap_operands</span><span class="p">(</span>
+            <span class="n">clifford_1q_impl</span><span class="p">(</span><span class="n">axis_permute_clifford_1q_elems</span><span class="p">[</span><span class="n">p1</span><span class="p">]),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="p">)</span>
 
     <span class="n">i</span> <span class="o">=</span> <span class="n">idx</span>
     <span class="n">NUM_LOCAL</span> <span class="o">=</span> <span class="mi">24</span><span class="o">**</span><span class="mi">2</span>
@@ -444,10 +454,12 @@
 <div class="viewcode-block" id="get_cz_entangling_gate_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_cz_entangling_gate_implementation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_cz_entangling_gate_implementation</span><span class="p">(</span>
-        <span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given entangling gate category using CZ gates</span>
 <span class="sd">    and the given single-qubit gate implementation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 
@@ -474,10 +486,12 @@
 <div class="viewcode-block" id="get_zzw_entangling_gate_implementation">
 <a class="viewcode-back" href="../../../circuits.html#oitg.circuits.clifford.get_zzw_entangling_gate_implementation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_zzw_entangling_gate_implementation</span><span class="p">(</span>
-        <span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">EntanglingGate</span><span class="p">,</span> <span class="n">clifford_1q_impl_0</span><span class="p">:</span> <span class="n">CliffordImpl</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateGenerator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given entangling gate category using symmetric</span>
 <span class="sd">    ZZ (wobble) gates and the given single-qubit gate implementation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">clifford_1q_impl_1</span><span class="p">(</span><span class="n">idx</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">remap_operands</span><span class="p">(</span><span class="n">clifford_1q_impl_0</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 
@@ -507,8 +521,9 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given 2-qubit Clifford group element using CZ</span>
 <span class="sd">    gates and local single-qubit ±π/2 rotations about the x and y axes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xypm_implementation</span><span class="p">,</span>
-                                          <span class="n">get_cz_entangling_gate_implementation</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xypm_implementation</span><span class="p">,</span> <span class="n">get_cz_entangling_gate_implementation</span>
+    <span class="p">)</span></div>
 
 
 
@@ -518,8 +533,9 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an implementation of the given 2-qubit Clifford group element using CZ</span>
 <span class="sd">    gates and local single-qubit ±π/2 and π rotations about the x and z axes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xzpm2_implementation</span><span class="p">,</span>
-                                          <span class="n">get_cz_entangling_gate_implementation</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xzpm2_implementation</span><span class="p">,</span> <span class="n">get_cz_entangling_gate_implementation</span>
+    <span class="p">)</span></div>
 
 
 
@@ -530,8 +546,11 @@
 <span class="sd">    symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local</span>
 <span class="sd">    single-qubit ±π/2 and π rotations about the x and z axes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">get_clifford_1q_xzpm2_implementation</span><span class="p">,</span>
-                                          <span class="n">get_zzw_entangling_gate_implementation</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">get_clifford_2q_implementation</span><span class="p">(</span>
+        <span class="n">idx</span><span class="p">,</span>
+        <span class="n">get_clifford_1q_xzpm2_implementation</span><span class="p">,</span>
+        <span class="n">get_zzw_entangling_gate_implementation</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

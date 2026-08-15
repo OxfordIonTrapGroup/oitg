@@ -1,21 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oitg.circuits.protocols.rbm.generate &mdash; oitg  documentation</title>
-      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/protocols/rbm/generate.html"/>
-  <!--[if lt IE 9]>
-    <script src="../../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/protocols/rbm/generate.html"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
@@ -81,8 +81,10 @@
 <span class="sd">implementing stabilizer calculations.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">...clifford</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateGroup</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...gate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gate</span><span class="p">,</span> <span class="n">GateSequence</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...to_matrix</span><span class="w"> </span><span class="kn">import</span> <span class="n">gate_sequence_matrix</span>
@@ -90,13 +92,15 @@
 
 <div class="viewcode-block" id="generate_rbm_experiment">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.rbm.generate.generate_rbm_experiment">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">generate_rbm_experiment</span><span class="p">(</span><span class="n">group</span><span class="p">:</span> <span class="n">GateGroup</span><span class="p">,</span>
-                            <span class="n">sequence_lengths</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-                            <span class="n">randomisations_per_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                            <span class="n">pauli_randomize_last</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">interleave_gates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">derive_shorter_by_truncation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_rbm_experiment</span><span class="p">(</span>
+    <span class="n">group</span><span class="p">:</span> <span class="n">GateGroup</span><span class="p">,</span>
+    <span class="n">sequence_lengths</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">randomisations_per_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">pauli_randomize_last</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">interleave_gates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">derive_shorter_by_truncation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">GateSequence</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :param sequence_lengths: List of sequence lengths to generate. For each length k, a</span>
 <span class="sd">        number of sequences will be generated with k Clifford group elements (or</span>
@@ -134,14 +138,15 @@
     <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">sequence_lengths</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">_rand</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">randomisations_per_length</span><span class="p">):</span>
             <span class="n">unfinished_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">num_elements</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+                <span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">num_elements</span><span class="p">())</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">derive_shorter_by_truncation</span><span class="p">:</span>
             <span class="k">break</span>
     <span class="k">if</span> <span class="n">derive_shorter_by_truncation</span><span class="p">:</span>
         <span class="n">truncated_sequences</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">sequence_lengths</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
             <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">unfinished_sequences</span><span class="p">:</span>
-                <span class="n">truncated_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">[:(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+                <span class="n">truncated_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seq</span><span class="p">[:</span> <span class="p">(</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
         <span class="n">unfinished_sequences</span> <span class="o">+=</span> <span class="n">truncated_sequences</span>
 
     <span class="c1"># Use a special marker index for the interleaved gates (if any), as we want to</span>
@@ -162,8 +167,9 @@
             <span class="n">interleaved_sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interleaved_seq</span><span class="p">)</span>
         <span class="n">unfinished_sequences</span> <span class="o">+=</span> <span class="n">interleaved_sequences</span>
 
-        <span class="n">interleaved_matrix</span> <span class="o">=</span> <span class="n">gate_sequence_matrix</span><span class="p">(</span><span class="n">interleave_gates</span><span class="p">,</span>
-                                                  <span class="n">num_qubits</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">num_qubits</span><span class="p">)</span>
+        <span class="n">interleaved_matrix</span> <span class="o">=</span> <span class="n">gate_sequence_matrix</span><span class="p">(</span>
+            <span class="n">interleave_gates</span><span class="p">,</span> <span class="n">num_qubits</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">num_qubits</span>
+        <span class="p">)</span>
 
     <span class="n">finished_sequences_descs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">clifford_idxs</span> <span class="ow">in</span> <span class="n">unfinished_sequences</span><span class="p">:</span>
@@ -216,9 +222,10 @@
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Demonstrate sequence generation.</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">contexttimer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Timer</span>
+
     <span class="kn">from</span><span class="w"> </span><span class="nn">....cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache_to_pickle_file</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">...clifford</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">...visualisation</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_circuit_pdf</span>
@@ -239,16 +246,22 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generated 1-qubit Clifford group in </span><span class="si">{}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">elapsed</span><span class="p">))</span>
     <span class="k">with</span> <span class="n">Timer</span><span class="p">()</span> <span class="k">as</span> <span class="n">t</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">generate_rbm_experiment</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">num_randomisations</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generated </span><span class="si">{}</span><span class="s2"> 1-qubit sequences in </span><span class="si">{}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_randomisations</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">elapsed</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Generated </span><span class="si">{}</span><span class="s2"> 1-qubit sequences in </span><span class="si">{}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_randomisations</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">elapsed</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="k">with</span> <span class="n">Timer</span><span class="p">()</span> <span class="k">as</span> <span class="n">t</span><span class="p">:</span>
         <span class="n">c2</span> <span class="o">=</span> <span class="n">get_c2</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loaded 2-qubit Clifford group in </span><span class="si">{}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">elapsed</span><span class="p">))</span>
     <span class="k">with</span> <span class="n">Timer</span><span class="p">()</span> <span class="k">as</span> <span class="n">t</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">generate_rbm_experiment</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">num_randomisations</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generated </span><span class="si">{}</span><span class="s2"> 2-qubit sequences in </span><span class="si">{}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_randomisations</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">elapsed</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Generated </span><span class="si">{}</span><span class="s2"> 2-qubit sequences in </span><span class="si">{}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_randomisations</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">elapsed</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="n">save_circuit_pdf</span><span class="p">(</span><span class="s2">&quot;rbm.pdf&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>

@@ -1,21 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oitg.circuits.protocols.process_tomo.analyse &mdash; oitg  documentation</title>
-      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/protocols/process_tomo/analyse.html"/>
-  <!--[if lt IE 9]>
-    <script src="../../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/protocols/process_tomo/analyse.html"/>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
@@ -99,9 +99,11 @@
 <span class="sd">    Physical Review A 98, (2018).</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">...gate</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...to_matrix</span><span class="w"> </span><span class="kn">import</span> <span class="n">gate_sequence_matrix</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.tools</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
@@ -109,7 +111,7 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_first_index</span><span class="p">(</span><span class="n">needle</span><span class="p">,</span> <span class="n">haystack</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">)]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">haystack</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">)]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">i</span>
     <span class="k">raise</span> <span class="ne">ValueError</span>
 
@@ -117,7 +119,7 @@
 <div class="viewcode-block" id="guess_prepare_target_measure_split">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.guess_prepare_target_measure_split">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">guess_prepare_target_measure_split</span><span class="p">(</span>
-    <span class="n">all_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">]</span>
+    <span class="n">all_sequences</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;For a given list of gate sequences making up a tomography experiment, guesses</span>
 <span class="sd">    which is the target sequence to be analysed, and the preparation/measuemrent</span>
@@ -139,15 +141,17 @@
 
     <span class="n">target_start_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_find_first_index</span><span class="p">(</span><span class="n">target_seq</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_sequences</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">target_seq</span><span class="p">,</span> <span class="p">[(</span><span class="n">s</span><span class="p">[:</span><span class="n">t</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_seq</span><span class="p">):])</span>
-                        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target_start_idxs</span><span class="p">,</span> <span class="n">all_sequences</span><span class="p">)]</span></div>
+    <span class="k">return</span> <span class="n">target_seq</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">s</span><span class="p">[:</span><span class="n">t</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_seq</span><span class="p">)</span> <span class="p">:])</span>
+        <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target_start_idxs</span><span class="p">,</span> <span class="n">all_sequences</span><span class="p">)</span>
+    <span class="p">]</span></div>
 
 
 
 <div class="viewcode-block" id="auto_prepare_data">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.auto_prepare_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">auto_prepare_data</span><span class="p">(</span>
-    <span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+    <span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a results dictionary, guess the target and fiducial sequences and extract</span>
 <span class="sd">    the tomography input data.</span>
@@ -170,7 +174,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">prepare_data</span><span class="p">(</span>
     <span class="n">outcomes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">GateSequence</span><span class="p">,</span> <span class="n">GateSequence</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
     <span class="n">initial_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">readout_projectors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">readout_projectors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a dictionary of observed measurement outcomes indexed by pairs of the</span>
 <span class="sd">    state preparation and measurement gate sequences used, compute the prepared/measured</span>
@@ -201,8 +205,9 @@
     <span class="n">meas_sequences</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">))</span>
     <span class="n">meas_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">meas_sequences</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span><span class="p">]</span>
 
-    <span class="n">num_qubits</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
-        <span class="nb">max</span><span class="p">(</span><span class="n">collect_operands</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">num_qubits</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">collect_operands</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fiducial_pairs</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">basis_ket</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
         <span class="n">psi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
@@ -222,7 +227,8 @@
     <span class="k">if</span> <span class="n">readout_projectors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">readout_projectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">projector</span><span class="p">(</span><span class="n">basis_ket</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">num_qubits</span><span class="p">)]</span>
     <span class="n">meas_projectors</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">readout_projector</span> <span class="o">@</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">meas_unitaries</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">readout_projector</span> <span class="o">@</span> <span class="n">u</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">meas_unitaries</span>
         <span class="k">for</span> <span class="n">readout_projector</span> <span class="ow">in</span> <span class="n">readout_projectors</span>
     <span class="p">]</span>
 
@@ -235,15 +241,17 @@
             <span class="n">observations</span><span class="p">[</span><span class="n">prep_idx</span><span class="p">,</span> <span class="n">meas_base_idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-            <span class="s2">&quot;Currently assuming all prepare/measure combinations are present&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;Currently assuming all prepare/measure combinations are present&quot;</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">prep_projectors</span><span class="p">,</span> <span class="n">meas_projectors</span><span class="p">,</span> <span class="n">observations</span></div>
 
 
 
 <div class="viewcode-block" id="build_choi_predictor">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.build_choi_predictor">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">build_choi_predictor</span><span class="p">(</span><span class="n">prep_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                         <span class="n">meas_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_choi_predictor</span><span class="p">(</span>
+    <span class="n">prep_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">meas_operators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a list of prepared and measured states as state vectors, return a matrix</span>
 <span class="sd">    that predicts observed probabilities when applied to the Choi matrix of a process.</span>
 
@@ -262,17 +270,21 @@
 <span class="sd">        ideal projections onto states :math:`\left(\left|\phi_j\right&gt;\right)_j`, and</span>
 <span class="sd">        :math:`P_j = \left|\phi_j\right&gt;\left&lt;\phi_j\right|`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span>
-        <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="n">meas</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">prep_operators</span>
-        <span class="k">for</span> <span class="n">meas</span> <span class="ow">in</span> <span class="n">meas_operators</span>
-    <span class="p">])</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">mat2vec</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="n">meas</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="n">prep_operators</span>
+            <span class="k">for</span> <span class="n">meas</span> <span class="ow">in</span> <span class="n">meas_operators</span>
+        <span class="p">]</span>
+    <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="invert_choi_predictor">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.invert_choi_predictor">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">invert_choi_predictor</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                          <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">invert_choi_predictor</span><span class="p">(</span>
+    <span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Obtain an estimate for the process :math:`\mathcal{E}` by applying the inverse</span>
 <span class="sd">    of the given Choi predictor to a matrix of experimentally measured outcomes.</span>
 
@@ -297,28 +309,35 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Choi predictor not of right shape for CPTP involution&quot;</span><span class="p">)</span>
     <span class="n">num_measurement_bases</span><span class="p">,</span> <span class="n">rem</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">observations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pure_state_dimension</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rem</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of observation matrix columns not consistent with &quot;</span>
-                         <span class="s2">&quot;dim(pure_state) measurements per basis&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Number of observation matrix columns not consistent with &quot;</span>
+            <span class="s2">&quot;dim(pure_state) measurements per basis&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">normalised_observations</span> <span class="o">=</span> <span class="n">observations</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
     <span class="n">shots_per_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_measurement_bases</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">normalised_observations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="n">normalised_observations</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/=</span> <span class="n">shots_per_basis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-    <span class="n">solution</span><span class="p">,</span> <span class="n">residuals</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">singular_vals</span> <span class="o">=</span> \
-        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">normalised_observations</span><span class="p">),</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">,</span> <span class="n">residuals</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">singular_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span>
+        <span class="n">choi_predictor</span><span class="p">,</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">normalised_observations</span><span class="p">),</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">rank</span> <span class="o">!=</span> <span class="n">solution</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Predictor matrix was rank-deficient; &quot;</span>
-                         <span class="s2">&quot;check that input/measurement state sets are complete&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Predictor matrix was rank-deficient; &quot;</span>
+            <span class="s2">&quot;check that input/measurement state sets are complete&quot;</span>
+        <span class="p">)</span>
     <span class="k">return</span> <span class="n">vec2mat</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="o">/</span> <span class="n">pure_state_dimension</span></div>
 
 
 
 <div class="viewcode-block" id="linear_inversion_tomography">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.linear_inversion_tomography">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">linear_inversion_tomography</span><span class="p">(</span><span class="n">prep_projectors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                                <span class="n">meas_operators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                                <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">linear_inversion_tomography</span><span class="p">(</span>
+    <span class="n">prep_projectors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">meas_operators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the linear inversion estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations.</span>
 
@@ -338,8 +357,9 @@
 
 <div class="viewcode-block" id="negative_log_likelihood">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                            <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">negative_log_likelihood</span><span class="p">(</span>
+    <span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the negative log-likelihood for the given outcomes to be observed (with</span>
 <span class="sd">    experiments as described by the Choi predictor) as a function of the given</span>
 <span class="sd">    superoperator in Choi representation.</span>
@@ -353,8 +373,9 @@
     <span class="c1"># Fudge predictions away from 0 to avoid stalling as per [KBLG18] appendix D.</span>
     <span class="n">mask_small</span> <span class="o">=</span> <span class="n">probability_vec</span> <span class="o">&lt;</span> <span class="mf">1e-16</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask_small</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> very small probabilities encountered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_small</span><span class="p">)))</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> very small probabilities encountered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_small</span><span class="p">))</span>
+        <span class="p">)</span>
     <span class="n">probability_vec</span><span class="p">[</span><span class="n">mask_small</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-16</span>
     <span class="n">probability_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probability_vec</span><span class="p">)</span>
 
@@ -364,9 +385,9 @@
 
 <div class="viewcode-block" id="negative_log_likelihood_gradient">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.negative_log_likelihood_gradient">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                                     <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                                     <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">negative_log_likelihood_gradient</span><span class="p">(</span>
+    <span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Calculate the derivative of the log-likelihood</span>
 <span class="sd">    :math:`\mathcal{L}(C_\mathcal{E})` around the given Choi matrix</span>
 <span class="sd">    :math:`C_\mathcal{E}`.</span>
@@ -384,8 +405,9 @@
     <span class="c1"># [KBLG18] appendix D.</span>
     <span class="n">mask_small</span> <span class="o">=</span> <span class="n">probability_vec</span> <span class="o">&lt;</span> <span class="mf">1e-16</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask_small</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> very small probabilities encountered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_small</span><span class="p">)))</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> very small probabilities encountered&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mask_small</span><span class="p">))</span>
+        <span class="p">)</span>
     <span class="n">probability_vec</span><span class="p">[</span><span class="n">mask_small</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-16</span>
     <span class="n">probability_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probability_vec</span><span class="p">)</span>
 
@@ -410,10 +432,12 @@
 
 <div class="viewcode-block" id="diluted_mle_tomography">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.diluted_mle_tomography">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">diluted_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                           <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                           <span class="n">rel_tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
-                           <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">diluted_mle_tomography</span><span class="p">(</span>
+    <span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">rel_tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span>
+    <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations using a diluted fixed-point iteration method.</span>
 
@@ -466,24 +490,30 @@
 
             <span class="c1"># Calculate λ, the TP Lagrange multiplier matrix, see e.g. [AL12] eq. 17.</span>
             <span class="n">lambda_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">sqrtm</span><span class="p">(</span>
-                <span class="n">_ptrace</span><span class="p">(</span><span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">choi</span> <span class="o">@</span> <span class="n">diluted_grad</span><span class="p">,</span> <span class="n">pure_state_dimension</span><span class="p">))</span>
+                <span class="n">_ptrace</span><span class="p">(</span><span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">choi</span> <span class="o">@</span> <span class="n">diluted_grad</span><span class="p">,</span> <span class="n">pure_state_dimension</span><span class="p">)</span>
+            <span class="p">)</span>
 
             <span class="c1"># Build inverse of λ ⊗ id as used in the iteration step (e.g. [AL12]</span>
             <span class="c1"># eq. 16).</span>
             <span class="c1"># For large systems, we would probably want to write the multiplications</span>
             <span class="c1"># with the inverse in terms of linalg.solve instead, but just calculating</span>
             <span class="c1"># the inverse avoids tensor product index gymnastics for now.</span>
-            <span class="n">lambda_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">(</span><span class="n">lambda_</span><span class="p">)),</span>
-                                 <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">))</span>
+            <span class="n">lambda_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">(</span><span class="n">lambda_</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">pure_state_dimension</span><span class="p">)</span>
+            <span class="p">)</span>
 
             <span class="n">new_choi</span> <span class="o">=</span> <span class="n">lambda_inv</span> <span class="o">@</span> <span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">choi</span> <span class="o">@</span> <span class="n">diluted_grad</span> <span class="o">@</span> <span class="n">lambda_inv</span>
-            <span class="k">if</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span>
-                                       <span class="n">new_choi</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">old_nll</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">new_choi</span><span class="p">)</span>
+                <span class="o">&lt;</span> <span class="n">old_nll</span>
+            <span class="p">):</span>
                 <span class="k">break</span>
             <span class="n">eps</span> <span class="o">/=</span> <span class="mi">2</span>
             <span class="k">if</span> <span class="n">eps</span> <span class="o">&lt;</span> <span class="mf">1e-16</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Did not converge (dilution limit reached, but &quot;</span>
-                                 <span class="s2">&quot;likelihood still not decreasing)&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Did not converge (dilution limit reached, but &quot;</span>
+                    <span class="s2">&quot;likelihood still not decreasing)&quot;</span>
+                <span class="p">)</span>
 
         <span class="c1"># Ensure complete positivity, i.e. Hermitian Choi matrix.</span>
         <span class="n">choi</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_choi</span> <span class="o">+</span> <span class="n">new_choi</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span> <span class="o">/</span> <span class="mi">2</span>
@@ -525,6 +555,7 @@
 <span class="sd">        :math:`d = 2^n` for :math:`n` qubits, and the Choi matrices are</span>
 <span class="sd">        :math:`d^2 \times d^2` in size.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pure_state_dimension</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">pure_state_dimension</span>
 
@@ -545,18 +576,21 @@
 
 <span class="sd">        See [KBLG18]_ eq. 12.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">choi</span> <span class="o">+</span> <span class="n">vec2mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdagger_id</span> <span class="o">-</span>
-                              <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span></div>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">choi</span> <span class="o">+</span> <span class="n">vec2mat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mdagger_id</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mdagger_m</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span>
+        <span class="p">)</span></div>
 </div>
 
 
 
 <div class="viewcode-block" id="project_into_cptp">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.project_into_cptp">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">project_into_cptp</span><span class="p">(</span><span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                      <span class="n">tp_projector</span><span class="p">:</span> <span class="n">TPProjector</span><span class="p">,</span>
-                      <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
-                      <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">project_into_cptp</span><span class="p">(</span>
+    <span class="n">choi</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">tp_projector</span><span class="p">:</span> <span class="n">TPProjector</span><span class="p">,</span>
+    <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+    <span class="n">iteration_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Project the given Choi matrix onto the closest superoperator that is both</span>
 <span class="sd">    completely positive and trace-preserving.</span>
 
@@ -579,12 +613,15 @@
         <span class="n">choi</span> <span class="o">=</span> <span class="n">tp_projector</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">before_tp</span><span class="p">)</span>
         <span class="n">tp_step</span> <span class="o">=</span> <span class="n">before_tp</span> <span class="o">-</span> <span class="n">choi</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">old_cp_step</span> <span class="o">-</span> <span class="n">cp_step</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">old_tp_step</span> <span class="o">-</span> <span class="n">tp_step</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">old_cp_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span> <span class="o">-</span> <span class="n">old_choi</span><span class="p">))</span> <span class="o">+</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span>
-                       <span class="n">mat2vec</span><span class="p">(</span><span class="n">old_tp_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">after_cp</span> <span class="o">-</span> <span class="n">old_after_cp</span><span class="p">))</span>
-                <span class="o">&lt;</span> <span class="n">tol</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">old_cp_step</span> <span class="o">-</span> <span class="n">cp_step</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">old_tp_step</span> <span class="o">-</span> <span class="n">tp_step</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">old_cp_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi</span> <span class="o">-</span> <span class="n">old_choi</span><span class="p">))</span>
+            <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                <span class="mi">2</span> <span class="o">*</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">old_tp_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">after_cp</span> <span class="o">-</span> <span class="n">old_after_cp</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="o">&lt;</span> <span class="n">tol</span>
+        <span class="p">):</span>
             <span class="k">return</span> <span class="n">choi</span>
         <span class="n">old_cp_step</span> <span class="o">=</span> <span class="n">cp_step</span>
         <span class="n">old_tp_step</span> <span class="o">=</span> <span class="n">tp_step</span>
@@ -596,8 +633,9 @@
 
 <div class="viewcode-block" id="pgdb_mle_tomography">
 <a class="viewcode-back" href="../../../../../circuits.html#oitg.circuits.protocols.process_tomo.analyse.pgdb_mle_tomography">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">pgdb_mle_tomography</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                        <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pgdb_mle_tomography</span><span class="p">(</span>
+    <span class="n">choi_predictor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">observations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the tomography estimate of the quantum process that has produced</span>
 <span class="sd">    the given observations using a projected gradient descent algorithm with</span>
 <span class="sd">    backtracking, as proposed by [KBLG18]_.</span>
@@ -631,8 +669,9 @@
 
     <span class="n">old_nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span><span class="p">)</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">nll_gradient</span> <span class="o">=</span> <span class="n">negative_log_likelihood_gradient</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span>
-                                                        <span class="n">choi</span><span class="p">)</span>
+        <span class="n">nll_gradient</span> <span class="o">=</span> <span class="n">negative_log_likelihood_gradient</span><span class="p">(</span>
+            <span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span>
+        <span class="p">)</span>
 
         <span class="n">choi_step</span> <span class="o">=</span> <span class="n">project_into_cptp</span><span class="p">(</span><span class="n">choi</span> <span class="o">-</span> <span class="n">nll_gradient</span> <span class="o">/</span> <span class="n">mu</span><span class="p">,</span> <span class="n">tp_projector</span><span class="p">)</span> <span class="o">-</span> <span class="n">choi</span>
 
@@ -640,8 +679,9 @@
         <span class="n">change</span> <span class="o">=</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">choi_step</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">mat2vec</span><span class="p">(</span><span class="n">nll_gradient</span><span class="p">)</span>
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span><span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span>
-                                          <span class="n">choi</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">choi_step</span><span class="p">)</span>
+            <span class="n">nll</span> <span class="o">=</span> <span class="n">negative_log_likelihood</span><span class="p">(</span>
+                <span class="n">choi_predictor</span><span class="p">,</span> <span class="n">observation_vec</span><span class="p">,</span> <span class="n">choi</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">choi_step</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">nll</span> <span class="o">&lt;=</span> <span class="n">old_nll</span> <span class="o">+</span> <span class="n">change</span> <span class="ow">or</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="n">alpha</span> <span class="o">/=</span> <span class="mi">2</span>

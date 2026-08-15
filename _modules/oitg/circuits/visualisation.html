@@ -1,21 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>oitg.circuits.visualisation &mdash; oitg  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/visualisation.html"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+
   
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="canonical" href="https://oxfordiontrapgroup.github.io/oitg/_modules/oitg/circuits/visualisation.html"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -91,15 +91,14 @@
     <span class="c1"># TODO: This should be made more configurable, but at the time of writing, the</span>
     <span class="c1"># Qiskit drawing code only seems to work when writing to PDF.</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">qiskit</span>
+
     <span class="n">qasm</span> <span class="o">=</span> <span class="n">stringify_qasm</span><span class="p">(</span><span class="n">gate_experiment_to_qasm</span><span class="p">(</span><span class="n">gates</span><span class="p">))</span>
     <span class="n">qcircuit</span> <span class="o">=</span> <span class="n">qiskit</span><span class="o">.</span><span class="n">converters</span><span class="o">.</span><span class="n">dag_to_circuit</span><span class="p">(</span>
-        <span class="n">qiskit</span><span class="o">.</span><span class="n">converters</span><span class="o">.</span><span class="n">ast_to_dag</span><span class="p">(</span><span class="n">qiskit</span><span class="o">.</span><span class="n">qasm</span><span class="o">.</span><span class="n">Qasm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">qasm</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()))</span>
-    <span class="n">qcircuit</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">,</span>
-                  <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
-                  <span class="n">style</span><span class="o">=</span><span class="p">{</span>
-                      <span class="s2">&quot;usepiformat&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                      <span class="s2">&quot;cregbundle&quot;</span><span class="p">:</span> <span class="kc">True</span>
-                  <span class="p">})</span></div>
+        <span class="n">qiskit</span><span class="o">.</span><span class="n">converters</span><span class="o">.</span><span class="n">ast_to_dag</span><span class="p">(</span><span class="n">qiskit</span><span class="o">.</span><span class="n">qasm</span><span class="o">.</span><span class="n">Qasm</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">qasm</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">())</span>
+    <span class="p">)</span>
+    <span class="n">qcircuit</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span>
+        <span class="n">output</span><span class="o">=</span><span class="s2">&quot;mpl&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;usepiformat&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;cregbundle&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 
