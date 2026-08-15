@@ -1,6 +1,6 @@
 [project]
 name = "oitg"
-dynamic = ["version"]
+version = "0.3"
 description = "Oxford Ion-Trap Group routines"
 authors = [{ name = "Oxford Ion Trap Quantum Computing Group" }]
 readme = "README.md"
@@ -31,11 +31,8 @@ dev = [
 qiskit = ["qiskit>=0.45.1,<0.46"]
 
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.hatch.version]
-source = "vcs"
 
 [tool.poe.tasks]
 docs = "make -C $POE_ROOT/docs html"
