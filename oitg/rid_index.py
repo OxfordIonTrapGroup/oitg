@@ -1,12 +1,13 @@
-from datetime import date, timedelta
 import logging
 import lzma
-import numpy
 import os
-from pathlib import Path
 import pickle
 import re
+from datetime import date, timedelta
+from pathlib import Path
 from typing import Dict, List
+
+import numpy
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +34,10 @@ def add_rids_from_path(root_path, path, index: Dict[int, List[str]]):
             if previous_path := index.get(rid):
                 if previous_path != rel_path:
                     logger.warn(
-                        "RID %s encountered more than once; '%s' will be ignored", rid,
-                        previous_path)
+                        "RID %s encountered more than once; '%s' will be ignored",
+                        rid,
+                        previous_path,
+                    )
             index[rid] = rel_path
         else:
             logger.warn("Ignoring file '%s/%s'", path, name)
@@ -85,8 +88,10 @@ def update_index(root_path):
     try:
         rids, paths = read_index(root_path)
     except FileNotFoundError:
-        print(f"Index ({Path(root_path) / INDEX_FILE}) not found, " +
-              "creating it from scratch. This might take a while...")
+        print(
+            f"Index ({Path(root_path) / INDEX_FILE}) not found, "
+            + "creating it from scratch. This might take a while..."
+        )
         write_index_from_dict(root_path, create_initial_index(root_path))
         print("...done.")
         return
@@ -117,7 +122,8 @@ def resolve_rid(root_path, index_pairs, rid):
         result = Path(root_path) / paths[idx]
         if not result.exists():
             raise FileNotFoundError(
-                f"HDF5 file for RID {rid} not found in expected path '{result}'")
+                f"HDF5 file for RID {rid} not found in expected path '{result}'"
+            )
         return result
 
     # RID isn't in index, but could be more recent than the last update. Since we update

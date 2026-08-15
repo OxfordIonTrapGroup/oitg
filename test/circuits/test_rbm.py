@@ -12,6 +12,7 @@ class SymSubspaceTest(unittest.TestCase):
     fail – an inverse being found means that the gate decomposition math is very
     likely all in good order.
     """
+
     def test_xx_sequence_gen(self):
         g = make_sym_qutrit_clifford_group(get_sym_qutrit_clifford_xx_implementation)
         generate_rbm_experiment(g, [2, 3, 100, 1001], 100)

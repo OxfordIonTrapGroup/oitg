@@ -1,5 +1,6 @@
 import argparse
 from pathlib import Path
+
 from ..rid_index import update_index
 
 

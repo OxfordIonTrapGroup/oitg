@@ -1,24 +1,29 @@
 import argparse
 import logging
-from pathlib import Path
-from oitg.results import find_by_magic
 import shutil
+from pathlib import Path
+
+from oitg.results import find_by_magic
 
 logger = logging.getLogger(__name__)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Fetch ARTIQ results file from shared area")
-    parser.add_argument("-o",
-                        "--output-path",
-                        default=None,
-                        type=str,
-                        metavar="filename",
-                        help="Output file name (defaults to current directory)")
+        description="Fetch ARTIQ results file from shared area"
+    )
+    parser.add_argument(
+        "-o",
+        "--output-path",
+        default=None,
+        type=str,
+        metavar="filename",
+        help="Output file name (defaults to current directory)",
+    )
     # TODO: Also allow specifying day/hour/experiment/… via command line args?
     parser.add_argument(
-        "rid", help="RID of experiment, or 'magic' RID string (e.g. alice_12345)")
+        "rid", help="RID of experiment, or 'magic' RID string (e.g. alice_12345)"
+    )
     args = parser.parse_args()
 
     resolved = find_by_magic(args.rid)

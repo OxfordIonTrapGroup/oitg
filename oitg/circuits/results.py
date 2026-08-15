@@ -3,14 +3,17 @@
 Also see :mod:`oitg.results` for finding and loading HDF5 files.
 """
 
-import numpy as np
-from .gate import GateSequence
-from .qasm import parse_gate_sequence_string
 from typing import Any, Dict, List
 
+import numpy as np
 
-def collect_outcomes(sequences: List[GateSequence], run_order: List[int],
-                     outcomes: List[np.ndarray]):
+from .gate import GateSequence
+from .qasm import parse_gate_sequence_string
+
+
+def collect_outcomes(
+    sequences: List[GateSequence], run_order: List[int], outcomes: List[np.ndarray]
+):
     """Total up the number of observations per outcome for gate sequence runner
     experiments.
 
@@ -36,8 +39,8 @@ def collect_outcomes(sequences: List[GateSequence], run_order: List[int],
 
 
 def collect_outcomes_from_datasets(
-        datasets: Dict[str, Any],
-        prefix: str = "data.circuits.") -> Dict[GateSequence, np.ndarray]:
+    datasets: Dict[str, Any], prefix: str = "data.circuits."
+) -> Dict[GateSequence, np.ndarray]:
     """Total up the number of observations per outcome for gate sequence runner
     experiments.
 
@@ -53,8 +56,12 @@ def collect_outcomes_from_datasets(
         each measurement outcome was observed after running them; see
         :meth:`collect_outcomes`.
     """
+
     def d(key):
         return datasets[prefix + key]
 
-    return collect_outcomes([parse_gate_sequence_string(s) for s in d("sequences")],
-                            d("run_order"), d("outcomes"))
+    return collect_outcomes(
+        [parse_gate_sequence_string(s) for s in d("sequences")],
+        d("run_order"),
+        d("outcomes"),
+    )

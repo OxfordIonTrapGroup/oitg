@@ -20,7 +20,9 @@ gate set.
 from enum import Enum, unique
 from itertools import product
 from typing import Callable, Dict, List
+
 import numpy as np
+
 from .gate import Gate, GateGenerator, GateSequence, remap_operands
 from .to_matrix import gate_sequence_matrix
 
@@ -37,8 +39,14 @@ class GateGroup:
         as a map of canonical matrix key (see :meth:`to_canonical_matrix_key`) to
         element index.
     """
-    def __init__(self, num_qubits: int, gate_sequences: List[GateSequence],
-                 matrices: List[np.ndarray], inverse_idxs: Dict[bytearray, int]):
+
+    def __init__(
+        self,
+        num_qubits: int,
+        gate_sequences: List[GateSequence],
+        matrices: List[np.ndarray],
+        inverse_idxs: Dict[bytearray, int],
+    ):
         self.num_qubits = num_qubits
 
         # Exhaustive list of gate sequences for all elements and their unitary matrices.
@@ -96,7 +104,7 @@ def to_canonical_matrix(gate_matrix: np.ndarray) -> np.ndarray:
     while np.abs(u[0, i]) < 1e-6:
         i += 1
     phase = u[0, i] / np.abs(u[0, i])
-    return np.array(np.around(u / phase, decimals=4) + 0.0, dtype='complex64')
+    return np.array(np.around(u / phase, decimals=4) + 0.0, dtype="complex64")
 
 
 def to_canonical_matrix_key(gate_matrix: np.ndarray) -> bytearray:
@@ -178,13 +186,13 @@ def get_clifford_1q_xypm_implementation(idx: int) -> GateGenerator:
     """
     for e in _clifford_1q_xypm_implementations[idx]:
         if e == 0:
-            yield Gate("rx", (np.pi / 2, ), (0, ))
+            yield Gate("rx", (np.pi / 2,), (0,))
         elif e == 1:
-            yield Gate("ry", (np.pi / 2, ), (0, ))
+            yield Gate("ry", (np.pi / 2,), (0,))
         elif e == 2:
-            yield Gate("rx", (-np.pi / 2, ), (0, ))
+            yield Gate("rx", (-np.pi / 2,), (0,))
         elif e == 3:
-            yield Gate("ry", (-np.pi / 2, ), (0, ))
+            yield Gate("ry", (-np.pi / 2,), (0,))
         else:
             assert False
 
@@ -225,17 +233,17 @@ def get_clifford_1q_xzpm2_implementation(idx: int) -> GateGenerator:
     """
     for e in _clifford_1q_xzpm2_implementations[idx]:
         if e == 0:
-            yield Gate("rx", (np.pi / 2, ), (0, ))
+            yield Gate("rx", (np.pi / 2,), (0,))
         elif e == 1:
-            yield Gate("rz", (np.pi / 2, ), (0, ))
+            yield Gate("rz", (np.pi / 2,), (0,))
         elif e == 2:
-            yield Gate("rx", (-np.pi / 2, ), (0, ))
+            yield Gate("rx", (-np.pi / 2,), (0,))
         elif e == 3:
-            yield Gate("rz", (-np.pi / 2, ), (0, ))
+            yield Gate("rz", (-np.pi / 2,), (0,))
         elif e == 4:
-            yield Gate("rx", (np.pi, ), (0, ))
+            yield Gate("rx", (np.pi,), (0,))
         elif e == 5:
-            yield Gate("rz", (np.pi, ), (0, ))
+            yield Gate("rz", (np.pi,), (0,))
         else:
             assert False
 
@@ -257,8 +265,9 @@ class EntanglingGate(Enum):
 
 
 def get_clifford_2q_implementation(
-    idx: int, clifford_1q_impl: CliffordImpl,
-    entangling_gates_impl: Callable[[EntanglingGate, CliffordImpl], GateGenerator]
+    idx: int,
+    clifford_1q_impl: CliffordImpl,
+    entangling_gates_impl: Callable[[EntanglingGate, CliffordImpl], GateGenerator],
 ) -> GateGenerator:
     """Generate an implementation of the 2-qubit Clifford group element with the given
     index.
@@ -285,8 +294,9 @@ def get_clifford_2q_implementation(
         assert 0 <= i < 3**2
         p0, p1 = divmod(i, 3)
         yield from clifford_1q_impl(axis_permute_clifford_1q_elems[p0])
-        yield from remap_operands(clifford_1q_impl(axis_permute_clifford_1q_elems[p1]),
-                                  {0: 1})
+        yield from remap_operands(
+            clifford_1q_impl(axis_permute_clifford_1q_elems[p1]), {0: 1}
+        )
 
     i = idx
     NUM_LOCAL = 24**2
@@ -327,10 +337,12 @@ def get_clifford_2q_implementation(
 
 
 def get_cz_entangling_gate_implementation(
-        kind: EntanglingGate, clifford_1q_impl_0: CliffordImpl) -> GateGenerator:
+    kind: EntanglingGate, clifford_1q_impl_0: CliffordImpl
+) -> GateGenerator:
     """Generate an implementation of the given entangling gate category using CZ gates
     and the given single-qubit gate implementation.
     """
+
     def clifford_1q_impl_1(idx):
         return remap_operands(clifford_1q_impl_0(idx), {0: 1})
 
@@ -354,10 +366,12 @@ def get_cz_entangling_gate_implementation(
 
 
 def get_zzw_entangling_gate_implementation(
-        kind: EntanglingGate, clifford_1q_impl_0: CliffordImpl) -> GateGenerator:
+    kind: EntanglingGate, clifford_1q_impl_0: CliffordImpl
+) -> GateGenerator:
     """Generate an implementation of the given entangling gate category using symmetric
     ZZ (wobble) gates and the given single-qubit gate implementation.
     """
+
     def clifford_1q_impl_1(idx):
         return remap_operands(clifford_1q_impl_0(idx), {0: 1})
 
@@ -384,16 +398,18 @@ def get_clifford_2q_xypm_cz_implementation(idx: int) -> GateGenerator:
     """Generate an implementation of the given 2-qubit Clifford group element using CZ
     gates and local single-qubit ±π/2 rotations about the x and y axes.
     """
-    return get_clifford_2q_implementation(idx, get_clifford_1q_xypm_implementation,
-                                          get_cz_entangling_gate_implementation)
+    return get_clifford_2q_implementation(
+        idx, get_clifford_1q_xypm_implementation, get_cz_entangling_gate_implementation
+    )
 
 
 def get_clifford_2q_xzpm2_cz_implementation(idx: int) -> GateGenerator:
     """Generate an implementation of the given 2-qubit Clifford group element using CZ
     gates and local single-qubit ±π/2 and π rotations about the x and z axes.
     """
-    return get_clifford_2q_implementation(idx, get_clifford_1q_xzpm2_implementation,
-                                          get_cz_entangling_gate_implementation)
+    return get_clifford_2q_implementation(
+        idx, get_clifford_1q_xzpm2_implementation, get_cz_entangling_gate_implementation
+    )
 
 
 def get_clifford_2q_xzpm2_zzw_implementation(idx: int) -> GateGenerator:
@@ -401,5 +417,8 @@ def get_clifford_2q_xzpm2_zzw_implementation(idx: int) -> GateGenerator:
     symmetric ZZ entangling gate implemented as a spin-echo wobble gate and local
     single-qubit ±π/2 and π rotations about the x and z axes.
     """
-    return get_clifford_2q_implementation(idx, get_clifford_1q_xzpm2_implementation,
-                                          get_zzw_entangling_gate_implementation)
+    return get_clifford_2q_implementation(
+        idx,
+        get_clifford_1q_xzpm2_implementation,
+        get_zzw_entangling_gate_implementation,
+    )

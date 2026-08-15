@@ -38,8 +38,10 @@ the result to a :class:`GateSequence`.
 from typing import Dict, Iterable, NamedTuple, Set, Tuple
 
 # TODO: Make this a NamedTuple subclass (Python 3.6+) or dataclass (3.7+).
-Gate = NamedTuple("Gate", [("kind", str), ("parameters", Tuple[float, ...]),
-                           ("operands", Tuple[int, ...])])
+Gate = NamedTuple(
+    "Gate",
+    [("kind", str), ("parameters", Tuple[float, ...]), ("operands", Tuple[int, ...])],
+)
 
 #:
 GateSequence = Tuple[Gate, ...]
@@ -64,5 +66,6 @@ def remap_operands(gates: GateGenerator, operand_map: Dict[int, int]) -> GateGen
     ``0`` is used as part of a multi-qubit gate).
     """
     for g in gates:
-        yield Gate(g.kind, g.parameters,
-                   tuple(operand_map.get(k, k) for k in g.operands))
+        yield Gate(
+            g.kind, g.parameters, tuple(operand_map.get(k, k) for k in g.operands)
+        )

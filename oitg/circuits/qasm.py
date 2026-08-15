@@ -11,6 +11,7 @@ For more complex QASM support, we should integrate an external library.
 import math
 import re
 from typing import Callable, Iterable
+
 from .gate import Gate, GateGenerator, collect_operands
 
 Statements = Iterable[str]
@@ -51,7 +52,7 @@ def default_prologue(num_qubits: int) -> Statements:
     # TODO: We currently use the Quantum Experience standard library for the gate
     # definitions; should replace with a taylor-made one.
     yield "OPENQASM 2.0"
-    yield "include \"qelib1.inc\""
+    yield 'include "qelib1.inc"'
     # Use single-letter names `q`/`r` for brevity in plots.
     yield "qreg q[{}]".format(num_qubits)
     yield "creg r[{}]".format(num_qubits)
@@ -62,9 +63,10 @@ def default_epilogue(num_qubits: int) -> Statements:
 
 
 def gate_experiment_to_qasm(
-        gates: GateGenerator,
-        prologue_fn: Callable[[int], Statements] = default_prologue,
-        epilogue_fn: Callable[[int], Statements] = default_epilogue) -> Statements:
+    gates: GateGenerator,
+    prologue_fn: Callable[[int], Statements] = default_prologue,
+    epilogue_fn: Callable[[int], Statements] = default_epilogue,
+) -> Statements:
     num_qubits = max(collect_operands(gates)) + 1
 
     yield from prologue_fn(num_qubits)
@@ -93,16 +95,18 @@ def parse_gate_sequence_string(string: str) -> GateGenerator:
         match = re.match(r"(\w+)\s*(\(.*\))?\s*((q\[\d+\],?\s?)*)", statement)
         if match is None:
             raise ValueError(
-                "Not a valid gate string statement: '{}'".format(statement))
+                "Not a valid gate string statement: '{}'".format(statement)
+            )
         kind, param_string, operand_string, _ = match.groups()
 
         parameters = ()
         if param_string is not None:
             parameters = eval(param_string, None, {"pi": math.pi})
             if not isinstance(parameters, tuple):
-                parameters = (parameters, )
+                parameters = (parameters,)
 
         operands = tuple(
-            int(m.groups()[0]) for m in re.finditer(r"q\[(\d+)\]", operand_string))
+            int(m.groups()[0]) for m in re.finditer(r"q\[(\d+)\]", operand_string)
+        )
 
         yield Gate(kind, parameters, operands)

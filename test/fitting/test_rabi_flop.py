@@ -1,5 +1,6 @@
-import numpy as np
 import unittest
+
+import numpy as np
 
 from oitg.fitting.rabi_flop import fitting_function, rabi_flop
 
@@ -23,15 +24,16 @@ class RabiFlopTest(unittest.TestCase):
             "t_period": t_period,
             "t_dead": t_dead,
             "y_lower": y_lower,
-            "tau_decay": tau_decay
+            "tau_decay": tau_decay,
         }
         for seed in range(3):
             y, y_err = simulate(t, p_true, seed=seed)
             p, p_err = rabi_flop.fit(t, y, y_err)
-            self.assertAlmostEqual(p["t_period"],
-                                   t_period,
-                                   delta=max(0.05 * t_period,
-                                             4 * p_err["t_period"]))
+            self.assertAlmostEqual(
+                p["t_period"],
+                t_period,
+                delta=max(0.05 * t_period, 4 * p_err["t_period"]),
+            )
 
     def test_many_periods(self):
         # ~13 oscillations per scan, no visible decay.
@@ -59,12 +61,7 @@ class RabiFlopTest(unittest.TestCase):
         # Decays away before completing a full oscillation; the period is
         # only loosely defined, so just require the fit to match the data.
         t = np.linspace(0.0, 4e-3, 51)
-        p_true = {
-            "t_period": 2.5e-3,
-            "t_dead": 0.0,
-            "y_lower": 0.0,
-            "tau_decay": 1e-3
-        }
+        p_true = {"t_period": 2.5e-3, "t_dead": 0.0, "y_lower": 0.0, "tau_decay": 1e-3}
         y, y_err = simulate(t, p_true)
         p, p_err, residuals = rabi_flop.fit(t, y, y_err, calculate_residuals=True)
         self.assertLess(np.sqrt(np.mean(residuals**2)), 0.1)
@@ -75,15 +72,15 @@ class RabiFlopTest(unittest.TestCase):
             "t_period": 1e-3,
             "t_dead": 40e-6,
             "y_lower": 0.0,
-            "tau_decay": np.inf
+            "tau_decay": np.inf,
         }
         y, y_err = simulate(t, p_true)
         p, p_err = rabi_flop.fit(t, y, y_err)
-        self.assertAlmostEqual(p["t_dead"],
-                               40e-6,
-                               delta=max(20e-6, 4 * p_err["t_dead"]))
+        self.assertAlmostEqual(
+            p["t_dead"], 40e-6, delta=max(20e-6, 4 * p_err["t_dead"])
+        )
         self.assertAlmostEqual(p["t_pi"], 540e-6, delta=30e-6)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

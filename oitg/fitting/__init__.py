@@ -1,9 +1,9 @@
-from .FitBase import FitError  # noqa: F401
 from .cos import cos, cos_fft  # noqa: F401
 from .cos_2 import cos_2, cos_2_fft  # noqa: F401
 from .decaying_sinusoid import decaying_sinusoid  # noqa: F401
 from .detuned_square_pulse import detuned_square_pulse  # noqa: F401
 from .exponential_decay import exponential_decay  # noqa: F401
+from .FitBase import FitError  # noqa: F401
 from .gaussian import gaussian  # noqa: F401
 from .gaussian_beam import gaussian_beam  # noqa: F401
 from .half_lorentzian import half_lorentzian_left, half_lorentzian_right  # noqa: F401

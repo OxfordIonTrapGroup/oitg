@@ -1,10 +1,12 @@
 from typing import List, Sequence
+
 from ...gate import GateSequence
 from . import GSTSpec
 
 
-def generate_std_gst_sequences(spec: GSTSpec,
-                               max_len_exponent: int) -> List[GateSequence]:
+def generate_std_gst_sequences(
+    spec: GSTSpec, max_len_exponent: int
+) -> List[GateSequence]:
     r"""Return a list of sequences to run to perform gate set tomography according to
     the given spec, with standard power-of-two sequence lengths up to (approximately)
     :math:`2^{\mathrm{max\_len\_exponent}}`.
@@ -17,8 +19,9 @@ def generate_std_gst_sequences(spec: GSTSpec,
     return generate_gst_sequences(spec, (2**i for i in range(max_len_exponent + 1)))
 
 
-def generate_gst_sequences(spec: GSTSpec,
-                           target_lens: Sequence[int]) -> List[GateSequence]:
+def generate_gst_sequences(
+    spec: GSTSpec, target_lens: Sequence[int]
+) -> List[GateSequence]:
     r"""Return a list of sequences to run to perform gate set tomography according to
     the given spec, with number of gates per sequence limited to the given lengths.
 

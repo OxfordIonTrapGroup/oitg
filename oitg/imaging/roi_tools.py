@@ -1,8 +1,9 @@
+import math
+
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.ndimage import measurements
 from scipy.optimize import curve_fit
-import matplotlib.pyplot as plt
-import math
 
 
 def find_ion_centers(im_line, min_width=2, threshold=None, fit=False):
@@ -49,13 +50,12 @@ def find_ion_centers(im_line, min_width=2, threshold=None, fit=False):
             x0 = params[i]
             sigma = params[N + i]
             amp = params[2 * N + i]
-            y += amp * np.exp(-(x - x0)**2 / sigma**2 / 2)
+            y += amp * np.exp(-((x - x0) ** 2) / sigma**2 / 2)
         return y
 
-    popt, _ = curve_fit(fit_func,
-                        x,
-                        im_line,
-                        p0=x_cens + [min_width] * N + [np.amax(im_line)] * N)
+    popt, _ = curve_fit(
+        fit_func, x, im_line, p0=x_cens + [min_width] * N + [np.amax(im_line)] * N
+    )
 
     x_cens_fit = popt[:N]
     y_fit = fit_func(x, *popt)
@@ -111,9 +111,12 @@ def plot_ion_regions(im, x_rois, ax=None):
 
     ax.imshow(im.transpose(), cmap="Greys")
     for roi in x_rois:
-        ax.fill_between(x, [im.shape[1]] * len(x),
-                        where=np.logical_and(x >= roi[0], x <= roi[1]),
-                        alpha=0.2)
+        ax.fill_between(
+            x,
+            [im.shape[1]] * len(x),
+            where=np.logical_and(x >= roi[0], x <= roi[1]),
+            alpha=0.2,
+        )
 
 
 def trim_image(im, n_width=10, n_length=50):
@@ -129,5 +132,5 @@ def trim_image(im, n_width=10, n_length=50):
     x_range = x_cen - n_length, x_cen + n_length
     y_range = y_cen - n_width, y_cen + n_width
 
-    im_sub = im[x_range[0]:x_range[1], y_range[0]:y_range[1]]
+    im_sub = im[x_range[0] : x_range[1], y_range[0] : y_range[1]]
     return im_sub, [x_range, y_range]

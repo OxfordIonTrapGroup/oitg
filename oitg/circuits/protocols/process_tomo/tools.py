@@ -49,7 +49,8 @@ def choi2liou(choi):
     """
     dim = _sqrt_dim(choi)
     return dim * np.reshape(choi, (dim, dim, dim, dim)).swapaxes(0, 3).reshape(
-        (dim**2, dim**2))
+        (dim**2, dim**2)
+    )
 
 
 def liou2choi(liou):
@@ -72,5 +73,6 @@ def avg_gate_fidelity(liou, target_unitary):
     """
     target_liou = np.kron(np.conj(target_unitary), target_unitary)
     dim = _sqrt_dim(liou)
-    return (np.real(np.trace(liou @ np.conjugate(target_liou).T)) + dim) / (dim**2 +
-                                                                            dim)
+    return (np.real(np.trace(liou @ np.conjugate(target_liou).T)) + dim) / (
+        dim**2 + dim
+    )

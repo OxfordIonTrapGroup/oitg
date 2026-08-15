@@ -55,8 +55,10 @@ ARTIQ.
 """
 
 from itertools import chain
-from numpy import ndarray
 from typing import Callable, Iterable, Union
+
+from numpy import ndarray
+
 from ..gate import GateGenerator, GateSequence
 from ..qasm import gate_to_qasm
 
@@ -86,13 +88,16 @@ class SequenceRunnerOptions:
     :param randomise_per_repeat: Whether to randomise the order of sequences within each
         repeat.
     """
-    def __init__(self,
-                 num_global_repeats: int = 1,
-                 randomise_globally: bool = True,
-                 chunk_size: int = 1,
-                 num_repeats_per_chunk: int = 1,
-                 num_shots_per_repeat: int = 100,
-                 randomise_per_repeat: bool = True):
+
+    def __init__(
+        self,
+        num_global_repeats: int = 1,
+        randomise_globally: bool = True,
+        chunk_size: int = 1,
+        num_repeats_per_chunk: int = 1,
+        num_shots_per_repeat: int = 100,
+        randomise_per_repeat: bool = True,
+    ):
         self.num_global_repeats = num_global_repeats
         self.randomise_globally = randomise_globally
         self.chunk_size = chunk_size
@@ -106,12 +111,15 @@ class SequenceRunner:
 
     See the :mod:`module <oitg.circuits.runner>`\ -level docstring for details.
     """
-    def run_sequences(self,
-                      sequences: Iterable[GateSequence],
-                      num_qubits: Union[None, int] = None,
-                      progress_callback: Callable[[ndarray, ndarray], None] = None,
-                      progress_callback_interval: float = 5.0,
-                      dataset_prefix: Union[None, str] = "data.circuits."):
+
+    def run_sequences(
+        self,
+        sequences: Iterable[GateSequence],
+        num_qubits: Union[None, int] = None,
+        progress_callback: Callable[[ndarray, ndarray], None] = None,
+        progress_callback_interval: float = 5.0,
+        dataset_prefix: Union[None, str] = "data.circuits.",
+    ):
         r"""Runs the given sequences and returns result statistics.
 
         :param sequences: The gate sequences to execute.

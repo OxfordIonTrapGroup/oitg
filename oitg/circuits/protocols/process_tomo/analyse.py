@@ -23,9 +23,11 @@ on some qubit Hilbert space.
     Physical Review A 98, (2018).
 """
 
-import numpy as np
 import warnings
 from typing import Dict, List, Optional
+
+import numpy as np
+
 from ...gate import *
 from ...to_matrix import gate_sequence_matrix
 from .tools import *
@@ -33,13 +35,13 @@ from .tools import *
 
 def _find_first_index(needle, haystack):
     for i in range(len(haystack) - len(needle) + 1):
-        if haystack[i:i + len(needle)] == needle:
+        if haystack[i : i + len(needle)] == needle:
             return i
     raise ValueError
 
 
 def guess_prepare_target_measure_split(
-    all_sequences: List[GateSequence]
+    all_sequences: List[GateSequence],
 ) -> Tuple[GateSequence, List[Tuple[GateSequence, GateSequence]]]:
     """For a given list of gate sequences making up a tomography experiment, guesses
     which is the target sequence to be analysed, and the preparation/measuemrent
@@ -61,12 +63,14 @@ def guess_prepare_target_measure_split(
 
     target_start_idxs = [_find_first_index(target_seq, s) for s in all_sequences]
 
-    return target_seq, [(s[:t], s[t + len(target_seq):])
-                        for t, s in zip(target_start_idxs, all_sequences)]
+    return target_seq, [
+        (s[:t], s[t + len(target_seq) :])
+        for t, s in zip(target_start_idxs, all_sequences)
+    ]
 
 
 def auto_prepare_data(
-    outcomes: Dict[GateSequence, np.ndarray]
+    outcomes: Dict[GateSequence, np.ndarray],
 ) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
     """Given a results dictionary, guess the target and fiducial sequences and extract
     the tomography input data.
@@ -86,7 +90,7 @@ def auto_prepare_data(
 def prepare_data(
     outcomes: Dict[Tuple[GateSequence, GateSequence], np.ndarray],
     initial_state: Optional[List[np.ndarray]] = None,
-    readout_projectors: Optional[List[np.ndarray]] = None
+    readout_projectors: Optional[List[np.ndarray]] = None,
 ) -> Tuple[List[np.ndarray], List[np.ndarray], np.ndarray]:
     r"""Given a dictionary of observed measurement outcomes indexed by pairs of the
     state preparation and measurement gate sequences used, compute the prepared/measured
@@ -117,8 +121,9 @@ def prepare_data(
     meas_sequences = list(set(f[1] for f in fiducial_pairs))
     meas_indices = [meas_sequences.index(f[1]) for f in fiducial_pairs]
 
-    num_qubits = max(
-        max(collect_operands(s), default=0) for f in fiducial_pairs for s in f) + 1
+    num_qubits = (
+        max(max(collect_operands(s), default=0) for f in fiducial_pairs for s in f) + 1
+    )
 
     def basis_ket(k):
         psi = np.zeros(2**num_qubits, dtype=np.complex128)
@@ -138,7 +143,8 @@ def prepare_data(
     if readout_projectors is None:
         readout_projectors = [projector(basis_ket(k)) for k in range(2**num_qubits)]
     meas_projectors = [
-        u.T.conj() @ readout_projector @ u for u in meas_unitaries
+        u.T.conj() @ readout_projector @ u
+        for u in meas_unitaries
         for readout_projector in readout_projectors
     ]
 
@@ -151,12 +157,14 @@ def prepare_data(
             observations[prep_idx, meas_base_idx + i] = counts
     if np.sum(observations == -1) != 0:
         raise NotImplementedError(
-            "Currently assuming all prepare/measure combinations are present")
+            "Currently assuming all prepare/measure combinations are present"
+        )
     return prep_projectors, meas_projectors, observations
 
 
-def build_choi_predictor(prep_operators: Iterable[np.ndarray],
-                         meas_operators: Iterable[np.ndarray]) -> np.ndarray:
+def build_choi_predictor(
+    prep_operators: Iterable[np.ndarray], meas_operators: Iterable[np.ndarray]
+) -> np.ndarray:
     r"""Given a list of prepared and measured states as state vectors, return a matrix
     that predicts observed probabilities when applied to the Choi matrix of a process.
 
@@ -175,14 +183,18 @@ def build_choi_predictor(prep_operators: Iterable[np.ndarray],
         ideal projections onto states :math:`\left(\left|\phi_j\right>\right)_j`, and
         :math:`P_j = \left|\phi_j\right>\left<\phi_j\right|`.
     """
-    return np.vstack([
-        mat2vec(np.kron(prep, meas.T)) for prep in prep_operators
-        for meas in meas_operators
-    ])
+    return np.vstack(
+        [
+            mat2vec(np.kron(prep, meas.T))
+            for prep in prep_operators
+            for meas in meas_operators
+        ]
+    )
 
 
-def invert_choi_predictor(choi_predictor: np.ndarray,
-                          observations: np.ndarray) -> np.ndarray:
+def invert_choi_predictor(
+    choi_predictor: np.ndarray, observations: np.ndarray
+) -> np.ndarray:
     r"""Obtain an estimate for the process :math:`\mathcal{E}` by applying the inverse
     of the given Choi predictor to a matrix of experimentally measured outcomes.
 
@@ -207,25 +219,32 @@ def invert_choi_predictor(choi_predictor: np.ndarray,
         raise ValueError("Choi predictor not of right shape for CPTP involution")
     num_measurement_bases, rem = divmod(observations.shape[1], pure_state_dimension)
     if rem:
-        raise ValueError("Number of observation matrix columns not consistent with "
-                         "dim(pure_state) measurements per basis")
+        raise ValueError(
+            "Number of observation matrix columns not consistent with "
+            "dim(pure_state) measurements per basis"
+        )
 
     normalised_observations = observations.astype(np.float64)
     shots_per_basis = np.sum(observations, axis=1) / num_measurement_bases
     for i in range(normalised_observations.shape[0]):
         normalised_observations[i, :] /= shots_per_basis[i]
 
-    solution, residuals, rank, singular_vals = \
-        np.linalg.lstsq(choi_predictor, mat2vec(normalised_observations), rcond=None)
+    solution, residuals, rank, singular_vals = np.linalg.lstsq(
+        choi_predictor, mat2vec(normalised_observations), rcond=None
+    )
     if rank != solution.size:
-        raise ValueError("Predictor matrix was rank-deficient; "
-                         "check that input/measurement state sets are complete")
+        raise ValueError(
+            "Predictor matrix was rank-deficient; "
+            "check that input/measurement state sets are complete"
+        )
     return vec2mat(solution) / pure_state_dimension
 
 
-def linear_inversion_tomography(prep_projectors: List[np.ndarray],
-                                meas_operators: List[np.ndarray],
-                                observations: np.ndarray) -> np.ndarray:
+def linear_inversion_tomography(
+    prep_projectors: List[np.ndarray],
+    meas_operators: List[np.ndarray],
+    observations: np.ndarray,
+) -> np.ndarray:
     """Calculate the linear inversion estimate of the quantum process that has produced
     the given observations.
 
@@ -242,8 +261,9 @@ def linear_inversion_tomography(prep_projectors: List[np.ndarray],
     return invert_choi_predictor(predictor, observations)
 
 
-def negative_log_likelihood(choi_predictor: np.ndarray, observation_vec: np.ndarray,
-                            choi: np.ndarray) -> float:
+def negative_log_likelihood(
+    choi_predictor: np.ndarray, observation_vec: np.ndarray, choi: np.ndarray
+) -> float:
     """Return the negative log-likelihood for the given outcomes to be observed (with
     experiments as described by the Choi predictor) as a function of the given
     superoperator in Choi representation.
@@ -257,17 +277,18 @@ def negative_log_likelihood(choi_predictor: np.ndarray, observation_vec: np.ndar
     # Fudge predictions away from 0 to avoid stalling as per [KBLG18] appendix D.
     mask_small = probability_vec < 1e-16
     if np.any(mask_small):
-        warnings.warn("{} very small probabilities encountered".format(
-            np.sum(mask_small)))
+        warnings.warn(
+            "{} very small probabilities encountered".format(np.sum(mask_small))
+        )
     probability_vec[mask_small] = 1e-16
     probability_vec /= np.sum(probability_vec)
 
     return -observation_vec.T @ np.log(probability_vec)
 
 
-def negative_log_likelihood_gradient(choi_predictor: np.ndarray,
-                                     observation_vec: np.ndarray,
-                                     choi: np.ndarray) -> np.ndarray:
+def negative_log_likelihood_gradient(
+    choi_predictor: np.ndarray, observation_vec: np.ndarray, choi: np.ndarray
+) -> np.ndarray:
     r"""Calculate the derivative of the log-likelihood
     :math:`\mathcal{L}(C_\mathcal{E})` around the given Choi matrix
     :math:`C_\mathcal{E}`.
@@ -285,8 +306,9 @@ def negative_log_likelihood_gradient(choi_predictor: np.ndarray,
     # [KBLG18] appendix D.
     mask_small = probability_vec < 1e-16
     if np.any(mask_small):
-        warnings.warn("{} very small probabilities encountered".format(
-            np.sum(mask_small)))
+        warnings.warn(
+            "{} very small probabilities encountered".format(np.sum(mask_small))
+        )
     probability_vec[mask_small] = 1e-16
     probability_vec /= np.sum(probability_vec)
 
@@ -308,10 +330,12 @@ def _ptrace(rho, d):
     return result
 
 
-def diluted_mle_tomography(choi_predictor: np.ndarray,
-                           observations: np.ndarray,
-                           rel_tol: float = 1e-10,
-                           iteration_limit: int = 10000) -> np.ndarray:
+def diluted_mle_tomography(
+    choi_predictor: np.ndarray,
+    observations: np.ndarray,
+    rel_tol: float = 1e-10,
+    iteration_limit: int = 10000,
+) -> np.ndarray:
     """Calculate the tomography estimate of the quantum process that has produced
     the given observations using a diluted fixed-point iteration method.
 
@@ -364,24 +388,30 @@ def diluted_mle_tomography(choi_predictor: np.ndarray,
 
             # Calculate λ, the TP Lagrange multiplier matrix, see e.g. [AL12] eq. 17.
             lambda_ = scipy.linalg.sqrtm(
-                _ptrace(diluted_grad @ choi @ diluted_grad, pure_state_dimension))
+                _ptrace(diluted_grad @ choi @ diluted_grad, pure_state_dimension)
+            )
 
             # Build inverse of λ ⊗ id as used in the iteration step (e.g. [AL12]
             # eq. 16).
             # For large systems, we would probably want to write the multiplications
             # with the inverse in terms of linalg.solve instead, but just calculating
             # the inverse avoids tensor product index gymnastics for now.
-            lambda_inv = np.kron(np.linalg.inv(np.complex128(lambda_)),
-                                 np.eye(pure_state_dimension))
+            lambda_inv = np.kron(
+                np.linalg.inv(np.complex128(lambda_)), np.eye(pure_state_dimension)
+            )
 
             new_choi = lambda_inv @ diluted_grad @ choi @ diluted_grad @ lambda_inv
-            if negative_log_likelihood(choi_predictor, observation_vec,
-                                       new_choi) < old_nll:
+            if (
+                negative_log_likelihood(choi_predictor, observation_vec, new_choi)
+                < old_nll
+            ):
                 break
             eps /= 2
             if eps < 1e-16:
-                raise ValueError("Did not converge (dilution limit reached, but "
-                                 "likelihood still not decreasing)")
+                raise ValueError(
+                    "Did not converge (dilution limit reached, but "
+                    "likelihood still not decreasing)"
+                )
 
         # Ensure complete positivity, i.e. Hermitian Choi matrix.
         choi = (new_choi + new_choi.T.conj()) / 2
@@ -417,6 +447,7 @@ class TPProjector:
         :math:`d = 2^n` for :math:`n` qubits, and the Choi matrices are
         :math:`d^2 \times d^2` in size.
     """
+
     def __init__(self, pure_state_dimension):
         self.dim = pure_state_dimension
 
@@ -435,14 +466,17 @@ class TPProjector:
 
         See [KBLG18]_ eq. 12.
         """
-        return choi + vec2mat(self.mdagger_id -
-                              self.mdagger_m @ mat2vec(choi)) / self.dim
+        return (
+            choi + vec2mat(self.mdagger_id - self.mdagger_m @ mat2vec(choi)) / self.dim
+        )
 
 
-def project_into_cptp(choi: np.ndarray,
-                      tp_projector: TPProjector,
-                      tol: float = 1e-4,
-                      iteration_limit: int = 10000) -> np.ndarray:
+def project_into_cptp(
+    choi: np.ndarray,
+    tp_projector: TPProjector,
+    tol: float = 1e-4,
+    iteration_limit: int = 10000,
+) -> np.ndarray:
     """Project the given Choi matrix onto the closest superoperator that is both
     completely positive and trace-preserving.
 
@@ -465,12 +499,15 @@ def project_into_cptp(choi: np.ndarray,
         choi = tp_projector.project(before_tp)
         tp_step = before_tp - choi
 
-        if (np.linalg.norm(old_cp_step - cp_step)**2 +
-                np.linalg.norm(old_tp_step - tp_step)**2 +
-                np.abs(2 * mat2vec(old_cp_step).conj().T @ mat2vec(choi - old_choi)) +
-                np.abs(2 *
-                       mat2vec(old_tp_step).conj().T @ mat2vec(after_cp - old_after_cp))
-                < tol):
+        if (
+            np.linalg.norm(old_cp_step - cp_step) ** 2
+            + np.linalg.norm(old_tp_step - tp_step) ** 2
+            + np.abs(2 * mat2vec(old_cp_step).conj().T @ mat2vec(choi - old_choi))
+            + np.abs(
+                2 * mat2vec(old_tp_step).conj().T @ mat2vec(after_cp - old_after_cp)
+            )
+            < tol
+        ):
             return choi
         old_cp_step = cp_step
         old_tp_step = tp_step
@@ -479,8 +516,9 @@ def project_into_cptp(choi: np.ndarray,
     raise ValueError("Did not converge")
 
 
-def pgdb_mle_tomography(choi_predictor: np.ndarray,
-                        observations: np.ndarray) -> np.ndarray:
+def pgdb_mle_tomography(
+    choi_predictor: np.ndarray, observations: np.ndarray
+) -> np.ndarray:
     """Calculate the tomography estimate of the quantum process that has produced
     the given observations using a projected gradient descent algorithm with
     backtracking, as proposed by [KBLG18]_.
@@ -514,8 +552,9 @@ def pgdb_mle_tomography(choi_predictor: np.ndarray,
 
     old_nll = negative_log_likelihood(choi_predictor, observation_vec, choi)
     while True:
-        nll_gradient = negative_log_likelihood_gradient(choi_predictor, observation_vec,
-                                                        choi)
+        nll_gradient = negative_log_likelihood_gradient(
+            choi_predictor, observation_vec, choi
+        )
 
         choi_step = project_into_cptp(choi - nll_gradient / mu, tp_projector) - choi
 
@@ -523,8 +562,9 @@ def pgdb_mle_tomography(choi_predictor: np.ndarray,
         change = gamma * mat2vec(choi_step).conj().T @ mat2vec(nll_gradient)
 
         while True:
-            nll = negative_log_likelihood(choi_predictor, observation_vec,
-                                          choi + alpha * choi_step)
+            nll = negative_log_likelihood(
+                choi_predictor, observation_vec, choi + alpha * choi_step
+            )
             if nll <= old_nll + change or alpha < 1e-10:
                 break
             alpha /= 2

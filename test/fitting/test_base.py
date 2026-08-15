@@ -1,5 +1,6 @@
 import unittest
-from oitg.fitting import cos, FitError
+
+from oitg.fitting import FitError, cos
 
 
 class TestUndefinedParam(unittest.TestCase):

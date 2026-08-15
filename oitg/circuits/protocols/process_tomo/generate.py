@@ -1,11 +1,14 @@
 from itertools import chain, product
 from typing import List, Tuple
+
 import numpy as np
+
 from ...gate import Gate, GateSequence, remap_operands
 
 
-def generate_process_tomography_sequences(target: GateSequence,
-                                          num_qubits: int) -> List[GateSequence]:
+def generate_process_tomography_sequences(
+    target: GateSequence, num_qubits: int
+) -> List[GateSequence]:
     """Return a list of gate sequences to perform process tomography on the given target
     sequence.
 
@@ -22,8 +25,8 @@ def generate_process_tomography_sequences(target: GateSequence,
 
 
 def wrap_target_in_process_tomography_fiducials(
-        target: GateSequence,
-        fiducial_pairs: List[Tuple[GateSequence, GateSequence]]) -> List[GateSequence]:
+    target: GateSequence, fiducial_pairs: List[Tuple[GateSequence, GateSequence]]
+) -> List[GateSequence]:
     """Return a list of gate sequences to perform process tomography on the given target
     sequence.
 
@@ -38,7 +41,8 @@ def wrap_target_in_process_tomography_fiducials(
 
 
 def generate_process_tomography_fiducial_pairs(
-        num_qubits: int) -> List[Tuple[GateSequence, GateSequence]]:
+    num_qubits: int,
+) -> List[Tuple[GateSequence, GateSequence]]:
     """Return a list of tuples of gate sequences implementing the preparation and
     measurement for process tomography.
 
@@ -52,21 +56,26 @@ def generate_process_tomography_fiducial_pairs(
     :param num_qubits: The number of qubits making up the Hilbert space of interest.
     """
     fiducials = [
-        (Gate("ry", (np.pi / 2, ), (0, )), ),  # +x
-        (Gate("rx", (-np.pi / 2, ), (0, )), ),  # +y
+        (Gate("ry", (np.pi / 2,), (0,)),),  # +x
+        (Gate("rx", (-np.pi / 2,), (0,)),),  # +y
         (),  # +z
-        (Gate("ry", (-np.pi / 2, ), (0, )), ),  # -x
-        (Gate("rx", (np.pi / 2, ), (0, )), ),  # -y
-        (Gate("rx", (np.pi, ), (0, )), ),  # -z
+        (Gate("ry", (-np.pi / 2,), (0,)),),  # -x
+        (Gate("rx", (np.pi / 2,), (0,)),),  # -y
+        (Gate("rx", (np.pi,), (0,)),),  # -z
     ]
 
     def make_combinations(qubit_seqs):
         return [
             tuple(
                 chain.from_iterable(
-                    remap_operands(seq, {0: i}) for (i, seq) in enumerate(seqs)))
+                    remap_operands(seq, {0: i}) for (i, seq) in enumerate(seqs)
+                )
+            )
             for seqs in product(qubit_seqs, repeat=num_qubits)
         ]
 
-    return [(prep, measure[::-1]) for prep in make_combinations(fiducials)
-            for measure in make_combinations(fiducials[:3])]
+    return [
+        (prep, measure[::-1])
+        for prep in make_combinations(fiducials)
+        for measure in make_combinations(fiducials[:3])
+    ]

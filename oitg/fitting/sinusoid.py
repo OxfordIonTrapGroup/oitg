@@ -1,6 +1,8 @@
 """Fit a sinusoid with optional dead-time to data"""
+
 import numpy as np
 from scipy.signal import lombscargle
+
 from .FitBase import FitBase
 
 
@@ -23,12 +25,14 @@ def fitting_function(t, p_dict):
     If t_dead is known to be zero, best fit results are obtained if this
     parameter is constrained manually when fitting.
     """
-    y = p_dict["a"] * np.sin((t - p_dict["t_dead"]) * p_dict["omega"]
-                             + p_dict["phi"]) \
+    y = (
+        p_dict["a"] * np.sin((t - p_dict["t_dead"]) * p_dict["omega"] + p_dict["phi"])
         + p_dict["c"]
+    )
     # Hold constant during dead time
-    return np.where(t > p_dict["t_dead"], y,
-                    p_dict["a"] * np.sin(p_dict["phi"]) + p_dict["c"])
+    return np.where(
+        t > p_dict["t_dead"], y, p_dict["a"] * np.sin(p_dict["phi"]) + p_dict["c"]
+    )
 
 
 def parameter_initialiser(t, y, p_dict):
@@ -86,26 +90,23 @@ def derived_params(p_dict, p_error_dict):
     # this error calculation neglects parameter covariance!
     # may want to upgrade FitBase to make covariance matrix available.
 
-    p_error_dict["max"] = \
-        np.sqrt(p_error_dict["c"]**2
-                + p_error_dict["a"]**2)
+    p_error_dict["max"] = np.sqrt(p_error_dict["c"] ** 2 + p_error_dict["a"] ** 2)
 
-    p_error_dict["min"] = \
-        np.sqrt(p_error_dict["c"]**2
-                + p_error_dict["a"]**2)
+    p_error_dict["min"] = np.sqrt(p_error_dict["c"] ** 2 + p_error_dict["a"] ** 2)
 
-    p_error_dict["t_pi"] = \
-        np.sqrt(p_error_dict["t_dead"]**2
-                + (np.pi / p_dict["omega"]
-                    * (p_error_dict["omega"] / p_dict["omega"]))**2)
+    p_error_dict["t_pi"] = np.sqrt(
+        p_error_dict["t_dead"] ** 2
+        + (np.pi / p_dict["omega"] * (p_error_dict["omega"] / p_dict["omega"])) ** 2
+    )
 
-    p_error_dict["t_pi/2"] = \
-        np.sqrt(p_error_dict["t_dead"]**2
-                + (np.pi / 2 / p_dict["omega"]
-                    * (p_error_dict["omega"] / p_dict["omega"]))**2)
+    p_error_dict["t_pi/2"] = np.sqrt(
+        p_error_dict["t_dead"] ** 2
+        + (np.pi / 2 / p_dict["omega"] * (p_error_dict["omega"] / p_dict["omega"])) ** 2
+    )
 
-    p_error_dict["period"] = \
+    p_error_dict["period"] = (
         2 * np.pi / p_dict["omega"] * (p_error_dict["omega"] / p_dict["omega"])
+    )
 
     return (p_dict, p_error_dict)
 
@@ -122,7 +123,8 @@ sinusoid = FitBase(
         "c": (-np.inf, np.inf),
         "phi": (-np.inf, np.inf),  # allows fit to wrap phase
     },
-    derived_parameter_names=["t_pi", "t_pi/2", "period", "max", "min"],)
+    derived_parameter_names=["t_pi", "t_pi/2", "period", "max", "min"],
+)
 
 if __name__ == "__main__":
     # example and debugging
@@ -140,17 +142,18 @@ if __name__ == "__main__":
 
     # fix these fit parameters to a specific value
     const_dict = {
-        't_dead': 0.0,
+        "t_dead": 0.0,
         # 'phi': phi,
         # 'c': offset
     }
-    p, p_err, x_fit, y_fit = sinusoid.fit(t,
-                                          y,
-                                          y_err=np.ones(y.shape) *
-                                          np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
-                                          evaluate_function=True,
-                                          evaluate_x_limit=[0, t_max],
-                                          constants=const_dict)
+    p, p_err, x_fit, y_fit = sinusoid.fit(
+        t,
+        y,
+        y_err=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
+        evaluate_function=True,
+        evaluate_x_limit=[0, t_max],
+        constants=const_dict,
+    )
 
     print("done")
     if True:
@@ -158,16 +161,19 @@ if __name__ == "__main__":
         print("p_err", p_err)
     if True:
         from matplotlib import pyplot as plt
+
         mask = np.argsort(t)
         t = t[mask]
         y = y[mask]
 
         plt.figure()
-        plt.errorbar(t,
-                     y,
-                     yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
-                     ecolor='k',
-                     label="input")
+        plt.errorbar(
+            t,
+            y,
+            yerr=np.ones(y.shape) * np.sqrt(1 / 3 - 1 / 4) * amp * rel_noise,
+            ecolor="k",
+            label="input",
+        )
         plt.plot(x_fit, y_fit, color="y", label="fit")
         plt.legend()
         plt.show()

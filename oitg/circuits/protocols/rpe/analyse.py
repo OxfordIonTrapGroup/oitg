@@ -1,5 +1,7 @@
-import numpy as np
 from typing import Dict, Iterable, Tuple
+
+import numpy as np
+
 from ...gate import GateSequence
 
 
@@ -25,10 +27,12 @@ def analyse(outcomes: Dict[GateSequence, np.ndarray]) -> float:
     # right one and extract the pi_2 sequence.
     for i in range(1, 3):
         target_and_pi_2_seq = seqs[idxs[i]]
-        if target_and_pi_2_seq[:len(target_seq)] != target_seq:
-            raise ValueError("Second shortest sequence should be the target gate string"
-                             "plus the π/2 implementation")
-        pi_2_seq = target_and_pi_2_seq[len(target_seq):]
+        if target_and_pi_2_seq[: len(target_seq)] != target_seq:
+            raise ValueError(
+                "Second shortest sequence should be the target gate string"
+                "plus the π/2 implementation"
+            )
+        pi_2_seq = target_and_pi_2_seq[len(target_seq) :]
         if pi_2_seq != target_seq:
             break
     else:
@@ -45,8 +49,12 @@ def analyse(outcomes: Dict[GateSequence, np.ndarray]) -> float:
         current_len = 2**i
         cos_outcomes = outcomes[target_seq * current_len]
         sin_outcomes = outcomes[target_seq * current_len + pi_2_seq]
-        pauli_xy_estimates.append(((2 * cos_outcomes[0] / sum(cos_outcomes) - 1),
-                                   -(2 * sin_outcomes[0] / sum(sin_outcomes) - 1)))
+        pauli_xy_estimates.append(
+            (
+                (2 * cos_outcomes[0] / sum(cos_outcomes) - 1),
+                -(2 * sin_outcomes[0] / sum(sin_outcomes) - 1),
+            )
+        )
     return estimate_phase(pauli_xy_estimates)
 
 

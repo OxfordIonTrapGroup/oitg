@@ -10,15 +10,16 @@ class FitError(Exception):
 
 class FitParameters:
     """An object used to pass parameters to the fit function"""
+
     def __init__(self, names=[], constant_parameters=[], initialised_parameters=[]):
         """Initialises a parameter object.
 
-         - names: a sequence of all parameter names used
-         - constant_parameters: an optional dictionary of those parameters
-            which are to be held constant, and the corresponding values
-         - initialised_parameters: an optional dictionary of those
-            parameters which are to be manually initialised before
-            the fit rather than automatically
+        - names: a sequence of all parameter names used
+        - constant_parameters: an optional dictionary of those parameters
+           which are to be held constant, and the corresponding values
+        - initialised_parameters: an optional dictionary of those
+           parameters which are to be manually initialised before
+           the fit rather than automatically
         """
 
         self.parameter_dict = {}
@@ -31,12 +32,18 @@ class FitParameters:
         names = set(names)
         undefined_constants = self.constant_parameter_names - names
         if undefined_constants:
-            raise FitError("Parameters specified as constant "
-                           "do not exist: {}".format(undefined_constants))
+            raise FitError(
+                "Parameters specified as constant do not exist: {}".format(
+                    undefined_constants
+                )
+            )
         undefined_initialised = self.initialised_parameter_names - names
         if undefined_initialised:
-            raise FitError("Initial values specified for parameters that "
-                           "do not exist: {}".format(undefined_initialised))
+            raise FitError(
+                "Initial values specified for parameters that do not exist: {}".format(
+                    undefined_initialised
+                )
+            )
 
         for name in names:
             if name in self.constant_parameter_names:
@@ -75,8 +82,7 @@ class FitParameters:
 
         # If we are in init mode and the parameter shouldn't be
         # initialised
-        if self.initialisation_mode and \
-           name in self.initialised_parameter_names:
+        if self.initialisation_mode and name in self.initialised_parameter_names:
             return
 
         # Otherwise, set the value
@@ -96,13 +102,16 @@ class FitParameters:
 
 class FitBase:
     """An object associated with a fitting function."""
-    def __init__(self,
-                 parameter_names,
-                 fitting_function,
-                 parameter_initialiser=None,
-                 derived_parameter_function=None,
-                 parameter_bounds={},
-                 derived_parameter_names: list[str]=[]):
+
+    def __init__(
+        self,
+        parameter_names,
+        fitting_function,
+        parameter_initialiser=None,
+        derived_parameter_function=None,
+        parameter_bounds={},
+        derived_parameter_names: list[str] = [],
+    ):
         """Create an object for fitting a function.
 
         - parameter_names:
@@ -149,19 +158,21 @@ class FitBase:
                 DeprecationWarning,
             )
 
-    def fit(self,
-            x,
-            y,
-            y_err=None,
-            x_limit=[-np.inf, np.inf],
-            y_limit=[-np.inf, np.inf],
-            constants={},
-            initialise={},
-            calculate_residuals=False,
-            evaluate_function=False,
-            evaluate_x_limit=[None, None],
-            evaluate_n=1000,
-            method="lsq"):
+    def fit(
+        self,
+        x,
+        y,
+        y_err=None,
+        x_limit=[-np.inf, np.inf],
+        y_limit=[-np.inf, np.inf],
+        constants={},
+        initialise={},
+        calculate_residuals=False,
+        evaluate_function=False,
+        evaluate_x_limit=[None, None],
+        evaluate_n=1000,
+        method="lsq",
+    ):
         """Perform a fit of this object's function to the given data.
 
         - x and y are the arrays of data to fit to.
@@ -222,10 +233,12 @@ class FitBase:
 
         # Strip out any data-points that lie outside of the
         # fitting limits
-        valid_indices = np.where((x_limit[0] <= x)
-                                 & (x <= x_limit[1])
-                                 & (y_limit[0] <= y)
-                                 & (y <= y_limit[1]))
+        valid_indices = np.where(
+            (x_limit[0] <= x)
+            & (x <= x_limit[1])
+            & (y_limit[0] <= y)
+            & (y <= y_limit[1])
+        )
         x = x[valid_indices]
         y = y[valid_indices]
         if y_err is not None:
@@ -249,9 +262,9 @@ class FitBase:
         for name in p.variable_names:
             p_init_list.append(p[name])
             p_scale_list.append(p.scale_dict[name])
-            l, u = self.parameter_bounds.get(name, (-np.inf, np.inf))
-            lower_bounds.append(l)
-            upper_bounds.append(u)
+            lower, upper = self.parameter_bounds.get(name, (-np.inf, np.inf))
+            lower_bounds.append(lower)
+            upper_bounds.append(upper)
 
         def LocalFitFunction(x, *p_list):
             # Transfer the parameters from the list used by the fit
@@ -265,9 +278,16 @@ class FitBase:
         # If an exception occurs, raise it as a FitError
         try:
             fitter = getattr(self, method)
-            p_list, p_list_covariance = fitter(LocalFitFunction, x, y, y_err,
-                                               p_init_list, lower_bounds, upper_bounds,
-                                               p_scale_list)
+            p_list, p_list_covariance = fitter(
+                LocalFitFunction,
+                x,
+                y,
+                y_err,
+                p_init_list,
+                lower_bounds,
+                upper_bounds,
+                p_scale_list,
+            )
         except Exception as e:
             raise FitError(e)
 
@@ -295,8 +315,7 @@ class FitBase:
 
         # Calculate any derived parameters
         if self.derived_parameter_function is not None:
-            p_dict, p_error_dict = \
-                self.derived_parameter_function(p_dict, p_error_dict)
+            p_dict, p_error_dict = self.derived_parameter_function(p_dict, p_error_dict)
 
         if calculate_residuals:
             residuals = y - self.fitting_function(x, p_dict)
@@ -333,18 +352,20 @@ class FitBase:
             return p_dict, p_error_dict, x_fit, y_fit
 
     def lsq(self, model_fn, x, y, y_err, init, lower, upper, scale):
-        return curve_fit(model_fn,
-                         x,
-                         y,
-                         init,
-                         sigma=y_err,
-                         absolute_sigma=y_err is not None,
-                         bounds=(lower, upper),
-                         x_scale=scale,
-                         method='trf')
+        return curve_fit(
+            model_fn,
+            x,
+            y,
+            init,
+            sigma=y_err,
+            absolute_sigma=y_err is not None,
+            bounds=(lower, upper),
+            x_scale=scale,
+            method="trf",
+        )
 
     def mle_binomial(self, model_fn, x, y, _y_err, init, lower, upper, _scale):
-        HUGE_NUMBER = 100000.
+        HUGE_NUMBER = 100000.0
 
         def _nll(params):
             nll = 0.0
@@ -352,7 +373,7 @@ class FitBase:
                 q = model_fn(X, *params)
                 if q < 0 or q > 1:
                     return HUGE_NUMBER
-                likeli = q**Y * (1 - q)**(1 - Y)
+                likeli = q**Y * (1 - q) ** (1 - Y)
                 if likeli > 0.0:
                     nll -= np.log(likeli)
                 else:
@@ -360,7 +381,7 @@ class FitBase:
             return nll
 
         bounds = list(map(tuple, zip(lower, upper)))
-        output = minimize(_nll, init, method='L-BFGS-B', bounds=bounds)
-        popt = output['x']
+        output = minimize(_nll, init, method="L-BFGS-B", bounds=bounds)
+        popt = output["x"]
         pcov = output["hess_inv"].todense()
         return popt, pcov

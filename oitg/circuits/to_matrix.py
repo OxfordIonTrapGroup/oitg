@@ -1,58 +1,71 @@
 """Tools for converting common gates to unitary matrices."""
 
-import numpy as np
 from typing import Union
+
+import numpy as np
+
 from .gate import Gate, GateGenerator, collect_operands
 
-PAULI_OPERATORS = [[[1, 0], [0, 1]], [[0, 1], [1, 0]], [[0, -1j], [1j, 0]],
-                   [[1, 0], [0, -1]]]
+PAULI_OPERATORS = [
+    [[1, 0], [0, 1]],
+    [[0, 1], [1, 0]],
+    [[0, -1j], [1j, 0]],
+    [[1, 0], [0, -1]],
+]
 
 
 def rxy(phase, amount):
     x = np.array(PAULI_OPERATORS[1])
     y = np.array(PAULI_OPERATORS[2])
-    return (np.cos(amount / 2) * np.eye(2) - 1j * np.sin(amount / 2) *
-            (np.cos(phase) * x + np.sin(phase) * y))
+    return np.cos(amount / 2) * np.eye(2) - 1j * np.sin(amount / 2) * (
+        np.cos(phase) * x + np.sin(phase) * y
+    )
 
 
 LOCAL_MATRICES = {
     #: Rotation around x axis of the bloch sphere.
-    "rx": (lambda amount: [[np.cos(amount / 2), -1j * np.sin(amount / 2)],
-                           [-1j * np.sin(amount / 2),
-                            np.cos(amount / 2)]]),
-
+    "rx": (
+        lambda amount: [
+            [np.cos(amount / 2), -1j * np.sin(amount / 2)],
+            [-1j * np.sin(amount / 2), np.cos(amount / 2)],
+        ]
+    ),
     #: Rotation around y axis of the bloch sphere.
-    "ry": (lambda amount: [[np.cos(amount / 2), -np.sin(amount / 2)],
-                           [np.sin(amount / 2), np.cos(amount / 2)]]),
-
+    "ry": (
+        lambda amount: [
+            [np.cos(amount / 2), -np.sin(amount / 2)],
+            [np.sin(amount / 2), np.cos(amount / 2)],
+        ]
+    ),
     #: Rotation around z axis of the bloch sphere.
-    "rz":
-    (lambda amount: [[np.exp(-1j * amount / 2), 0], [0, np.exp(1j * amount / 2)]]),
-
+    "rz": (
+        lambda amount: [[np.exp(-1j * amount / 2), 0], [0, np.exp(1j * amount / 2)]]
+    ),
     #: Arbitrary single-qubit rotation around axis in the xy plane.
     "rxy": (rxy),
-
     #: Hadamard gate.
     "h": (lambda: np.array([[1, 1], [1, -1]]) / np.sqrt(2)),
-
     #: Conditional X gate.
     "cx": (lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]),
-
     #: Conditional Z gate.
     "cz": (lambda: [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, -1]]),
-
     #: XX entangling gate (e.g. MS gate), i.e. exp(-i / 2 * π / 2 * X⊗X).
-    "xx": (lambda: np.array([[1, 0, 0, -1j], [0, 1, -1j, 0], [0, -1j, 1, 0],
-                             [-1j, 0, 0, 1]]) / np.sqrt(2)),
-
+    "xx": (
+        lambda: (
+            np.array([[1, 0, 0, -1j], [0, 1, -1j, 0], [0, -1j, 1, 0], [-1j, 0, 0, 1]])
+            / np.sqrt(2)
+        )
+    ),
     #: Minus-XX entangling gate, i.e. exp(i / 2 * π / 2 * X⊗X).
-    "mxx": (lambda: np.array([[1, 0, 0, 1j], [0, 1, 1j, 0], [0, 1j, 1, 0],
-                              [1j, 0, 0, 1]]) / np.sqrt(2)),
-
+    "mxx": (
+        lambda: (
+            np.array([[1, 0, 0, 1j], [0, 1, 1j, 0], [0, 1j, 1, 0], [1j, 0, 0, 1]])
+            / np.sqrt(2)
+        )
+    ),
     #: Two-loop Z⊗Z wobble gate with spin-echo π pulse in the middle, but no surrounding
     #: gates to fix up the inversion.
     "zzw": (lambda: [[0, 0, 0, 1], [0, 0, -1j, 0], [0, -1j, 0, 0], [1, 0, 0, 0]]),
-
     #: Scheduling barrier; no action on quantum state.
     "barrier": (None),
 }
@@ -117,8 +130,9 @@ def single_gate_matrix(gate: Gate, num_qubits: int) -> np.ndarray:
     return np.array(u.reshape(u_permuted.shape))
 
 
-def gate_sequence_matrix(gates: GateGenerator,
-                         num_qubits: Union[int, None] = None) -> np.ndarray:
+def gate_sequence_matrix(
+    gates: GateGenerator, num_qubits: Union[int, None] = None
+) -> np.ndarray:
     """Return the unitary matrix that describes the action of the given gate sequence.
 
     :param num_qubits: The number of qubits of the target Hilbert space. If ``None``,
