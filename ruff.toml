@@ -1,0 +1,14 @@
+line-length = 88
+
+[format]
+line-ending = "lf"
+
+[lint]
+# Roughly the Flake8 rule set this project used previously (pycodestyle + Pyflakes),
+# plus import sorting. We should consider extending this in the future (e.g. to the
+# new Ruff 0.16+ default rules).
+select = ["E", "F", "W", "I"]
+ignore = [
+    # Star imports are common in idiomatic ARTIQ code
+    "F403", "F405"
+]

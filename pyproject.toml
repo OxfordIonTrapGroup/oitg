@@ -1,47 +1,52 @@
-[tool.poetry]
+[project]
 name = "oitg"
-version = "0.1"
+dynamic = ["version"]
 description = "Oxford Ion-Trap Group routines"
-authors = ["Oxford Ion Trap Quantum Computing Group"]
+authors = [{ name = "Oxford Ion Trap Quantum Computing Group" }]
 readme = "README.md"
+requires-python = ">=3.10"
 
-[tool.poetry.dependencies]
-python = "^3.10"
-statsmodels = "^0.14.0"
-scipy = ">=1.11.4"
-numpy = ">=1.24.2"
-h5py = "^3.10.0"
+dependencies = [
+    "h5py>=3.10.0",
+    "numpy>=1.24.2",
+    "scipy>=1.11.4",
+    "statsmodels>=0.14.0",
+]
 
-[tool.poetry.group.qiskit.dependencies]
-qiskit = "^0.45.1"
-
-[tool.poetry.group.dev.dependencies]
-poethepoet = "^0.22.1"
-toml = "^0.10.2"
-
-# Pin exact versions of linters to avoid inconsistencies between CI environments.
-yapf = "0.40.2"
-flake8 = "6.1.0"
-
-# To generate documentation.
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^1.3.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 oitg_fetch = "oitg.frontend.oitg_fetch:main"
 oitg_index_rids = "oitg.frontend.oitg_index_rids:main"
 
-[tool.poetry-dynamic-versioning]
-enable = true
-vcs = "git"
-style = "pep440"
+[dependency-groups]
+dev = [
+    "poethepoet>=0.22.1",
+    "ruff>=0.14.11",
+    "sphinx-rtd-theme>=1.3.0",
+    "sphinx>=7.2.6",
+    "toml>=0.10.2",
+]
+
+# Only needed for oitg.circuits.visualisation, which still targets the pre-1.0 Qiskit
+# APIs (qiskit.qasm, converters.ast_to_dag).
+qiskit = ["qiskit>=0.45.1,<0.46"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.poe.tasks]
-fmt = "yapf -ir oitg"
-fmt-test = "yapf -dr oitg test"
-lint = "flake8 oitg test"
+docs = "make -C $POE_ROOT/docs html"
+
+_fmt-imports = "ruff check --select I --fix oitg test -q"
+_fmt = "ruff format oitg test"
+fmt.sequence = ["_fmt-imports", "_fmt"]
+
+_fmt-test-imports = "ruff check --select I oitg test -q"
+_fmt-test = "ruff format --check oitg test"
+fmt-test.sequence = ["_fmt-test-imports", "_fmt-test"]
+
+lint = "ruff check oitg test"
 test = "python -m unittest discover -t . -v test"

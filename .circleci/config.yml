@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  python: circleci/python@2.1.1
+  python: circleci/python@3.2.0
 jobs:
   test:
     executor:
@@ -9,16 +9,16 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: poetry
+          pkg-manager: uv
       - run:
          name: Run unit tests
-         command: poetry run poe test
+         command: uv run poe test
       - run:
-          name: Verify that Flake8 passes
-          command: poetry run poe lint
+          name: Verify that Ruff lint passes
+          command: uv run poe lint
       - run:
-          name: Check that YAPF doesn't change formatting
-          command: poetry run poe fmt-test
+          name: Check that Ruff doesn't change formatting
+          command: uv run poe fmt-test
   docs-build:
     executor:
       name: python/default
@@ -26,10 +26,10 @@ jobs:
     steps:
       - checkout
       - python/install-packages:
-          pkg-manager: poetry
+          pkg-manager: uv
       - run:
           name: Build documentation
-          command: cd docs && poetry run make html
+          command: uv run poe docs
       - persist_to_workspace:
           root: docs/_build
           paths: html
