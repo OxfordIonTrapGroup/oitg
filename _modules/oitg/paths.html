@@ -84,11 +84,41 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 
+<div class="viewcode-block" id="OitgEnvError">
+<a class="viewcode-back" href="../../paths.html#oitg.paths.OitgEnvError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OitgEnvError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a value could not be determined from the local machine configuration</span>
+<span class="sd">    (``OITG_…`` environment variables).</span>
+
+<span class="sd">    Not named the more straightforward &quot;EnvironmentError&quot; to avoid confusion with the</span>
+<span class="sd">    built-in exception type of the same name.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_user</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OITG_USER&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No user supplied, and no OITG_USER environment key&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">OitgEnvError</span><span class="p">(</span><span class="s2">&quot;No user supplied, and no OITG_USER environment key&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="default_experiment">
+<a class="viewcode-back" href="../../paths.html#oitg.paths.default_experiment">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_experiment</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the default experiment name, as given by the ``OITG_EXPERIMENT``</span>
+<span class="sd">    environment variable.</span>
+
+<span class="sd">    The experiment name matches the corresponding subdirectory of the shared area</span>
+<span class="sd">    ARTIQ results directory (e.g. ``lab1_alice``); see :func:`.artiq_results_path`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OITG_EXPERIMENT&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OitgEnvError</span><span class="p">(</span>
+            <span class="s2">&quot;No experiment supplied, and no OITG_EXPERIMENT environment key&quot;</span>
+        <span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="shared_area_path">
@@ -110,7 +140,7 @@
         <span class="k">return</span> <span class="s2">&quot;Z:</span><span class="se">\\</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;unix&quot;</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;posix&quot;</span><span class="p">:</span>  <span class="c1"># Linux / OSX / ...</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/steaneShared/&quot;</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown OS&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="n">OitgEnvError</span><span class="p">(</span><span class="s2">&quot;Unknown OS&quot;</span><span class="p">)</span></div>
 
 
 
@@ -166,19 +196,14 @@
 <span class="sd">    The standard results path is ``&lt;shared_area&gt;/artiqResults/&lt;experiment&gt;``.</span>
 
 <span class="sd">    :param experiment: The name of the experimental setup, as per the corresponding</span>
-<span class="sd">        subdirectory of the shared area results directory. If ``None``, the environment</span>
-<span class="sd">        variable ``OITG_EXPERIMENT`` is used.</span>
+<span class="sd">        subdirectory of the shared area results directory. If ``None``, defaults to</span>
+<span class="sd">        the environment variable ``OITG_EXPERIMENT`` (see :func:`.default_experiment`).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shared_area_path</span><span class="p">(),</span> <span class="s2">&quot;artiqResults&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">experiment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">experiment</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;OITG_EXPERIMENT&quot;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="s2">&quot;No experiment supplied, and no OITG_EXPERIMENT environment key&quot;</span>
-            <span class="p">)</span>
+        <span class="n">experiment</span> <span class="o">=</span> <span class="n">default_experiment</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">experiment</span><span class="p">)</span></div>
 

@@ -48,6 +48,8 @@
 <li class="toctree-l1"><a class="reference internal" href="cache.html">oitg.cache API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="circuits.html">oitg.circuits API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">oitg.paths API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.paths.OitgEnvError"><code class="docutils literal notranslate"><span class="pre">OitgEnvError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#oitg.paths.default_experiment"><code class="docutils literal notranslate"><span class="pre">default_experiment()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#oitg.paths.shared_area_path"><code class="docutils literal notranslate"><span class="pre">shared_area_path()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#oitg.paths.analysis_root_path"><code class="docutils literal notranslate"><span class="pre">analysis_root_path()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#oitg.paths.todays_analysis_path"><code class="docutils literal notranslate"><span class="pre">todays_analysis_path()</span></code></a></li>
@@ -86,6 +88,24 @@
 <span id="oitg-paths-api"></span><h1>oitg.paths API<a class="headerlink" href="#module-oitg.paths" title="Link to this heading"></a></h1>
 <p>Well-known file system paths within the Oxford Ion Trap Quantum Computing group’s
 computer/network setup.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="oitg.paths.OitgEnvError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">OitgEnvError</span></span><a class="reference internal" href="_modules/oitg/paths.html#OitgEnvError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.OitgEnvError" title="Link to this definition"></a></dt>
+<dd><p>Raised when a value could not be determined from the local machine configuration
+(<code class="docutils literal notranslate"><span class="pre">OITG_…</span></code> environment variables).</p>
+<p>Not named the more straightforward “EnvironmentError” to avoid confusion with the
+built-in exception type of the same name.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="oitg.paths.default_experiment">
+<span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">default_experiment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/oitg/paths.html#default_experiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.default_experiment" title="Link to this definition"></a></dt>
+<dd><p>Return the default experiment name, as given by the <code class="docutils literal notranslate"><span class="pre">OITG_EXPERIMENT</span></code>
+environment variable.</p>
+<p>The experiment name matches the corresponding subdirectory of the shared area
+ARTIQ results directory (e.g. <code class="docutils literal notranslate"><span class="pre">lab1_alice</span></code>); see <a class="reference internal" href="#oitg.paths.artiq_results_path" title="oitg.paths.artiq_results_path"><code class="xref py py-func docutils literal notranslate"><span class="pre">artiq_results_path()</span></code></a>.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="oitg.paths.shared_area_path">
 <span class="sig-prename descclassname"><span class="pre">oitg.paths.</span></span><span class="sig-name descname"><span class="pre">shared_area_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/oitg/paths.html#shared_area_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#oitg.paths.shared_area_path" title="Link to this definition"></a></dt>
@@ -135,8 +155,8 @@ conclusions reached are reexamined.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>experiment</strong> – The name of the experimental setup, as per the corresponding
-subdirectory of the shared area results directory. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the environment
-variable <code class="docutils literal notranslate"><span class="pre">OITG_EXPERIMENT</span></code> is used.</p>
+subdirectory of the shared area results directory. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to
+the environment variable <code class="docutils literal notranslate"><span class="pre">OITG_EXPERIMENT</span></code> (see <a class="reference internal" href="#oitg.paths.default_experiment" title="oitg.paths.default_experiment"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_experiment()</span></code></a>).</p>
 </dd>
 </dl>
 </dd></dl>
