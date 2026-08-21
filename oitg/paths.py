@@ -24,6 +24,21 @@ def _get_user() -> str:
         raise OitgEnvError("No user supplied, and no OITG_USER environment key")
 
 
+def default_experiment() -> str:
+    """Return the default experiment name, as given by the ``OITG_EXPERIMENT``
+    environment variable.
+
+    The experiment name matches the corresponding subdirectory of the shared area
+    ARTIQ results directory (e.g. ``lab1_alice``); see :func:`.artiq_results_path`.
+    """
+    try:
+        return os.environ["OITG_EXPERIMENT"]
+    except KeyError:
+        raise OitgEnvError(
+            "No experiment supplied, and no OITG_EXPERIMENT environment key"
+        )
+
+
 def shared_area_path() -> str:
     r"""Return the standard path to the shared area on the current platform.
 
@@ -88,18 +103,13 @@ def artiq_results_path(experiment: Optional[str] = None) -> str:
     The standard results path is ``<shared_area>/artiqResults/<experiment>``.
 
     :param experiment: The name of the experimental setup, as per the corresponding
-        subdirectory of the shared area results directory. If ``None``, the environment
-        variable ``OITG_EXPERIMENT`` is used.
+        subdirectory of the shared area results directory. If ``None``, defaults to
+        the environment variable ``OITG_EXPERIMENT`` (see :func:`.default_experiment`).
     """
 
     path = os.path.join(shared_area_path(), "artiqResults")
 
     if experiment is None:
-        try:
-            experiment = os.environ["OITG_EXPERIMENT"]
-        except KeyError:
-            raise OitgEnvError(
-                "No experiment supplied, and no OITG_EXPERIMENT environment key"
-            )
+        experiment = default_experiment()
 
     return os.path.join(path, experiment)
