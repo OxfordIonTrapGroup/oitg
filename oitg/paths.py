@@ -8,11 +8,20 @@ from datetime import date
 from typing import Optional
 
 
+class OitgEnvError(Exception):
+    """Raised when a value could not be determined from the local machine configuration
+    (``OITG_…`` environment variables).
+
+    Not named the more straightforward "EnvironmentError" to avoid confusion with the
+    built-in exception type of the same name.
+    """
+
+
 def _get_user() -> str:
     try:
         return os.environ["OITG_USER"]
     except KeyError:
-        raise Exception("No user supplied, and no OITG_USER environment key")
+        raise OitgEnvError("No user supplied, and no OITG_USER environment key")
 
 
 def shared_area_path() -> str:
@@ -32,7 +41,7 @@ def shared_area_path() -> str:
         return "Z:\\"
     if os.name == "unix" or os.name == "posix":  # Linux / OSX / ...
         return os.path.expanduser("~/steaneShared/")
-    raise Exception("Unknown OS")
+    raise OitgEnvError("Unknown OS")
 
 
 def analysis_root_path(user: Optional[str] = None) -> str:
@@ -89,7 +98,7 @@ def artiq_results_path(experiment: Optional[str] = None) -> str:
         try:
             experiment = os.environ["OITG_EXPERIMENT"]
         except KeyError:
-            raise Exception(
+            raise OitgEnvError(
                 "No experiment supplied, and no OITG_EXPERIMENT environment key"
             )
 
