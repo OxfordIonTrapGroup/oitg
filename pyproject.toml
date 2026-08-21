@@ -30,7 +30,7 @@ dev = [
 
 # Only needed for oitg.circuits.visualisation, which still targets the pre-1.0 Qiskit
 # APIs (qiskit.qasm, converters.ast_to_dag).
-qiskit = ["qiskit>=0.45.1,<0.46"]
+qiskit = ["qiskit>=0.45.1,<1.5"]
 
 [build-system]
 requires = ["hatchling"]
