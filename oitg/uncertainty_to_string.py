@@ -14,11 +14,17 @@ def uncertainty_to_string(x, err, precision=1):
 
     Based on http://stackoverflow.com/questions/6671053/python-pretty-print-errorbars"""
 
-    if isnan(x) or isnan(err):
+    if isnan(x):
         return "NaN"
 
-    if isinf(x) or isinf(err):
+    if isnan(err):
+        return f"{x}(NaN)"
+
+    if isinf(x):
         return "inf"
+
+    if isinf(err):
+        return f"{x}(inf)"
 
     # Chuck away sign of err
     err = abs(err)
@@ -64,32 +70,3 @@ def uncertainty_to_string(x, err, precision=1):
         return result2
     else:
         return result1
-
-
-if __name__ == "__main__":
-    xs = [
-        0,
-        12.34567,
-        -0.123456,
-        0.001234560000,
-        -0.0000123456,
-        float("nan"),
-        0,
-        float("inf"),
-        10,
-    ]
-    xes = [
-        1e-4,
-        0.00123,
-        0.000123,
-        0.000000012345,
-        0.0000001234,
-        1,
-        float("nan"),
-        float("inf"),
-        100,
-    ]
-    precs = [1, 2, 3, 4, 1, 1, 1, 1, 1]
-
-    for x, xe_, prec in zip(xs, xes, precs):
-        print("{} +- {} --> {}".format(x, xe_, uncertainty_to_string(x, xe_, prec)))
