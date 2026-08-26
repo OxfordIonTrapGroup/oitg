@@ -1,18 +1,32 @@
+"""Fit a typical Rabi flop time scan with a decaying cosine curve, including
+initial dead time to account for AOM/... switching effects.
+
+The flop starts at y_start and oscillates towards y_lower, with the contrast decaying
+exponentially in time (i.e. y approaches the mean of the two levels for t >> tau_decay).
+Both scans starting at y = 1 and at y = 0 are supported; unless explicitly specified by
+the user (either as a constant or initial value), y_start is inferred from the data and
+held constant at 0 or 1 during the fit. To fix the direction ahead of time, pass e.g.
+constants={"y_start": 0.0}; to instead let the fit also refine the initial level (e.g.
+to absorb state preparation errors), pass it as an initial value.
+
+Note: For backwards compatibility, the level the flop oscillates towards is always
+called y_lower, even though it is the *upper* level for flops starting at y = 0.
+Parameter sets without a y_start entry (e.g. from before flops starting at y = 0 were
+supported) are interpreted as starting at y = 1.
+
+Scans which do not start (close to) one of the extrema are not covered by this model;
+see :mod:`.sinusoid`/:mod:`.decaying_sinusoid`.
+
+For guessing the initial parameters, it is assumed that the scan covers at least about a
+quarter of an oscillation period, and that the sampling is dense enough to resolve the
+oscillation (more than two points per period).
+"""
+
 import numpy as np
 from scipy.optimize import minimize_scalar
 from scipy.signal import lombscargle
 
 from . import FitBase
-
-"""Fit a typical Rabi flop time scan with a decaying cosine curve, including
-initial dead time to account for AOM/... switching effects.
-
-Currently only supports positive-sign scans (starting at y=1, not y=0).
-
-For guessing the initial parameters, it is assumed that the scan covers at
-least about a quarter of an oscillation period, and that the sampling is dense
-enough to resolve the oscillation (more than two points per period).
-"""
 
 
 def parameter_initialiser(x, y, p):
@@ -69,12 +83,10 @@ def parameter_initialiser(x, y, p):
 
     p["t_dead"] = 0.0
 
-    p["y_lower"] = np.clip(2 * y_mean - 1, 0, 1)
-
     # Consider the strongest few periodogram peaks and their first harmonics
     # (as noise and irregular sampling can cause a subharmonic to end up
     # stronger than the true frequency) as candidates, preferring those which
-    # lead to a pi time larger than t_min (i.e. the first minimum not before
+    # lead to a pi time larger than t_min (i.e. the first extremum not before
     # the scanned range). Among those, pick the one that actually matches the
     # data best when combined with the other initial parameter estimates.
     peak_idxs = (
@@ -88,40 +100,74 @@ def parameter_initialiser(x, y, p):
     if allowed:
         candidates = allowed
 
-    trial = {"t_dead": 0.0, "y_lower": p["y_lower"], "tau_decay": p["tau_decay"]}
+    # Unless the user has fixed the starting level (and thus the direction of the flop),
+    # also let both a flop starting at y = 0 and one starting at y = 1 compete based on
+    # the rms error for the parameter estimates (approximating y_lower as the opposite
+    # excursion from the data mean relative to y_start).
+    if p.is_initialised("y_start"):
+        y_starts = [p["y_start"]]
+    else:
+        y_starts = [0.0, 1.0]
 
-    def sum_squares(omega):
-        trial["t_period"] = 2 * np.pi / omega
+    def trial_parameters(y_start, omega):
+        if p.is_initialised("y_lower"):
+            y_lower = p["y_lower"]
+        else:
+            y_lower = np.clip(2 * y_mean - y_start, 0, 1)
+        return {
+            "t_period": 2 * np.pi / omega,
+            "t_dead": 0.0,
+            "y_start": y_start,
+            "y_lower": y_lower,
+            "tau_decay": p["tau_decay"],
+        }
+
+    def sum_squares(trial):
         return np.sum((y - fitting_function(x, trial)) ** 2)
 
-    p["t_period"] = 2 * np.pi / min(candidates, key=sum_squares)
+    best = min(
+        (trial_parameters(s, omega) for s in y_starts for omega in candidates),
+        key=sum_squares,
+    )
+    p.hold_constant("y_start", best["y_start"])
+    p["y_lower"] = best["y_lower"]
+    p["t_period"] = best["t_period"]
+
+
+def transferred_fraction(t, p):
+    """Just the exponentially damped population transfer probability (starting at 0),
+    without dead time, starting sign, or contrast reduction.
+    """
+    return (1 - np.exp(-t / p["tau_decay"]) * np.cos(2 * np.pi / p["t_period"] * t)) / 2
 
 
 def fitting_function(x, p):
-    y_upper = 1.0
+    # Parameter sets from before flops starting at y = 0 were supported.
+    try:
+        y_start = p["y_start"]
+    except KeyError:
+        y_start = 1.0
+
     shifted_t = x - p["t_dead"]
-    y = p["y_lower"] + (y_upper - p["y_lower"]) / 2 * (
-        np.exp(-shifted_t / p["tau_decay"])
-        * np.cos(2 * np.pi / p["t_period"] * shifted_t)
-        + 1
-    )
-    return np.where(x < p["t_dead"], y_upper, y)
+    y = y_start + (p["y_lower"] - y_start) * transferred_fraction(shifted_t, p)
+    return np.where(x < p["t_dead"], y_start, y)
 
 
 def derived_parameter_function(p, p_err):
-    non_decaying_pi_time = p["t_dead"] + p["t_period"] / 2
+    half_period = p["t_period"] / 2
 
-    # Compute the point of maximum population transfer (minimum in y) which
-    # will be slightly shifted towards zero in the face of non-zero tau_decay.
+    # Compute the point of maximum population transfer (the first extremum in
+    # y), which will be slightly shifted towards zero in the face of non-zero
+    # tau_decay.
     fit = minimize_scalar(
-        lambda t: fitting_function(t, p),
+        lambda t: -transferred_fraction(t, p),
         method="brent",
-        bracket=[0.9 * non_decaying_pi_time, non_decaying_pi_time],
+        bracket=[0.9 * half_period, half_period],
     )
     if fit.success:
-        p["t_pi"] = fit.x
+        p["t_pi"] = p["t_dead"] + fit.x
     else:
-        p["t_pi"] = non_decaying_pi_time
+        p["t_pi"] = p["t_dead"] + half_period
 
     # This is just a Gaussian error propagation guess.
     p_err["t_pi"] = np.sqrt(p_err["t_dead"] ** 2 + (p_err["t_period"] / 2) ** 2)
@@ -129,13 +175,14 @@ def derived_parameter_function(p, p_err):
 
 
 rabi_flop = FitBase.FitBase(
-    ["t_period", "t_dead", "y_lower", "tau_decay"],
+    ["t_period", "t_dead", "y_start", "y_lower", "tau_decay"],
     fitting_function,
     parameter_initialiser=parameter_initialiser,
     derived_parameter_function=derived_parameter_function,
     parameter_bounds={
         "t_period": (0, np.inf),
         "t_dead": (0, np.inf),
+        "y_start": (0, 1),
         "y_lower": (0, 1),
         "tau_decay": (0, np.inf),
     },

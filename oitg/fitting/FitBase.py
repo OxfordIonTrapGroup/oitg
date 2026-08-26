@@ -90,6 +90,32 @@ class FitParameters:
         if value != 0:
             self.scale_dict[name] = abs(value)
 
+    def is_initialised(self, name: str) -> bool:
+        """Return whether the given parameter has been assigned an initial value or has
+        been held constant (e.g. by the user in the constructor).
+        """
+        return (
+            name in self.constant_parameter_names
+            or name in self.initialised_parameter_names
+        )
+
+    def hold_constant(self, name: str, value) -> None:
+        """Hold the given parameter constant at the given value during the fit.
+
+        This is intended to be used by parameter initialisers to fix discrete choices
+        based on the data (e.g. the sign of a Rabi flop) that cannot be varied
+        continuously during the fit, but that we try to infer on behalf of the user if
+        not specified.
+
+        Has no effect if an initial value/constant has already been specified by the
+        user-facing constructor arguments.
+        """
+        if self.is_initialised(name):
+            return
+        self.parameter_dict[name] = value
+        self.constant_parameter_names.add(name)
+        self.variable_names.remove(name)
+
     def absorb_variable_values(self, values):
         """Set the value of all variables with the given sequence of values.
         The variables are indexed with the order of the names in
@@ -127,7 +153,8 @@ class FitBase:
             where x and y are the numpy arrays for the data to be fitted
             and P is the FitParameters object
             If no function is given, the all non-initialised parameters
-            are set to 0
+            are set to 0. The initialiser can also use P.hold_constant() to
+            fix parameters inferred from the data (e.g. discrete choices).
         - derived_parameter_function:
             An optional function used to generate certain derived
             parameters after fitting has taken place
@@ -308,9 +335,10 @@ class FitBase:
             p_dict[p.variable_names[i]] = p_list[i]
             p_error_dict[p.variable_names[i]] = p_list_errors[i]
 
-        # Copy the constants
+        # Copy the constants (both user-specified and those held constant by
+        # the parameter initialiser).
         for name in p.constant_parameter_names:
-            p_dict[name] = constants[name]
+            p_dict[name] = p[name]
             p_error_dict[name] = 0
 
         # Calculate any derived parameters
