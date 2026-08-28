@@ -1,8 +1,13 @@
 import unittest
 
 import numpy as np
+from scipy.optimize import minimize_scalar
 
-from oitg.fitting.rabi_flop import fitting_function, rabi_flop
+from oitg.fitting.rabi_flop import (
+    derived_parameter_function,
+    fitting_function,
+    rabi_flop,
+)
 
 
 def simulate(t, p_true, num_shots=50, seed=0):
@@ -24,6 +29,20 @@ def make_params(t_period, tau_decay, y_start, y_lower, t_dead=0.0):
         "y_lower": y_lower,
         "tau_decay": tau_decay,
     }
+
+
+def first_max_transfer_time(p):
+    """Reference for t_pi independent of the model internals (just numerically optimise
+    the maximum distance from y_start within the first 3/4 of a period plus dead time).
+    """
+    result = minimize_scalar(
+        lambda t: -abs(float(fitting_function(t, p)) - p["y_start"]),
+        method="bounded",
+        bounds=(p["t_dead"], p["t_dead"] + 0.75 * p["t_period"]),
+        options={"xatol": 1e-11},
+    )
+    assert result.success
+    return result.x
 
 
 class RabiFlopTest(unittest.TestCase):
@@ -99,6 +118,45 @@ class RabiFlopTest(unittest.TestCase):
                 p["t_dead"], 40e-6, delta=max(20e-6, 4 * p_err["t_dead"])
             )
             self.assertAlmostEqual(p["t_pi"], 540e-6, delta=30e-6)
+
+    def test_t_pi(self):
+        # t_pi should be the first point of maximum population transfer regardless
+        # of the direction of the flop, shifted towards zero for finite decay times
+        # and offset by the dead time.
+        t = np.linspace(0.0, 4e-3, 51)
+        t_period = 1e-3
+        for y_start in (1.0, 0.0):
+            for tau_decay in (np.inf, 2e-3, 0.5e-3):
+                for t_dead in (0.0, 40e-6):
+                    with self.subTest(
+                        y_start=y_start, tau_decay=tau_decay, t_dead=t_dead
+                    ):
+                        p_true = make_params(
+                            t_period, tau_decay, y_start, abs(y_start - 0.9), t_dead
+                        )
+                        t_pi_true = first_max_transfer_time(p_true)
+
+                        # Check derived parameter calculation to high precision.
+                        p, _ = derived_parameter_function(
+                            dict(p_true), {k: 0.0 for k in p_true}
+                        )
+                        self.assertAlmostEqual(p["t_pi"], t_pi_true, delta=1e-9)
+                        if np.isinf(tau_decay):
+                            self.assertAlmostEqual(
+                                p["t_pi"], t_dead + t_period / 2, delta=1e-9
+                            )
+                        else:
+                            self.assertLess(p["t_pi"], t_dead + t_period / 2)
+                            self.assertGreater(p["t_pi"], t_dead + t_period / 4)
+
+                        # Simulate readout noise and check with lower precision.
+                        y, y_err = simulate(t, p_true)
+                        p, p_err = rabi_flop.fit(t, y, y_err)
+                        self.assertEqual(p["y_start"], y_start)
+                        self.assertAlmostEqual(
+                            p["t_pi"], t_pi_true, delta=max(30e-6, 4 * p_err["t_pi"])
+                        )
+                        self.assertGreater(p_err["t_pi"], 0.0)
 
     def test_user_specified_y_start(self):
         t = np.linspace(0.0, 4e-3, 51)
