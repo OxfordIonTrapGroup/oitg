@@ -98,6 +98,50 @@ class RabiFlopTest(unittest.TestCase):
         t = np.geomspace(3e-6, 350e-6, 51)
         self._check_period(13e-6, 300e-6, 0.05, t=t)
 
+    def test_no_aliasing(self):
+        # On a regularly spaced grid, a harmonic of a spurious periodogram peak
+        # can coincide exactly with an alias of the true frequency, which then
+        # matches the data equally well; the lower frequency should win.
+        t = np.linspace(0.0, 4e-3, 51)
+        for y_start in (1.0, 0.0):
+            for tau_decay in (1.5e-3, 2e-3):
+                for t_dead in (0.0, 40e-6):
+                    p_true = make_params(
+                        1e-3, tau_decay, y_start, abs(y_start - 0.9), t_dead
+                    )
+                    for seed in range(10):
+                        with self.subTest(
+                            y_start=y_start,
+                            tau_decay=tau_decay,
+                            t_dead=t_dead,
+                            seed=seed,
+                        ):
+                            y, y_err = simulate(t, p_true, seed=seed)
+                            p, p_err = rabi_flop.fit(t, y, y_err)
+                            self.assertAlmostEqual(p["t_period"], 1e-3, delta=0.05e-3)
+
+    def test_random_grid_subset(self):
+        # Only a random subset of a regularly spaced scan might be available
+        # (e.g. while a randomised scan is still being acquired); oscillations
+        # resolved by the underlying grid should still be found even though
+        # the typical spacing of the available points is much larger.
+        grid = np.linspace(0.0, 4e-3, 51)
+        for t_period in (0.3e-3, 0.2e-3):
+            for seed in range(10):
+                with self.subTest(t_period=t_period, seed=seed):
+                    rng = np.random.default_rng(seed)
+                    keep = rng.random(len(grid)) < 0.5
+                    keep[0] = True
+                    t = grid[keep]
+                    y_start = float(seed % 2)
+                    p_true = make_params(t_period, 2e-3, y_start, abs(y_start - 0.9))
+                    y, y_err = simulate(t, p_true, seed=seed)
+                    p, p_err = rabi_flop.fit(t, y, y_err)
+                    self.assertEqual(p["y_start"], y_start)
+                    self.assertAlmostEqual(
+                        p["t_period"], t_period, delta=0.05 * t_period
+                    )
+
     def test_overdamped(self):
         # Decays away before completing a full oscillation; the period is
         # only loosely defined, so just require the fit to match the data.

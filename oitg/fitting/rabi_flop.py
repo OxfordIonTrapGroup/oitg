@@ -60,17 +60,24 @@ def parameter_initialiser(x, y, p):
         tau_decay = np.inf
     p["tau_decay"] = np.clip(tau_decay, t_range / 10, 10 * t_range)
 
-    # Estimate frequency using a Lomb-Scargle periodogram (which supports
-    # irregularly-spaced samples). Search between a quarter of an oscillation
-    # over the whole scan (relaxed Fourier limit, to also handle scans that
-    # do not quite reach the first minimum) and the Nyquist frequency
-    # corresponding to the median sample spacing, with the grid chosen fine
-    # enough to resolve the position of periodogram peaks (of width
+    # Estimate frequency using a Lomb-Scargle periodogram (which supports irregularly-
+    # spaced samples). Search between a quarter of an oscillation over the whole scan
+    # (to also handle scans that do not quite reach the first minimum) and the Nyquist
+    # frequency corresponding to a typical small sample spacing (see below), with the
+    # grid chosen fine enough to resolve the position of periodogram peaks (of width
     # ~2 pi / t_range) well.
+    #
+    # We use the first decile of the spacings rather than e.g. the median, as the
+    # spacings can be very non-uniform e.g. during acquisition of randomly ordered
+    # scans, or for geometrically spaced scans. The first decile rather the minimum, as
+    # well as the clamp to a fraction of the mean, is a heuristic to avoid making the
+    # evaluation too expensive, and can be tuned further or dropped.
     omega_min = 0.5 * np.pi / t_range
-    omega_max = max(np.pi / np.median(steps), 4 * omega_min)
+    step_ref = max(np.quantile(steps, 0.1), np.mean(steps) / 4)
+    omega_max = max(np.pi / step_ref, 4 * omega_min)
     num_omegas = int(np.ceil((omega_max - omega_min) / (np.pi / (4 * t_range))))
     omegas = np.linspace(omega_min, omega_max, max(num_omegas, 32))
+
     # Subtract the mean ourselves, as lombscargle(precenter=True) modifies y
     # in place on SciPy 1.15+, corrupting the data used for the actual fit.
     # To keep the strong low-frequency components introduced by the decaying
@@ -83,22 +90,27 @@ def parameter_initialiser(x, y, p):
 
     p["t_dead"] = 0.0
 
-    # Consider the strongest few periodogram peaks and their first harmonics
-    # (as noise and irregular sampling can cause a subharmonic to end up
-    # stronger than the true frequency) as candidates, preferring those which
-    # lead to a pi time larger than t_min (i.e. the first extremum not before
-    # the scanned range). Among those, pick the one that actually matches the
-    # data best when combined with the other initial parameter estimates.
+    # Consider the strongest few periodogram peaks and their first harmonics (as noise
+    # and irregular sampling can cause a subharmonic to end up stronger than the true
+    # frequency) as candidates, preferring those which lead to a pi time larger than
+    # t_min (i.e. the first extremum not before the scanned range). Among those, pick
+    # the one that actually matches the data best when combined with the other initial
+    # parameter estimates.
+    #
+    # We don't consider frequencies outside the search range and prefer lower
+    # frequencies to avoid aliasing of harmonics.
     peak_idxs = (
         np.nonzero((pgram[1:-1] >= pgram[:-2]) & (pgram[1:-1] >= pgram[2:]))[0] + 1
     )
     if len(peak_idxs) == 0:
         peak_idxs = np.array([np.argmax(pgram)])
     peaks = peak_idxs[np.argsort(-pgram[peak_idxs])][:3]
-    candidates = [c for omega in omegas[peaks] for c in (omega, 2 * omega)]
+    candidates = list(omegas[peaks])
+    candidates += [2 * omega for omega in omegas[peaks] if 2 * omega <= omega_max]
     allowed = [omega for omega in candidates if np.pi / omega > t_min]
     if allowed:
         candidates = allowed
+    candidates.sort()
 
     # Unless the user has fixed the starting level (and thus the direction of the flop),
     # also let both a flop starting at y = 0 and one starting at y = 1 compete based on
