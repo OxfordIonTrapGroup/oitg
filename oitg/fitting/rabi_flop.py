@@ -99,9 +99,14 @@ def parameter_initialiser(x, y, p):
     #
     # We don't consider frequencies outside the search range and prefer lower
     # frequencies to avoid aliasing of harmonics.
-    peak_idxs = (
-        np.nonzero((pgram[1:-1] >= pgram[:-2]) & (pgram[1:-1] >= pgram[2:]))[0] + 1
-    )
+    # Pad with -inf so that maxima at the edges of the search range are also picked up.
+    # In particular, for flops slower than the scan, the periodogram just increases
+    # monotonically towards omega_min, so there would otherwise be no candidate
+    # anywhere near the true frequency.
+    padded = np.concatenate(([-np.inf], pgram, [-np.inf]))
+    peak_idxs = np.nonzero(
+        (padded[1:-1] >= padded[:-2]) & (padded[1:-1] >= padded[2:])
+    )[0]
     if len(peak_idxs) == 0:
         peak_idxs = np.array([np.argmax(pgram)])
     peaks = peak_idxs[np.argsort(-pgram[peak_idxs])][:3]

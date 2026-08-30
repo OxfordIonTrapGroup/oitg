@@ -98,6 +98,14 @@ class RabiFlopTest(unittest.TestCase):
         t = np.geomspace(3e-6, 350e-6, 51)
         self._check_period(13e-6, 300e-6, 0.05, t=t)
 
+    def test_slower_than_scan(self):
+        # A Rabi frequency so low that the scan does not cover a full period.
+        t = np.geomspace(1e-6, 47e-6, 51)
+        t_range = t[-1] - t[0]
+        for periods_per_scan in (1.0, 0.65, 0.5):
+            with self.subTest(periods_per_scan=periods_per_scan):
+                self._check_period(t_range / periods_per_scan, np.inf, 0.02, t=t)
+
     def test_no_aliasing(self):
         # On a regularly spaced grid, a harmonic of a spurious periodogram peak
         # can coincide exactly with an alias of the true frequency, which then
