@@ -16,7 +16,11 @@ INDEX_FILE = "rid_index.pickle.xz"
 
 def iterate_hour_dirs(root_path, day, warn_on_unexpected=False):
     hour_regex = re.compile(r"^[0-2][0-9]$")
-    for entry in os.listdir(Path(root_path) / day):
+    day_dir = Path(root_path) / day
+    if not day_dir.is_dir():
+        # No results from this day; skip.
+        return
+    for entry in os.listdir(day_dir):
         path = f"{day}/{entry}"
         if re.match(hour_regex, entry):
             yield path
