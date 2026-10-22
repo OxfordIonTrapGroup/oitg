@@ -5,7 +5,7 @@ import pickle
 import re
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Dict
+from typing import Callable, Dict
 
 import numpy
 
@@ -75,16 +75,38 @@ def read_index(root_path):
         return pickle.load(in_file)
 
 
-def write_index_from_dict(root_path, index: Dict[int, str]):
+def _replace_atomically(path: Path, write: Callable[[Path], None]) -> None:
+    """Call ``write()`` with a temporary file name next to ``path`` and then move the
+    result into place, such that readers never observe a partially written file.
+    """
+    tmp_path = path.with_name(path.name + ".tmp")
+    try:
+        write(tmp_path)
+        os.replace(tmp_path, path)
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+
+def write_index_from_dict(root_path, index: Dict[int, str]) -> None:
+    """Write the pickled index (:data:`INDEX_FILE`) used by :func:`read_index` and
+    :func:`resolve_rid`.
+
+    :param index: Map from RID to the path of the results file relative to
+        ``root_path``.
+    """
     # Pickle the dictionary keys/values separately and xz-compress the result for size.
     # A typical size comparison during development (lab1_alice, early 2021):
     #  - Just pickle dict: 908 kB
     #  - This option: 604 kB
-    with lzma.open(Path(root_path) / INDEX_FILE, "wb") as out_file:
-        rids = numpy.array(list(index.keys()))
-        order = numpy.argsort(rids)
-        paths = list(index.values())
-        pickle.dump((rids[order], [paths[i] for i in order]), out_file)
+    rids = numpy.array(list(index.keys()))
+    order = numpy.argsort(rids)
+    paths = list(index.values())
+
+    def write(path):
+        with lzma.open(path, "wb") as out_file:
+            pickle.dump((rids[order], [paths[i] for i in order]), out_file)
+
+    _replace_atomically(Path(root_path) / INDEX_FILE, write)
 
 
 def dates_between(first, last):
