@@ -5,13 +5,21 @@ import pickle
 import re
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 import numpy
 
 logger = logging.getLogger(__name__)
 
 INDEX_FILE = "rid_index.pickle.xz"
+
+# Relative path of a results file below the results root, as produced by the ARTIQ
+# master: <ISO date>/<hour>/<RID>-<experiment class>.h5. The RID is zero-padded to at
+# least 9 digits (as per ``"{:09}".format(rid)``), and the class name is a Python
+# identifier, which may contain non-ASCII letters (hence \w).
+_REL_PATH_RE = re.compile(
+    r"^(?P<day>\d{4}-\d{2}-\d{2})/(?P<hour>\d{2})/(?P<rid>\d{9,})-(?P<class>\w+)\.h5$"
+)
 
 
 def iterate_hour_dirs(root_path, day, warn_on_unexpected=False):
@@ -28,23 +36,22 @@ def iterate_hour_dirs(root_path, day, warn_on_unexpected=False):
             logger.warning("Ignoring unexpected directory '%s'", path)
 
 
-def add_rids_from_path(root_path, path, index: Dict[int, List[str]]):
-    rid_match = re.compile(r"(\d{9})-[A-Za-z_][A-Za-z0-9_]*.h5$")
+def add_rids_from_path(root_path, path, index: Dict[int, str]):
     for name in os.listdir(Path(root_path) / path):
-        match = rid_match.match(name)
-        if match:
-            rid = int(match.group(1))
-            rel_path = f"{path}/{name}"
-            if previous_path := index.get(rid):
-                if previous_path != rel_path:
-                    logger.warning(
-                        "RID %s encountered more than once; '%s' will be ignored",
-                        rid,
-                        previous_path,
-                    )
-            index[rid] = rel_path
-        else:
-            logger.warning("Ignoring file '%s/%s'", path, name)
+        rel_path = f"{path}/{name}"
+        match = _REL_PATH_RE.match(rel_path)
+        if not match:
+            logger.warning("Ignoring file '%s'", rel_path)
+            continue
+        rid = int(match["rid"])
+        if previous_path := index.get(rid):
+            if previous_path != rel_path:
+                logger.warning(
+                    "RID %s encountered more than once; '%s' will be ignored",
+                    rid,
+                    previous_path,
+                )
+        index[rid] = rel_path
 
 
 def index_day(root_path, day, index):
@@ -68,7 +75,7 @@ def read_index(root_path):
         return pickle.load(in_file)
 
 
-def write_index_from_dict(root_path, index: Dict[int, List[str]]):
+def write_index_from_dict(root_path, index: Dict[int, str]):
     # Pickle the dictionary keys/values separately and xz-compress the result for size.
     # A typical size comparison during development (lab1_alice, early 2021):
     #  - Just pickle dict: 908 kB
