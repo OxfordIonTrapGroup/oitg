@@ -1,9 +1,10 @@
+import csv
 import logging
 import lzma
 import os
 import pickle
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Dict
 
@@ -12,6 +13,8 @@ import numpy
 logger = logging.getLogger(__name__)
 
 INDEX_FILE = "rid_index.pickle.xz"
+CSV_INDEX_FILE = "rid_index.csv.xz"
+CSV_INDEX_FORMAT = "oitg-rid-index 1"
 
 # Relative path of a results file below the results root, as produced by the ARTIQ
 # master: <ISO date>/<hour>/<RID>-<experiment class>.h5. The RID is zero-padded to at
@@ -87,9 +90,12 @@ def _replace_atomically(path: Path, write: Callable[[Path], None]) -> None:
         tmp_path.unlink(missing_ok=True)
 
 
-def write_index_from_dict(root_path, index: Dict[int, str]) -> None:
+def write_pickle_index(root_path, index: Dict[int, str]) -> None:
     """Write the pickled index (:data:`INDEX_FILE`) used by :func:`read_index` and
     :func:`resolve_rid`.
+
+    This is the legacy format, see :meth:`write_csv_index` for the newer CSV-based
+    format.
 
     :param index: Map from RID to the path of the results file relative to
         ``root_path``.
@@ -107,6 +113,69 @@ def write_index_from_dict(root_path, index: Dict[int, str]) -> None:
             pickle.dump((rids[order], [paths[i] for i in order]), out_file)
 
     _replace_atomically(Path(root_path) / INDEX_FILE, write)
+
+
+def write_csv_index(root_path, index: Dict[int, str]) -> None:
+    """Write the index as an xz-compressed CSV table (:data:`CSV_INDEX_FILE`).
+
+    The file looks like this::
+
+        # oitg-rid-index 1
+        # experiment=lab1_alice generated=2026-10-22T06:00:12Z
+        rid,day,hour,class
+        3,2017-10-05,23,MonitorFluo
+        ...
+
+    Rows are sorted by RID. ``day`` (ISO date) and ``hour`` (two digits) give the
+    results directory the file is stored in, ``class`` is the experiment class name, so
+    the path relative to the results root is ``f"{day}/{hour}/{rid:09}-{class}.h5"``.
+
+    Note that ``artiq_master`` names the results directories according to the time zone
+    configured on its machine (typically local time), and that for any single
+    experiment, the times of submission, ``run()`` start, and completion may differ
+    significantly (e.g. straddling an hour/day boundary).
+
+    No field needs CSV escaping (class names are identifiers), so the file can also be
+    parsed by just splitting lines on commas, ignoring those starting with ``#``.
+
+    :param index: Map from RID to the path of the results file relative to
+        ``root_path``. Entries not matching the standard ARTIQ results layout are
+        skipped with a warning.
+    """
+    rows = []
+    for rid in sorted(index):
+        rel_path = index[rid]
+        match = _REL_PATH_RE.match(rel_path)
+        if not match or int(match["rid"]) != rid:
+            logger.warning(
+                "Not including RID %s in CSV index, unexpected path '%s'", rid, rel_path
+            )
+            continue
+        rows.append((int(rid), match["day"], match["hour"], match["class"]))
+
+    experiment = Path(os.path.abspath(root_path)).name
+    generated = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    def write(path):
+        # The default xz preset is as good as it gets for this data (lab1_alice with
+        # 818k entries, 2026-10: 1.60 MB at preset 6 vs. 1.61 MB at 9 | EXTREME), at a
+        # fraction of the time and memory, so no need to be fancy.
+        with lzma.open(path, "wt", encoding="utf-8", newline="") as out_file:
+            out_file.write(f"# {CSV_INDEX_FORMAT}\n")
+            out_file.write(f"# experiment={experiment} generated={generated}\n")
+            writer = csv.writer(out_file, lineterminator="\n")
+            writer.writerow(["rid", "day", "hour", "class"])
+            writer.writerows(rows)
+
+    _replace_atomically(Path(root_path) / CSV_INDEX_FILE, write)
+
+
+def write_index_from_dict(root_path, index: Dict[int, str]) -> None:
+    """Write both the pickled index and the CSV index from the given RID -> relative
+    path map; see :func:`write_pickle_index` and :func:`write_csv_index`.
+    """
+    write_pickle_index(root_path, index)
+    write_csv_index(root_path, index)
 
 
 def dates_between(first, last):
