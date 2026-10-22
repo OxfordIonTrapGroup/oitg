@@ -182,33 +182,31 @@
 
 <span class="sd">    :return: A unitary matrix acting on the `2^num_qubits`-dimensional Hilbert space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_qubits</span>
     <span class="n">u_local</span> <span class="o">=</span> <span class="n">local_matrix</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">u_local</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">num_unitary_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">num_unitary_targets</span> <span class="o">==</span> <span class="n">_num_qubits_from_state_dimension</span><span class="p">(</span><span class="n">u_local</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">u_local</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># No-op (barrier, ...).</span>
-        <span class="n">num_unitary_targets</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">u_local</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
 
-    <span class="c1"># Construct global unitary by first tensoring with enough copies of the</span>
-    <span class="c1"># identity and then permuting the bases.</span>
-    <span class="n">u_permuted</span> <span class="o">=</span> <span class="n">u_local</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qubits</span> <span class="o">-</span> <span class="n">num_unitary_targets</span><span class="p">):</span>
-        <span class="n">u_permuted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">u_permuted</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">num_operands</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">u_local</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_operands</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">num_operands</span><span class="p">)</span>
 
-    <span class="n">system_perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gate</span><span class="o">.</span><span class="n">operands</span><span class="p">):</span>
-        <span class="n">system_perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">o</span>
-        <span class="n">system_perm</span><span class="p">[</span><span class="n">o</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="c1"># Construct global unitary by first tensoring with enough copies of the identity,</span>
+    <span class="c1"># u_local ⊗ id ⊗ id ⊗ ….</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">u_local</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">num_qubits</span> <span class="o">-</span> <span class="n">num_operands</span><span class="p">)))</span>
+
+    <span class="c1"># Now construct the permutation that shuffles u_local from the beginning to the</span>
+    <span class="c1"># target systems and fill in the identities in whatever order.</span>
+    <span class="n">inv_perm</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qubits</span><span class="p">)</span> <span class="k">if</span> <span class="n">q</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gate</span><span class="o">.</span><span class="n">operands</span>
+    <span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">inv_perm</span><span class="p">)</span>
 
     <span class="c1"># Shuffle around the axis indices. I wish numpy had a built-in method for this,</span>
     <span class="c1"># but just writing down the nested form manually isn&#39;t too bad for only qubits.</span>
     <span class="c1"># Dragging in qutip just for this seems wrong too.</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">u_permuted</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_qubits</span><span class="p">)</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">system_perm</span><span class="p">,</span> <span class="n">system_perm</span> <span class="o">+</span> <span class="n">num_qubits</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">u_permuted</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span></div>
+    <span class="n">axes</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">perm</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">perm</span> <span class="o">+</span> <span class="n">num_qubits</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">u</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">num_qubits</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span></div>
 
 
 
