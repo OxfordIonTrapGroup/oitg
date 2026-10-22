@@ -25,7 +25,7 @@ def iterate_hour_dirs(root_path, day, warn_on_unexpected=False):
         if re.match(hour_regex, entry):
             yield path
         elif warn_on_unexpected:
-            logger.warn("Ignoring unexpected directory '%s'", path)
+            logger.warning("Ignoring unexpected directory '%s'", path)
 
 
 def add_rids_from_path(root_path, path, index: Dict[int, List[str]]):
@@ -37,14 +37,14 @@ def add_rids_from_path(root_path, path, index: Dict[int, List[str]]):
             rel_path = f"{path}/{name}"
             if previous_path := index.get(rid):
                 if previous_path != rel_path:
-                    logger.warn(
+                    logger.warning(
                         "RID %s encountered more than once; '%s' will be ignored",
                         rid,
                         previous_path,
                     )
             index[rid] = rel_path
         else:
-            logger.warn("Ignoring file '%s/%s'", path, name)
+            logger.warning("Ignoring file '%s/%s'", path, name)
 
 
 def index_day(root_path, day, index):
