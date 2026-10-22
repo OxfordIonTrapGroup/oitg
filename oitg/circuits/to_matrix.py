@@ -101,33 +101,31 @@ def single_gate_matrix(gate: Gate, num_qubits: int) -> np.ndarray:
 
     :return: A unitary matrix acting on the `2^num_qubits`-dimensional Hilbert space.
     """
+    dim = 1 << num_qubits
     u_local = local_matrix(gate)
-
-    if u_local is not None:
-        num_unitary_targets = len(gate.operands)
-        assert num_unitary_targets == _num_qubits_from_state_dimension(u_local.shape[0])
-    else:
+    if u_local is None:
         # No-op (barrier, ...).
-        num_unitary_targets = 1
-        u_local = np.eye(2)
+        return np.eye(dim)
 
-    # Construct global unitary by first tensoring with enough copies of the
-    # identity and then permuting the bases.
-    u_permuted = u_local
-    for _ in range(num_qubits - num_unitary_targets):
-        u_permuted = np.kron(u_permuted, np.eye(2))
+    num_operands = len(gate.operands)
+    assert u_local.shape == (1 << num_operands, 1 << num_operands)
 
-    system_perm = np.array(range(num_qubits), dtype=int)
-    for i, o in enumerate(gate.operands):
-        system_perm[i] = o
-        system_perm[o] = i
+    # Construct global unitary by first tensoring with enough copies of the identity,
+    # u_local ⊗ id ⊗ id ⊗ ….
+    u = np.kron(u_local, np.eye(1 << (num_qubits - num_operands)))
+
+    # Now construct the permutation that shuffles u_local from the beginning to the
+    # target systems and fill in the identities in whatever order.
+    inv_perm = gate.operands + tuple(
+        q for q in range(num_qubits) if q not in gate.operands
+    )
+    perm = np.argsort(inv_perm)
 
     # Shuffle around the axis indices. I wish numpy had a built-in method for this,
     # but just writing down the nested form manually isn't too bad for only qubits.
     # Dragging in qutip just for this seems wrong too.
-    u = u_permuted.reshape([2, 2] * num_qubits)
-    u = np.transpose(u, axes=np.concatenate((system_perm, system_perm + num_qubits)))
-    return np.array(u.reshape(u_permuted.shape))
+    axes = (*perm, *(perm + num_qubits))
+    return u.reshape((2,) * (2 * num_qubits)).transpose(axes).reshape(dim, dim)
 
 
 def gate_sequence_matrix(

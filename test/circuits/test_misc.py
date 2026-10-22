@@ -1,3 +1,4 @@
+import itertools
 import unittest
 
 import numpy as np
@@ -72,6 +73,33 @@ class UnitaryTest(unittest.TestCase):
             single_gate_matrix(Gate("cx", (), (1, 0)), 2),
             [[1, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0]],
         )
+
+    def test_permute_larger_system(self):
+        # Check correct embedding for >2 qubit systems where not all permutations are
+        # necessarily 2-cycles.
+
+        def kron_at(num_qubits, ops):
+            result = np.array([[1.0]])
+            for q in range(num_qubits):
+                result = np.kron(result, ops.get(q, np.eye(2)))
+            return result
+
+        p0 = np.diag([1, 0])
+        p1 = np.diag([0, 1])
+        x = np.array([[0, 1], [1, 0]])
+        for num_qubits in (2, 3, 4):
+            for q in range(num_qubits):
+                assert_almost_equal(
+                    single_gate_matrix(Gate("rx", (np.pi,), (q,)), num_qubits),
+                    kron_at(num_qubits, {q: -1j * x}),
+                )
+            for c, t in itertools.permutations(range(num_qubits), 2):
+                # Check CNOT by writing it out as |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ X.
+                assert_almost_equal(
+                    single_gate_matrix(Gate("cx", (), (c, t)), num_qubits),
+                    kron_at(num_qubits, {c: p0}) + kron_at(num_qubits, {c: p1, t: x}),
+                    err_msg="cx on operands {} of {} qubits".format((c, t), num_qubits),
+                )
 
     def test_rxy(self):
         assert_almost_equal(
